@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "IKQp55BjYnM=",
+  "success": true,
+  "projectFilePath": "D:\\Nuvem\\GoogleDrive - segundio\\X7Dev - Programas\\DevEnvironment\\Tools\\X7.ProjectIndexer\\X7.ProjectIndexer.Knowledge\\X7.ProjectIndexer.Knowledge.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\engca\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\5.3.0-2.25625.1\\microsoft.codeanalysis.analyzers.5.3.0-2.25625.1.nupkg.sha512",
+    "C:\\Users\\engca\\.nuget\\packages\\microsoft.codeanalysis.common\\5.3.0\\microsoft.codeanalysis.common.5.3.0.nupkg.sha512",
+    "C:\\Users\\engca\\.nuget\\packages\\microsoft.codeanalysis.csharp\\5.3.0\\microsoft.codeanalysis.csharp.5.3.0.nupkg.sha512"
+  ],
+  "logs": []
+}

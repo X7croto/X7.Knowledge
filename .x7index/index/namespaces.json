@@ -1,0 +1,490 @@
+[
+  {
+    "Name": "X7.ProjectIndexer.CLI",
+    "Types": [
+      "CommandLineOptions",
+      "CommandLineParser"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Contracts",
+    "Types": [
+      "IFileScanner",
+      "IOutputWriter",
+      "IProjectIndexer"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Parsing",
+    "Types": [
+      "IParser",
+      "ParsedTypeIndexBuilder"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Integrity",
+    "Types": [
+      "IntegrityIssue",
+      "IntegritySeverity",
+      "IntegrityValidationContext",
+      "IntegrityValidationResult",
+      "IntegrityValidator"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Integrity.Rules",
+    "Types": [
+      "IntegrityValidationRule",
+      "BrokenReferenceRule",
+      "DuplicateMemberReferenceRule",
+      "MethodScopeConsistencyRule"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Models",
+    "Types": [
+      "AssignmentNode",
+      "BlockNode",
+      "FieldNode",
+      "IdentifierNode",
+      "IfNode",
+      "LocalVariableNode",
+      "LoopNode",
+      "MemberAccessNode",
+      "MethodNode",
+      "ObjectCreationNode",
+      "ParameterNode",
+      "ProjectIndex",
+      "ProjectNode",
+      "PropertyNode",
+      "TypeNode"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Indexing",
+    "Types": [
+      "PipelineContext",
+      "PipelineExecutor",
+      "PipelineStage",
+      "IPipelineStep",
+      "ProjectIndexer"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Models.Relations",
+    "Types": [
+      "ReturnNode",
+      "Aggregation",
+      "Composition",
+      "DependencyKind",
+      "Dependency",
+      "Implementation",
+      "Inheritance",
+      "InvocationNode",
+      "MethodCall",
+      "Reference",
+      "UsingReference"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "",
+    "Types": [
+      "SourceFile",
+      "DependencyChain",
+      "TypeAnalysis",
+      "ArchitectureModel",
+      "DomainModel",
+      "KnowledgeModel",
+      "QualityModel",
+      "RuntimeModel",
+      "ProjectSymbol",
+      "FileBindingContext",
+      "TypeReference",
+      "RoslynParser",
+      "SymbolIndex",
+      "ExecutionKnowledgeBuilder",
+      "KnowledgeGraph",
+      "KnowledgeNode",
+      "KnowledgeRelation",
+      "SearchDocument",
+      "ConceptModel",
+      "DependencyInjectionMap",
+      "DIRegistration",
+      "ExecutionFlow",
+      "RequestFlow",
+      "InferenceContext",
+      "SymbolContext",
+      "IProjectRule"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Scanning",
+    "Types": [
+      "FileScanner"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Scanning",
+    "Types": [
+      "FileScannerOptions"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Models.Analysis",
+    "Types": [
+      "ArchitecturalViolation",
+      "Cycle",
+      "ImpactedMethod",
+      "ImpactLevel",
+      "ImpactQuery",
+      "ImpactReport",
+      "Layer",
+      "Metrics",
+      "DeadMethod",
+      "TypeMetrics",
+      "AnalysisResult"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Graph",
+    "Types": [
+      "GraphBuilder",
+      "GraphAlgorithms",
+      "GraphQueryService",
+      "IGraphQueryService",
+      "GraphAlgorithms",
+      "GraphAlgorithms"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Models.Graph",
+    "Types": [
+      "GraphEdge",
+      "GraphNode",
+      "SemanticGraph"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Models.Knowledge",
+    "Types": [
+      "BusinessRuleModel",
+      "EntrypointModel",
+      "FeatureModel",
+      "FlowModel",
+      "FlowStep",
+      "HotspotModel",
+      "ModuleModel",
+      "ServiceDescription",
+      "ServiceKind",
+      "ServiceModel"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Knowledge",
+    "Types": [
+      "ServiceClassifier",
+      "BusinessRuleCompiler",
+      "EntrypointCompiler",
+      "FlowCompiler",
+      "HotspotCompiler",
+      "KnowledgeBuilder",
+      "ModuleCompiler",
+      "ServiceCompiler"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Models.Parsing",
+    "Types": [
+      "UsingDirective"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Models.Resolution",
+    "Types": [
+      "TypeOrigin",
+      "TypeResolution"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Models.Semantic",
+    "Types": [
+      "MethodScope",
+      "SymbolTable"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Semantic",
+    "Types": [
+      "SemanticBuilder",
+      "ScopeBuilder",
+      "SemanticIndexBuilder",
+      "SemanticLinker",
+      "SymbolLookup"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Models.Symbols",
+    "Types": [
+      "AssignmentSymbol",
+      "BaseSymbol",
+      "FieldSymbol",
+      "IdentifierSymbol",
+      "InvocationSymbol",
+      "ISymbol",
+      "LocalVariableSymbol",
+      "MemberAccessSymbol",
+      "MethodBodySymbol",
+      "MethodSymbol",
+      "ObjectCreationSymbol",
+      "ParameterSymbol",
+      "PropertySymbol",
+      "ReturnSymbol",
+      "SymbolExtensions",
+      "TypeSymbol"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Analysis",
+    "Types": [
+      "AnalysisPipeline",
+      "ArchitectureRuleEngine",
+      "CallHierarchyAnalyzer",
+      "CycleAnalyzer",
+      "DeadCodeAnalyzer",
+      "DependencyChainQuery",
+      "EntryPointAnalyzer",
+      "FanInOutAnalyzer",
+      "IAnalyzer",
+      "IArchitectureRule",
+      "ImpactAnalyzer",
+      "ImpactQueryService",
+      "InstabilityAnalyzer",
+      "LayerAnalyzer",
+      "LayerDependencyRule",
+      "MetricsAnalyzer",
+      "TypeCouplingAnalyzer"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Binding",
+    "Types": [
+      "Binder",
+      "BindingDiagnostics",
+      "TypeBinder",
+      "TypeNameResolver"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Query",
+    "Types": [
+      "ArchitectureQueries",
+      "QueryExtensions",
+      "SymbolQuery"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Resolution",
+    "Types": [
+      "AggregationResolver",
+      "CompositionResolver",
+      "DependencyResolver",
+      "ImplementationResolver",
+      "InheritanceResolver",
+      "IRelationshipResolver",
+      "ISymbolResolver",
+      "LocalVariableResolver",
+      "MethodCallResolver",
+      "NameResolver",
+      "RelationshipBuilder",
+      "ResolverContext",
+      "ScopeResolver",
+      "SymbolLookup",
+      "TypeNameNormalizer",
+      "TypeReferenceResolver"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Knowledge.Inference",
+    "Types": [
+      "IKnowledgeInference",
+      "KnowledgeInferencePipeline"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Knowledge.Query",
+    "Types": [
+      "FeatureCatalogQuery",
+      "IKnowledgeQuery",
+      "KnowledgeQueries",
+      "KnowledgeQueryBuilder",
+      "LayerCatalogQuery",
+      "PatternCatalogQuery",
+      "ServiceCatalogQuery"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Parsing.Visitors",
+    "Types": [
+      "AssignmentVisitor",
+      "BlockVisitor",
+      "CompilationUnitVisitor",
+      "FieldVisitor",
+      "IdentifierVisitor",
+      "MemberAccessVisitor",
+      "MethodVisitor",
+      "NamespaceVisitor",
+      "ObjectCreationVisitor",
+      "ParameterVisitor",
+      "PropertyVisitor",
+      "ReturnVisitor",
+      "TypeVisitor",
+      "SyntaxExtensions",
+      "UsingVisitor"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Models.Knowledge.Execution.Builders",
+    "Types": [
+      "BackgroundServiceBuilder",
+      "DIBuilder",
+      "EventFlowBuilder",
+      "PipelineBuilder",
+      "RequestFlowBuilder",
+      "TransactionBuilder"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Models.Knowledge.Execution.Models",
+    "Types": [
+      "BackgroundFlow",
+      "EventFlow",
+      "Pipeline",
+      "TransactionFlow"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Knowledge.Inference.Engine",
+    "Types": [
+      "KnowledgeAnalysisEngine",
+      "RuleResult"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Knowledge.Inference.Rules",
+    "Types": [
+      "ArchitectureStyleRule",
+      "DependencyRule",
+      "FeatureRule",
+      "FlowRule",
+      "IFieldRule",
+      "IMethodRule",
+      "IPropertyRule",
+      "ITypeRule",
+      "LayerRule",
+      "PatternRule"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Knowledge.Query.Builders",
+    "Types": [
+      "FeatureIndexBuilder",
+      "MethodIndexBuilder",
+      "NamespaceIndexBuilder",
+      "TypeIndexBuilder"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Knowledge.Query.Export",
+    "Types": [
+      "KnowledgeIndexExporter"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Core.Services.Knowledge.Query.Models",
+    "Types": [
+      "FeatureIndex",
+      "KnowledgeIndex",
+      "MethodIndex",
+      "NamespaceIndex",
+      "TypeIndex"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Knowledge",
+    "Types": [
+      "ArchitectureExporter",
+      "ClaudeExporter",
+      "GraphExporter",
+      "IKnowledgeExporter",
+      "KnowledgeExporter",
+      "KnowledgeGenerationReport",
+      "MarkdownWriter",
+      "MethodExporter",
+      "NamespaceExporter",
+      "ProjectExporter",
+      "SemanticExportBuilder",
+      "SolutionExporter",
+      "TypeExporter"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Knowledge.ExportModels",
+    "Types": [
+      "DependencyExport",
+      "MethodExport",
+      "SemanticExport",
+      "TypeExport"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Output.Writers",
+    "Types": [
+      "ConsoleWriter"
+    ],
+    "Features": []
+  },
+  {
+    "Name": "X7.ProjectIndexer.Tests",
+    "Types": [
+      "UnitTest1"
+    ],
+    "Features": []
+  }
+]

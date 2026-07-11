@@ -1,0 +1,28 @@
+# IKnowledgeQuery
+
+Namespace: X7.ProjectIndexer.Core.Services.Knowledge.Query
+Kind: interface
+Accessibility: public
+
+## Metrics
+
+FanIn: 0
+FanOut: 0
+Layer: -1
+Instability: 0,00
+
+## Methods
+
+- Execute
+
+## Properties
+
+
+## Fields
+
+
+## Depends On
+
+
+## Referenced By
+

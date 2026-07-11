@@ -1,0 +1,15 @@
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Knowledge\bin\Debug\net10.0\X7.ProjectIndexer.Knowledge.deps.json
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Knowledge\bin\Debug\net10.0\X7.ProjectIndexer.Knowledge.dll
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Knowledge\bin\Debug\net10.0\X7.ProjectIndexer.Knowledge.pdb
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Knowledge\bin\Debug\net10.0\X7.ProjectIndexer.Core.dll
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Knowledge\bin\Debug\net10.0\X7.ProjectIndexer.Core.pdb
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Knowledge\obj\Debug\net10.0\X7.ProjectIndexer.Knowledge.csproj.AssemblyReference.cache
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Knowledge\obj\Debug\net10.0\X7.ProjectIndexer.Knowledge.GeneratedMSBuildEditorConfig.editorconfig
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Knowledge\obj\Debug\net10.0\X7.ProjectIndexer.Knowledge.AssemblyInfoInputs.cache
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Knowledge\obj\Debug\net10.0\X7.ProjectIndexer.Knowledge.AssemblyInfo.cs
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Knowledge\obj\Debug\net10.0\X7.ProjectIndexer.Knowledge.csproj.CoreCompileInputs.cache
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Knowledge\obj\Debug\net10.0\X7.Proje.330E450B.Up2Date
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Knowledge\obj\Debug\net10.0\X7.ProjectIndexer.Knowledge.dll
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Knowledge\obj\Debug\net10.0\refint\X7.ProjectIndexer.Knowledge.dll
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Knowledge\obj\Debug\net10.0\X7.ProjectIndexer.Knowledge.pdb
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Knowledge\obj\Debug\net10.0\ref\X7.ProjectIndexer.Knowledge.dll

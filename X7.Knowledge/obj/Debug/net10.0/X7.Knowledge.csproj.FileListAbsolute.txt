@@ -1,0 +1,11 @@
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.Knowledge\bin\Debug\net10.0\X7.Knowledge.deps.json
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.Knowledge\bin\Debug\net10.0\X7.Knowledge.dll
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.Knowledge\bin\Debug\net10.0\X7.Knowledge.pdb
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.Knowledge\obj\Debug\net10.0\X7.Knowledge.GeneratedMSBuildEditorConfig.editorconfig
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.Knowledge\obj\Debug\net10.0\X7.Knowledge.AssemblyInfoInputs.cache
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.Knowledge\obj\Debug\net10.0\X7.Knowledge.AssemblyInfo.cs
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.Knowledge\obj\Debug\net10.0\X7.Knowledge.csproj.CoreCompileInputs.cache
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.Knowledge\obj\Debug\net10.0\X7.Knowledge.dll
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.Knowledge\obj\Debug\net10.0\refint\X7.Knowledge.dll
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.Knowledge\obj\Debug\net10.0\X7.Knowledge.pdb
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.Knowledge\obj\Debug\net10.0\ref\X7.Knowledge.dll

@@ -1,0 +1,15 @@
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CSharp\bin\Debug\net10.0\X7.ProjectIndexer.CSharp.deps.json
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CSharp\bin\Debug\net10.0\X7.ProjectIndexer.CSharp.dll
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CSharp\bin\Debug\net10.0\X7.ProjectIndexer.CSharp.pdb
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CSharp\bin\Debug\net10.0\X7.ProjectIndexer.Core.dll
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CSharp\bin\Debug\net10.0\X7.ProjectIndexer.Core.pdb
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CSharp\obj\Debug\net10.0\X7.ProjectIndexer.CSharp.csproj.AssemblyReference.cache
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CSharp\obj\Debug\net10.0\X7.ProjectIndexer.CSharp.GeneratedMSBuildEditorConfig.editorconfig
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CSharp\obj\Debug\net10.0\X7.ProjectIndexer.CSharp.AssemblyInfoInputs.cache
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CSharp\obj\Debug\net10.0\X7.ProjectIndexer.CSharp.AssemblyInfo.cs
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CSharp\obj\Debug\net10.0\X7.ProjectIndexer.CSharp.csproj.CoreCompileInputs.cache
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CSharp\obj\Debug\net10.0\X7.Proje.3B2F0B55.Up2Date
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CSharp\obj\Debug\net10.0\X7.ProjectIndexer.CSharp.dll
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CSharp\obj\Debug\net10.0\refint\X7.ProjectIndexer.CSharp.dll
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CSharp\obj\Debug\net10.0\X7.ProjectIndexer.CSharp.pdb
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CSharp\obj\Debug\net10.0\ref\X7.ProjectIndexer.CSharp.dll

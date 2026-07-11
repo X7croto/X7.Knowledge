@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="X7.Knowledge/X7.Knowledge.csproj" Id="025b0218-1535-4214-b07d-c65ce88ea87d" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj" Id="76e5780f-2e1c-46d0-925b-0f527ae067b7" />
+    <Project Path="X7.KnowledgeTests/X7.KnowledgeTests.csproj" Id="51d86e4a-3d07-49e1-89f0-001ec7f77ae1" />
+  </Folder>
+  <Project Path="X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj" />
+  <Project Path="X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj" />
+  <Project Path="X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj" />
+  <Project Path="X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj" />
+  <Project Path="X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj" Id="4937dbf7-4fbf-4ba3-96ab-5e4536b3ce1a" />
+  <Project Path="X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj" />
+  <Project Path="X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj" />
+  <Project Path="X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj" />
+</Solution>

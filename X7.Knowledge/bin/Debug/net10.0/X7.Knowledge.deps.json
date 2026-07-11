@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "X7.Knowledge/1.0.0": {
+        "runtime": {
+          "X7.Knowledge.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "X7.Knowledge/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

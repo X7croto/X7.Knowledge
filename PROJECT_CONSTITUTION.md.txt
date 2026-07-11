@@ -1,0 +1,2574 @@
+# PROJECT_CONSTITUTION.md
+
+Versão: 1.0 (Consolidação da Conversa Mestre)
+
+Status: Documento Constitucional do Projeto
+
+---
+
+# 1. Missão do Projeto
+
+## 1.1 Objetivo
+
+O X7.ProjectIndexer existe para transformar uma solução de software em uma Base de Conhecimento Estruturada que possa ser utilizada por uma LLM para compreender rapidamente um projeto de grande porte.
+
+Seu objetivo não é indexar código.
+
+Seu objetivo é reduzir drasticamente a quantidade de código que uma LLM precisa ler para executar uma tarefa.
+
+O projeto deve atuar como um compilador do conhecimento existente na solução.
+
+---
+
+## 1.2 Problema que resolve
+
+LLMs possuem contexto limitado.
+
+Em soluções grandes, compreender a arquitetura exige milhares de arquivos, tornando inviável fornecer toda a solução como contexto.
+
+O ProjectIndexer resolve esse problema compilando o conhecimento existente no projeto em uma representação estruturada que permita reconstruir rapidamente o modelo mental de um desenvolvedor experiente.
+
+---
+
+## 1.3 Produto Final
+
+O produto do X7.ProjectIndexer é uma representação estruturada do conhecimento existente em uma solução.
+
+Essa representação constitui a Knowledge IR (Intermediate Representation) do projeto.
+
+Essa Knowledge IR será posteriormente utilizada para construir contexto para uma LLM.
+
+O ProjectIndexer não responde perguntas.
+
+Ele produz conhecimento estruturado.
+
+---
+
+## 1.4 Definição Oficial
+
+O X7.ProjectIndexer é um compilador de conhecimento para projetos C#.
+
+Sua finalidade é transformar código-fonte em conhecimento estruturado, permitindo que qualquer LLM compreenda a arquitetura, as convenções e os padrões do projeto sem precisar analisar toda a solução.
+
+---
+
+## 1.5 Problema Fundamental
+
+A arquitetura do projeto deve ser orientada pela seguinte pergunta:
+
+> "Como representar o conhecimento que um desenvolvedor experiente possui sobre uma solução?"
+
+Essa pergunta substitui definitivamente a pergunta original:
+
+> "Como indexar uma solution?"
+
+---
+
+## 1.6 Resultado Esperado
+
+Após executar o ProjectIndexer sobre uma Solution, uma LLM deve conseguir responder perguntas como:
+
+- Como este projeto está organizado?
+- Onde ficam as regras de negócio?
+- Como uma nova Feature normalmente é implementada?
+- Quais convenções esta equipe utiliza?
+- Onde devo alterar determinado comportamento?
+- Quais componentes semelhantes já existem?
+
+Sem precisar analisar toda a Solution.
+
+---
+
+# 2. Não Objetivos
+
+As seguintes decisões foram explicitamente tomadas durante o desenvolvimento do projeto.
+
+## 2.1 O ProjectIndexer NÃO é um indexador textual
+
+O projeto não realiza busca textual.
+
+Seu objetivo é produzir conhecimento.
+
+---
+
+## 2.2 O ProjectIndexer NÃO é um mecanismo de pesquisa de arquivos
+
+Seu objetivo não é localizar arquivos.
+
+Seu objetivo é compreender o projeto.
+
+---
+
+## 2.3 O ProjectIndexer NÃO é um analisador estático tradicional
+
+Embora utilize análise estática, seu produto final não é um relatório de análise.
+
+O produto é conhecimento estruturado.
+
+---
+
+## 2.4 O ProjectIndexer NÃO é um servidor
+
+Nenhum componente responsável por servir consultas faz parte do núcleo do ProjectIndexer.
+
+O ProjectIndexer apenas produz conhecimento.
+
+---
+
+## 2.5 O ProjectIndexer NÃO deve conhecer nenhuma LLM
+
+Foi congelada a decisão de manter independência completa de modelos.
+
+O projeto não deve conhecer:
+
+- Claude
+- GPT
+- Ollama
+- Cursor
+- MCP
+- qualquer outra LLM
+
+Ele produz apenas conhecimento.
+
+---
+
+## 2.6 O ProjectIndexer NÃO interpreta semanticamente o domínio utilizando IA
+
+A interpretação baseada em IA pertence à camada consumidora.
+
+O núcleo do ProjectIndexer permanece determinístico.
+
+---
+
+## 2.7 O ProjectIndexer NÃO produz respostas
+
+Ele produz uma Base de Conhecimento.
+
+Responder perguntas é responsabilidade do consumidor dessa base.
+
+---
+
+## 2.8 O ProjectIndexer NÃO deve depender da forma de consumo
+
+A forma como o conhecimento será consultado não influencia sua geração.
+
+A geração da Knowledge IR é independente da tecnologia utilizada posteriormente.
+
+---
+
+## 2.9 O objetivo do projeto NÃO é construir um novo Claude
+
+Foi explicitamente decidido que o projeto não pretende substituir um assistente de IA.
+
+Seu objetivo é tornar qualquer assistente capaz de compreender profundamente um projeto específico.
+
+---
+
+# 3. Princípios Fundamentais
+
+Todos os princípios desta seção possuem caráter arquitetural e orientam qualquer decisão futura.
+
+---
+
+## P1 — O conhecimento é o produto
+
+Código não é o produto.
+
+Índice não é o produto.
+
+Graph não é o produto.
+
+O produto é conhecimento.
+
+Todo o restante existe apenas para produzi-lo.
+
+---
+
+## P2 — O conhecimento deve reduzir contexto
+
+Todo conhecimento extraído deve reduzir a quantidade de código necessária para executar uma tarefa.
+
+Caso uma informação não reduza contexto para a LLM, sua utilidade deve ser questionada.
+
+Este princípio ficou conhecido durante a conversa como:
+
+**Princípio da Compressão de Conhecimento.**
+
+---
+
+## P3 — O conhecimento deve representar o modelo mental de um desenvolvedor experiente
+
+O índice não deve representar apenas classes.
+
+Ele deve representar:
+
+- arquitetura;
+- convenções;
+- padrões;
+- responsabilidades;
+- organização;
+- dependências relevantes.
+
+---
+
+## P4 — O conhecimento deve ser independente da LLM consumidora
+
+A Knowledge IR constitui uma representação canônica do projeto.
+
+Ela deve poder ser utilizada por qualquer modelo de IA.
+
+---
+
+## P5 — A compilação deve ser determinística
+
+Executar o ProjectIndexer duas vezes sobre o mesmo código deve produzir o mesmo resultado.
+
+Inferências dependentes de IA não fazem parte do processo de compilação.
+
+---
+
+## P6 — O núcleo do projeto deve permanecer explicável
+
+Toda informação produzida deve possuir origem identificável.
+
+Sempre que possível, deve existir evidência que justifique determinada conclusão.
+
+---
+
+## P7 — O projeto deve privilegiar simplicidade
+
+A primeira versão deve priorizar uma arquitetura simples, baseada em arquivos, evitando infraestrutura desnecessária.
+
+---
+
+## P8 — O conhecimento pertence ao projeto, não ao mecanismo de armazenamento
+
+Graph, JSON, Binary, SQLite, Neo4j ou qualquer outra tecnologia representam apenas formas de armazenamento.
+
+O conhecimento permanece independente dessas representações.
+
+---
+
+## P9 — O verdadeiro ativo do sistema é a Knowledge IR
+
+Todos os demais componentes existem para produzir, consultar ou consumir essa representação.
+
+Nenhuma decisão arquitetural deve colocar outra estrutura como artefato principal do sistema.
+
+# 4. Glossário
+
+Esta seção define o significado oficial de todos os conceitos utilizados pelo projeto.
+
+As definições abaixo passam a ser as únicas aceitas dentro da arquitetura.
+
+Sempre que um termo aparecer em documentação, código ou ADRs futuras, ele deverá possuir exatamente o significado definido nesta seção.
+
+---
+
+## 4.1 Code
+
+Código-fonte existente na Solution.
+
+É a matéria-prima utilizada pelo ProjectIndexer.
+
+O código nunca constitui o produto do sistema.
+
+---
+
+## 4.2 Parsing
+
+Primeira etapa do pipeline.
+
+Responsável apenas por transformar arquivos em representação sintática.
+
+Não produz conhecimento.
+
+Não realiza inferências.
+
+---
+
+## 4.3 Semantic Model
+
+Representação semântica produzida a partir do código.
+
+Contém informações como:
+
+- tipos;
+- métodos;
+- propriedades;
+- herança;
+- chamadas;
+- namespaces;
+- atributos;
+- referências.
+
+Representa o significado estrutural do código.
+
+Ainda não representa conhecimento.
+
+---
+
+## 4.4 Structural Knowledge
+
+Conjunto de informações objetivamente extraídas do projeto.
+
+Inclui apenas aquilo que pode ser obtido de forma determinística.
+
+Exemplos:
+
+- dependências;
+- registros de DI;
+- chamadas;
+- fluxo;
+- herança;
+- composição;
+- relacionamentos.
+
+Não contém interpretação.
+
+---
+
+## 4.5 Fact
+
+Um Fact representa uma afirmação objetiva sobre o projeto.
+
+Exemplos:
+
+- Classe A implementa Interface B.
+- Classe C herda BaseValidator.
+- Projeto X referencia Projeto Y.
+- Método A chama Método B.
+
+Facts não representam conhecimento.
+
+Eles representam evidências.
+
+---
+
+## 4.6 Evidence
+
+Evidence representa o conjunto de fatos utilizados para justificar uma conclusão.
+
+Sempre que possível, uma inferência deve apontar explicitamente para suas evidências.
+
+Exemplos:
+
+Conclusão:
+
+"Classe X segue o padrão Repository."
+
+Evidências:
+
+- nome;
+- namespace;
+- interface implementada;
+- registro DI;
+- herança.
+
+---
+
+## 4.7 Rule Inference
+
+Processo determinístico responsável por transformar fatos em conhecimento reutilizável.
+
+Não utiliza IA.
+
+Baseia-se apenas em regras reproduzíveis.
+
+---
+
+## 4.8 Convention
+
+Uma Convention representa um padrão recorrente encontrado no projeto.
+
+Exemplos:
+
+- nomenclatura;
+- organização de pastas;
+- namespaces;
+- registro de DI;
+- composição;
+- factories;
+- testes;
+- herança.
+
+Convenções constituem conhecimento.
+
+Não constituem fatos.
+
+---
+
+## 4.9 Pattern
+
+Generalização de múltiplas ocorrências semelhantes encontradas na solução.
+
+Exemplo:
+
+120 Services implementam interfaces.
+
+O padrão produzido é:
+
+"Services implementam interfaces."
+
+---
+
+## 4.10 Knowledge
+
+Knowledge representa conhecimento reutilizável sobre o projeto.
+
+É produzido pela interpretação determinística dos fatos.
+
+Exemplos:
+
+- arquitetura em camadas;
+- convenções;
+- padrões;
+- organização;
+- responsabilidades.
+
+Knowledge constitui o principal produto do ProjectIndexer.
+
+---
+
+## 4.11 Knowledge IR
+
+Knowledge IR (Intermediate Representation) é a representação canônica produzida pelo sistema.
+
+Toda informação relevante do projeto deve convergir para essa estrutura.
+
+Ela constitui o artefato principal da arquitetura.
+
+Todo o restante deriva dela.
+
+---
+
+## 4.12 Knowledge Graph
+
+Representação em forma de grafo da Knowledge IR.
+
+Não constitui o modelo do sistema.
+
+Constitui apenas uma possível representação.
+
+---
+
+## 4.13 Knowledge View
+
+Forma específica de visualizar a mesma Knowledge IR.
+
+Uma View organiza o conhecimento de acordo com um tipo de pergunta.
+
+Exemplos:
+
+- Architecture View;
+- Feature View;
+- Convention View;
+- Workflow View;
+- Dependency View;
+- Implementation View.
+
+Views não criam conhecimento.
+
+Elas apenas reorganizam conhecimento existente.
+
+---
+
+## 4.14 Context
+
+Conjunto de conhecimento selecionado para responder uma tarefa específica.
+
+Contexto não representa toda a Knowledge IR.
+
+Representa apenas a parcela relevante para determinada intenção.
+
+---
+
+## 4.15 Context Builder
+
+Componente responsável por selecionar partes da Knowledge IR para responder uma determinada pergunta.
+
+Seu papel é selecionar.
+
+Não produzir conhecimento.
+
+---
+
+## 4.16 Knowledge Server
+
+Componente responsável por disponibilizar a Knowledge IR para consumidores externos.
+
+Não participa da compilação.
+
+Não interpreta conhecimento.
+
+Não modifica conhecimento.
+
+Sua responsabilidade limita-se à consulta.
+
+---
+
+## 4.17 LLM
+
+Modelo responsável por interpretar a Knowledge IR para executar tarefas.
+
+A LLM não participa da compilação.
+
+Ela apenas consome conhecimento.
+
+---
+
+## 4.18 Semantic Enrichment
+
+Conhecimento adicional produzido por IA após a compilação.
+
+Não altera a Knowledge IR original.
+
+Representa apenas uma camada adicional de interpretação.
+
+Pode ser descartado.
+
+Pode ser regenerado.
+
+---
+
+## 4.19 Compilação
+
+Processo determinístico que transforma código em conhecimento estruturado.
+
+Compilar significa elevar o nível de abstração.
+
+O pipeline deve produzir sucessivos níveis de representação.
+
+Código
+
+↓
+
+Semântica
+
+↓
+
+Conhecimento Estrutural
+
+↓
+
+Knowledge IR
+
+---
+
+## 4.20 Compilador
+
+Um Compiler transforma uma representação em outra representação de maior nível.
+
+Exemplos:
+
+SemanticCompiler
+
+KnowledgeCompiler
+
+ContextCompiler
+
+O termo Compiler representa corretamente a natureza do projeto.
+
+---
+
+## 4.21 Builder
+
+Builder representa construção de estruturas.
+
+Embora existam Builders herdados da evolução do projeto, a direção arquitetural aprovada passou a privilegiar o conceito de Compiler na camada de conhecimento.
+
+---
+
+## 4.22 Analyzer
+
+Analyzer produz diagnósticos.
+
+Ele não produz conhecimento.
+
+Sempre que possível, componentes responsáveis pela geração da Knowledge IR devem evitar responsabilidades típicas de Analyzer.
+
+---
+
+## 4.23 Projeto
+
+Conjunto completo de conhecimento existente na Solution.
+
+O objetivo do sistema não é representar arquivos.
+
+É representar o projeto.
+
+---
+
+# 5. Arquitetura Congelada
+
+Esta seção consolida a arquitetura oficialmente adotada pelo projeto.
+
+Ela representa o fluxo conceitual do conhecimento.
+
+---
+
+## 5.1 Produto Central
+
+Foi oficialmente definido que existe apenas um artefato central.
+
+Knowledge IR
+
+Todo componente da arquitetura existe para produzir, consultar ou consumir esse artefato.
+
+Nenhuma outra estrutura pode assumir esse papel.
+
+---
+
+## 5.2 Fluxo Geral
+
+O fluxo conceitual aprovado é:
+
+Código
+
+↓
+
+Parsing
+
+↓
+
+Semantic Model
+
+↓
+
+Structural Knowledge
+
+↓
+
+Rule Inference
+
+↓
+
+Knowledge IR
+
+↓
+
+Context Builder
+
+↓
+
+LLM
+
+---
+
+Até a geração da Knowledge IR todo o pipeline deve permanecer determinístico.
+
+---
+
+## 5.3 Responsabilidades
+
+### Parsing
+
+Responsável por compreender o código.
+
+Não interpreta.
+
+Não infere.
+
+Não produz conhecimento.
+
+---
+
+### Semantic
+
+Produz representação semântica.
+
+Não produz conhecimento.
+
+---
+
+### Structural Knowledge
+
+Transforma semântica em fatos estruturados.
+
+Produz apenas informação objetiva.
+
+---
+
+### Rule Inference
+
+Transforma fatos em conhecimento reutilizável.
+
+Executa inferências determinísticas.
+
+Não utiliza IA.
+
+---
+
+### Knowledge IR
+
+Representa todo o conhecimento produzido pelo sistema.
+
+Constitui o produto final da compilação.
+
+---
+
+### Context Builder
+
+Seleciona conhecimento relevante para determinada tarefa.
+
+Não modifica a Knowledge IR.
+
+---
+
+### LLM
+
+Recebe apenas o conhecimento necessário para executar a tarefa.
+
+É responsável pela interpretação semântica de alto nível.
+
+---
+
+## 5.4 Limite Arquitetural
+
+Existe uma fronteira oficial entre compilação e interpretação.
+
+Compilação:
+
+- Parsing
+- Semantic
+- Structural Knowledge
+- Rule Inference
+- Knowledge IR
+
+Interpretação:
+
+- Context Builder
+- LLM
+- Semantic Enrichment
+
+Essa separação constitui um dos princípios fundamentais da arquitetura.
+
+---
+
+## 5.5 Independência das Representações
+
+A Knowledge IR constitui o modelo canônico.
+
+As seguintes representações são apenas formas de armazenamento ou consulta:
+
+- Graph
+- JSON
+- Binary
+- SQLite
+- Neo4j
+- DuckDB
+- Search Index
+
+Nenhuma delas define o modelo do sistema.
+
+---
+
+## 5.6 Organização do Conhecimento
+
+O conhecimento deve representar aquilo que um desenvolvedor experiente conhece sobre o projeto.
+
+Inclui, entre outros:
+
+- arquitetura;
+- módulos;
+- camadas;
+- convenções;
+- padrões;
+- fluxos;
+- pontos de entrada;
+- dependências;
+- regras;
+- exemplos relevantes.
+
+O objetivo não é catalogar código.
+
+É reconstruir o modelo mental do projeto.
+
+---
+
+## 5.7 Critério de Inclusão
+
+Todo novo componente deverá responder explicitamente:
+
+"Qual pergunta da LLM este componente ajuda a responder?"
+
+Caso essa pergunta não possa ser respondida de forma objetiva, a permanência do componente na arquitetura deverá ser questionada.
+
+Este critério tornou-se uma regra oficial da evolução do projeto.
+
+
+# 6. ADRs (Architecture Decision Records)
+
+Esta seção registra todas as decisões arquiteturais aprovadas durante a evolução do projeto.
+
+Cada ADR representa uma decisão congelada.
+
+Caso uma ADR tenha sido posteriormente substituída, isso será explicitamente indicado.
+
+---
+
+# ADR-001
+
+## Título
+
+O ProjectIndexer é um Compilador de Conhecimento.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+O projeto nasceu como um indexador de código.
+
+Ao longo da evolução ficou evidente que simplesmente catalogar classes, métodos e relacionamentos não resolvia o problema original: permitir que uma LLM compreendesse rapidamente uma solução grande.
+
+A arquitetura passou então a ser reavaliada sob uma nova perspectiva.
+
+## Decisão
+
+O X7.ProjectIndexer deixa de ser definido como um indexador de código.
+
+Sua definição oficial passa a ser:
+
+"Compilador de Conhecimento para projetos C#."
+
+## Consequências
+
+Toda a arquitetura deve ser orientada pela produção de conhecimento.
+
+Estruturas cujo objetivo seja apenas catalogação de código deixam de representar o foco principal do sistema.
+
+---
+
+# ADR-002
+
+## Título
+
+Knowledge IR torna-se o artefato central do sistema.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Diversos componentes produziam modelos intermediários.
+
+Não existia uma definição clara sobre qual deles representava o verdadeiro produto do sistema.
+
+## Decisão
+
+Foi definido que existe apenas um artefato central.
+
+Knowledge IR.
+
+Todos os demais componentes passam a existir para:
+
+- produzir;
+- consultar;
+- consumir;
+
+essa representação.
+
+## Consequências
+
+Graph deixa de ocupar posição central.
+
+Builders deixam de produzir estruturas independentes.
+
+Toda evolução deve convergir para a Knowledge IR.
+
+---
+
+# ADR-003
+
+## Título
+
+O produto do ProjectIndexer é independente da LLM consumidora.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Durante a definição do objetivo do projeto discutiu-se a possibilidade de integrar diretamente Claude, GPT, Ollama e outros modelos.
+
+Isso criaria forte acoplamento.
+
+## Decisão
+
+A Knowledge IR será completamente independente da LLM.
+
+O índice não conhecerá:
+
+- Claude;
+- GPT;
+- Ollama;
+- Cursor;
+- MCP;
+- qualquer outra IA.
+
+## Consequências
+
+Novos consumidores poderão surgir sem necessidade de alterar o compilador.
+
+---
+
+# ADR-004
+
+## Título
+
+Primeira versão baseada em arquivos.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Foi discutida a utilização de servidores, banco de dados e outras infraestruturas.
+
+O objetivo inicial da V1 era validar o modelo de conhecimento.
+
+## Decisão
+
+A primeira versão priorizará simplicidade.
+
+O armazenamento será file-based.
+
+## Consequências
+
+Infraestrutura adicional somente será considerada após estabilização da Knowledge IR.
+
+---
+
+# ADR-005
+
+## Título
+
+Toda informação produzida deve reduzir contexto.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Durante a auditoria surgiu um critério objetivo para avaliar novos componentes.
+
+## Decisão
+
+Todo novo conhecimento deve responder:
+
+"Essa informação reduz a quantidade de código que uma LLM precisa ler?"
+
+Caso negativo, sua utilidade deve ser questionada.
+
+## Consequências
+
+Este princípio torna-se critério oficial para evolução da arquitetura.
+
+---
+
+# ADR-006
+
+## Título
+
+O modelo mental do desenvolvedor é o verdadeiro objetivo da compilação.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Percebeu-se que um desenvolvedor experiente não memoriza arquivos.
+
+Ele conhece:
+
+- padrões;
+- arquitetura;
+- convenções;
+- exceções;
+- domínio.
+
+## Decisão
+
+A Knowledge IR deverá representar esse modelo mental.
+
+Não apenas símbolos.
+
+## Consequências
+
+Conhecimento implícito passa a possuir prioridade sobre simples catalogação estrutural.
+
+---
+
+# ADR-007
+
+## Título
+
+Convenções fazem parte do conhecimento.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Inicialmente o projeto concentrava-se em arquitetura e estrutura.
+
+Posteriormente identificou-se uma categoria própria de conhecimento.
+
+## Decisão
+
+Convention Knowledge passa a ser considerado um tipo oficial de conhecimento.
+
+Inclui:
+
+- nomenclatura;
+- herança;
+- organização;
+- factories;
+- testes;
+- namespaces;
+- registro DI.
+
+## Consequências
+
+Convenções deixam de ser metadados.
+
+Passam a integrar a Knowledge IR.
+
+---
+
+# ADR-008
+
+## Título
+
+Graph deixa de ser o centro da arquitetura.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+O grafo passou a ser tratado como se fosse o modelo do sistema.
+
+Durante a auditoria verificou-se que isso confundia armazenamento com conhecimento.
+
+## Decisão
+
+Knowledge constitui o modelo.
+
+Graph torna-se apenas uma representação possível.
+
+## Consequências
+
+Outras representações tornam-se equivalentes:
+
+- JSON;
+- Binary;
+- SQLite;
+- Neo4j;
+- DuckDB.
+
+---
+
+# ADR-009
+
+## Título
+
+Compilação deve permanecer determinística.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Foi discutida a possibilidade de utilizar IA durante a geração do índice.
+
+## Decisão
+
+Todo o processo de compilação deve ser reproduzível.
+
+IA não participa da geração da Knowledge IR.
+
+## Consequências
+
+Execuções sucessivas devem produzir exatamente o mesmo resultado.
+
+---
+
+# ADR-010
+
+## Título
+
+Existe uma fronteira entre compilação e interpretação.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Inicialmente existia tendência de incorporar interpretação semântica ao compilador.
+
+A auditoria redefiniu essa responsabilidade.
+
+## Decisão
+
+Compilação termina na geração da Knowledge IR.
+
+Interpretação começa apenas no consumo dessa representação.
+
+## Consequências
+
+Separação clara entre:
+
+Compilador
+
+e
+
+LLM.
+
+---
+
+# ADR-011
+
+## Título
+
+Conhecimento deve ser explicável.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Uma inferência sem justificativa possui baixo valor para uma LLM.
+
+## Decisão
+
+Sempre que possível cada conclusão deverá apontar para suas evidências.
+
+## Consequências
+
+Explicabilidade torna-se característica desejável da Knowledge IR.
+
+---
+
+# ADR-012
+
+## Título
+
+O núcleo não responde perguntas.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Foi discutido transformar o ProjectIndexer em um mecanismo de consulta.
+
+## Decisão
+
+O núcleo apenas produz conhecimento.
+
+Responder perguntas pertence ao consumidor.
+
+## Consequências
+
+Consultas deixam de fazer parte da responsabilidade principal do compilador.
+
+---
+
+# ADR-013
+
+## Título
+
+Context Builder apenas seleciona conhecimento.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+O Context Builder chegou a ser considerado um mecanismo de inferência.
+
+## Decisão
+
+Sua responsabilidade limita-se à seleção da informação relevante.
+
+Não produz conhecimento.
+
+Não interpreta conhecimento.
+
+## Consequências
+
+A responsabilidade permanece bem delimitada.
+
+---
+
+# ADR-014
+
+## Título
+
+Knowledge Views representam diferentes formas de navegação.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Percebeu-se que a mesma Knowledge IR precisava responder perguntas muito diferentes.
+
+## Decisão
+
+O conhecimento poderá ser organizado em diferentes Views.
+
+Exemplos:
+
+- Architecture View;
+- Feature View;
+- Convention View;
+- Workflow View;
+- Dependency View.
+
+## Consequências
+
+As Views reorganizam conhecimento.
+
+Nunca produzem conhecimento novo.
+
+# ADR-015
+
+## Título
+
+A arquitetura deve ser orientada pelas perguntas que uma LLM precisa responder.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Durante a auditoria percebeu-se que organizar o conhecimento por tipos técnicos (Services, Repositories, Classes etc.) não refletia a forma como uma LLM trabalha ao executar uma tarefa.
+
+## Decisão
+
+A arquitetura da Knowledge IR passa a ser orientada pelas perguntas que precisam ser respondidas durante uma tarefa.
+
+Exemplos:
+
+- Onde criar?
+- Quem implementa?
+- Qual convenção seguir?
+- Qual fluxo devo alterar?
+- O que será impactado?
+- Existe implementação semelhante?
+
+## Consequências
+
+A organização lógica do conhecimento passa a privilegiar a resolução de tarefas em vez da representação direta da estrutura do código.
+
+---
+
+# ADR-016
+
+## Título
+
+O conhecimento implícito possui maior valor que a simples catalogação estrutural.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Durante a auditoria foi identificado que apenas listar símbolos não reduz significativamente o contexto necessário para uma LLM.
+
+## Decisão
+
+Sempre que possível, o projeto deverá identificar conhecimento recorrente existente na solução, como:
+
+- padrões;
+- famílias de classes;
+- convenções;
+- estilos de implementação;
+- arquiteturas recorrentes.
+
+## Consequências
+
+A evolução da Knowledge IR passa a priorizar abstrações reutilizáveis em vez de simples inventários de elementos do código.
+
+---
+
+# ADR-017
+
+## Título
+
+Toda evolução arquitetural deve ser justificada pelo benefício para a LLM.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Diversos componentes passaram a surgir durante a auditoria.
+
+Era necessário definir um critério objetivo para impedir crescimento desnecessário da arquitetura.
+
+## Decisão
+
+Todo novo componente deverá responder claramente:
+
+"Qual pergunta da LLM este componente responde?"
+
+Caso essa resposta não exista, sua inclusão deverá ser reconsiderada.
+
+## Consequências
+
+A arquitetura passa a crescer orientada por utilidade prática.
+
+---
+
+# ADR-018
+
+## Título
+
+Structural Knowledge constitui a camada canônica produzida pelo compilador.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Foi identificada a necessidade de separar fatos estruturais de interpretações semânticas.
+
+## Decisão
+
+O núcleo do compilador produz apenas conhecimento estrutural determinístico.
+
+Esse conhecimento constitui a base da Knowledge IR.
+
+## Consequências
+
+O compilador permanece:
+
+- reproduzível;
+- testável;
+- independente de IA.
+
+---
+
+# ADR-019
+
+## Título
+
+Semantic Enrichment pertence ao consumidor da Knowledge IR.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Foi discutida a possibilidade de produzir conhecimento semântico utilizando IA durante a indexação.
+
+## Decisão
+
+Qualquer enriquecimento semântico baseado em IA ocorrerá apenas após a geração da Knowledge IR.
+
+## Consequências
+
+A interpretação torna-se completamente desacoplada da compilação.
+
+---
+
+# ADR-020
+
+## Título
+
+Inferências produzidas por IA nunca alteram a Knowledge IR original.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Foi considerada a possibilidade de permitir que uma LLM modificasse o conhecimento compilado.
+
+## Decisão
+
+A Knowledge IR constitui um artefato imutável produzido pelo compilador.
+
+Inferências produzidas posteriormente representam apenas uma camada adicional.
+
+## Consequências
+
+A compilação permanece reproduzível.
+
+---
+
+# ADR-021
+
+## Título
+
+Conhecimento enriquecido deve ser descartável.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Após separar compilação de interpretação surgiu a necessidade de definir o ciclo de vida das inferências realizadas por IA.
+
+## Decisão
+
+Conhecimento enriquecido poderá ser removido e regenerado a qualquer momento.
+
+Não faz parte da saída oficial do compilador.
+
+## Consequências
+
+Evita acoplamento entre evolução da IA e evolução do compilador.
+
+---
+
+# ADR-022
+
+## Título
+
+Existe apenas uma direção para o fluxo de conhecimento.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Durante a definição da arquitetura surgiu a preocupação de permitir que interpretações retornassem ao compilador.
+
+## Decisão
+
+O fluxo oficial é:
+
+Código
+
+↓
+
+Parsing
+
+↓
+
+Semantic
+
+↓
+
+Structural Knowledge
+
+↓
+
+Rule Inference
+
+↓
+
+Knowledge IR
+
+↓
+
+Consumidores
+
+Nunca no sentido inverso.
+
+## Consequências
+
+Consumidores nunca modificam o resultado oficial da compilação.
+
+---
+
+# ADR-023
+
+## Título
+
+A arquitetura deve permanecer em camadas de abstração crescente.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Ao longo da auditoria tornou-se evidente que cada etapa do pipeline representa uma abstração superior à anterior.
+
+## Decisão
+
+Cada estágio do pipeline deverá produzir uma representação de nível mais alto.
+
+Código nunca deve ser manipulado diretamente por componentes responsáveis pelo conhecimento.
+
+## Consequências
+
+O pipeline permanece organizado por níveis de abstração.
+
+---
+
+# ADR-024
+
+## Título
+
+A Knowledge IR deve possuir um modelo canônico único.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Foi discutida a possibilidade de múltiplos modelos independentes de conhecimento.
+
+## Decisão
+
+Existe apenas um modelo oficial.
+
+As diferentes representações derivam desse modelo.
+
+## Consequências
+
+Evita divergência entre diferentes formatos de armazenamento.
+
+---
+
+# ADR-025
+
+## Título
+
+A arquitetura deve separar claramente conhecimento, armazenamento e consulta.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+Durante a auditoria foram identificados diversos componentes misturando essas responsabilidades.
+
+## Decisão
+
+São conceitos independentes:
+
+• conhecimento;
+
+• representação;
+
+• armazenamento;
+
+• consulta.
+
+Nenhum deles define o outro.
+
+## Consequências
+
+O modelo arquitetural torna-se mais estável frente à evolução tecnológica.
+
+---
+
+# ADR-026
+
+## Título
+
+A missão do ProjectIndexer termina na compilação do conhecimento.
+
+## Status
+
+APROVADA
+
+## Contexto
+
+A auditoria redefiniu sucessivamente o escopo do projeto.
+
+## Decisão
+
+A responsabilidade oficial do ProjectIndexer termina na produção da Knowledge IR.
+
+Qualquer processamento posterior pertence a outro componente da arquitetura.
+
+## Consequências
+
+Escopo do projeto torna-se claramente delimitado.
+
+# 7. Decisões Rejeitadas e Revogadas
+
+Esta seção registra decisões que foram efetivamente analisadas durante a evolução do projeto e posteriormente descartadas, revogadas ou consideradas incompatíveis com a arquitetura final.
+
+Estas decisões NÃO devem ser reabertas sem uma nova ADR formal.
+
+---
+
+# DR-001
+
+## Título
+
+O ProjectIndexer como Indexador de Código.
+
+## Status
+
+REJEITADA
+
+## Contexto
+
+Nas primeiras discussões o projeto era frequentemente tratado como um indexador de código.
+
+A auditoria demonstrou que essa definição era insuficiente para atingir o objetivo original.
+
+## Decisão Final
+
+O projeto passou a ser oficialmente definido como um Compilador de Conhecimento.
+
+## Motivo
+
+Indexação de código não representa o conhecimento necessário para uma LLM compreender um projeto.
+
+---
+
+# DR-002
+
+## Título
+
+Graph como modelo principal do sistema.
+
+## Status
+
+REJEITADA
+
+## Contexto
+
+Durante parte do desenvolvimento o grafo ocupava posição central na arquitetura.
+
+## Decisão Final
+
+Graph passa a ser apenas uma representação possível da Knowledge IR.
+
+## Motivo
+
+O modelo do sistema é o conhecimento.
+
+O grafo é apenas uma forma de representá-lo.
+
+---
+
+# DR-003
+
+## Título
+
+Acoplamento entre ProjectIndexer e Claude Code.
+
+## Status
+
+REJEITADA
+
+## Contexto
+
+Foi considerada a possibilidade de produzir uma arquitetura específica para Claude Code.
+
+## Decisão Final
+
+O ProjectIndexer permanece totalmente independente de qualquer LLM.
+
+## Motivo
+
+A Knowledge IR deve ser reutilizável por qualquer consumidor.
+
+---
+
+# DR-004
+
+## Título
+
+Conhecimento produzido diretamente por IA durante a compilação.
+
+## Status
+
+REJEITADA
+
+## Contexto
+
+Foi discutida a utilização de uma LLM para produzir conhecimento durante a indexação.
+
+## Decisão Final
+
+A compilação permanece totalmente determinística.
+
+A IA participa apenas posteriormente.
+
+## Motivo
+
+Garantir reprodutibilidade, previsibilidade e testabilidade.
+
+---
+
+# DR-005
+
+## Título
+
+Misturar compilação e interpretação.
+
+## Status
+
+REJEITADA
+
+## Contexto
+
+Durante a auditoria percebeu-se que diversas responsabilidades estavam se aproximando.
+
+## Decisão Final
+
+Compilação e interpretação tornam-se fases distintas.
+
+## Motivo
+
+Cada etapa possui responsabilidades completamente diferentes.
+
+---
+
+# DR-006
+
+## Título
+
+Conhecimento acoplado ao mecanismo de armazenamento.
+
+## Status
+
+REJEITADA
+
+## Contexto
+
+Alguns componentes assumiam implicitamente que o conhecimento existia em forma de Graph.
+
+## Decisão Final
+
+Conhecimento torna-se independente da representação física.
+
+## Motivo
+
+Evitar dependência tecnológica.
+
+---
+
+# DR-007
+
+## Título
+
+Query dependente da implementação do armazenamento.
+
+## Status
+
+REJEITADA
+
+## Contexto
+
+Durante a auditoria foi identificado forte acoplamento entre consultas e a estrutura utilizada para persistência.
+
+## Decisão Final
+
+Modelo de conhecimento e mecanismo de consulta passam a ser conceitos independentes.
+
+## Motivo
+
+Consultas não devem depender da forma como o conhecimento é armazenado.
+
+---
+
+# DR-008
+
+## Título
+
+Context Builder realizando inferências.
+
+## Status
+
+REJEITADA
+
+## Contexto
+
+Inicialmente o Context Builder aproximava-se de um mecanismo de raciocínio.
+
+## Decisão Final
+
+Sua responsabilidade limita-se à seleção de conhecimento.
+
+## Motivo
+
+Inferência pertence a outra camada.
+
+---
+
+# DR-009
+
+## Título
+
+Conhecimento organizado exclusivamente por estruturas técnicas.
+
+## Status
+
+REJEITADA
+
+## Contexto
+
+A organização inicialmente seguia entidades como:
+
+- Services;
+- Repositories;
+- Controllers;
+- Classes.
+
+## Decisão Final
+
+A organização passa a priorizar perguntas que precisam ser respondidas.
+
+## Motivo
+
+Essa estrutura reduz melhor o contexto necessário para uma LLM.
+
+---
+
+# DR-010
+
+## Título
+
+ProjectIndexer responsável por responder perguntas.
+
+## Status
+
+REJEITADA
+
+## Contexto
+
+Em determinado momento o índice aproximava-se de um mecanismo de consulta inteligente.
+
+## Decisão Final
+
+O ProjectIndexer produz conhecimento.
+
+Consumidores respondem perguntas.
+
+## Motivo
+
+Separação de responsabilidades.
+
+---
+
+# DR-011
+
+## Título
+
+X7.Agent como componente obrigatório da arquitetura.
+
+## Status
+
+REVOGADA
+
+## Contexto
+
+Durante parte do planejamento existia a proposta de construir um agente próprio.
+
+Posteriormente a auditoria revisitou esse objetivo.
+
+Foi concluído que Claude Code, Cursor e outras ferramentas já desempenham esse papel.
+
+## Decisão Final
+
+A ideia de um agente genérico foi removida do roadmap da V1.
+
+Em seu lugar passou a ser considerada uma arquitetura baseada em um servidor especializado de conhecimento.
+
+## Consequências
+
+O foco retorna para o verdadeiro objetivo do projeto:
+
+Produzir conhecimento especializado sobre a solução.
+
+---
+
+# DR-012
+
+## Título
+
+Construção de infraestrutura antes da estabilização da Knowledge IR.
+
+## Status
+
+REJEITADA
+
+## Contexto
+
+Diversas possibilidades de infraestrutura foram discutidas durante a auditoria.
+
+## Decisão Final
+
+A evolução da infraestrutura somente poderá ocorrer após estabilização da Knowledge IR.
+
+## Motivo
+
+A representação do conhecimento constitui o verdadeiro núcleo do projeto.
+
+---
+
+# DR-013
+
+## Título
+
+Conhecimento implícito produzido diretamente pelo parser.
+
+## Status
+
+REJEITADA
+
+## Contexto
+
+Foi identificado que diversos conceitos de domínio não podem ser descobertos apenas pela análise sintática.
+
+## Decisão Final
+
+O parser limita-se à produção de informação estrutural.
+
+## Motivo
+
+Evitar interpretações incorretas e preservar determinismo.
+
+---
+
+# DR-014
+
+## Título
+
+ProjectIndexer como mecanismo especializado para um único projeto.
+
+## Status
+
+REJEITADA
+
+## Contexto
+
+Embora o projeto tenha surgido motivado pela necessidade do Segundio, discutiu-se se ele deveria permanecer acoplado a esse cenário.
+
+## Decisão Final
+
+O ProjectIndexer constitui uma ferramenta genérica de compilação de conhecimento para projetos C#.
+
+## Motivo
+
+O conhecimento compilado deve ser reutilizável em qualquer solução.
+
+---
+
+# DR-015
+
+## Título
+
+Conhecimento dependente do consumidor.
+
+## Status
+
+REJEITADA
+
+## Contexto
+
+Foi discutida a possibilidade de produzir diferentes conhecimentos conforme a ferramenta utilizada.
+
+## Decisão Final
+
+A Knowledge IR permanece única.
+
+Cada consumidor decide como utilizá-la.
+
+## Motivo
+
+Existe apenas uma verdade sobre o projeto.
+
+Mudam apenas as formas de navegação.
+
+---
+
+## Observação
+
+Durante a auditoria diversas hipóteses foram exploradas.
+
+Hipóteses que nunca chegaram a ser aprovadas não fazem parte desta seção.
+
+Somente decisões efetivamente analisadas e posteriormente rejeitadas ou revogadas foram registradas.
+
+---
+
+# 8. Regras de Desenvolvimento
+
+Esta seção consolida as regras metodológicas aprovadas durante o desenvolvimento do projeto.
+
+Estas regras orientam qualquer alteração futura.
+
+## RD-001
+
+Toda alteração arquitetural relevante deve resultar em uma ADR.
+
+Discussões isoladas não alteram a arquitetura oficial.
+
+---
+
+## RD-002
+
+Nenhuma ADR aprovada pode ser rediscutida informalmente.
+
+Caso seja necessária uma revisão, uma nova ADR deverá substituir explicitamente a anterior.
+
+---
+
+## RD-003
+
+Arquitetura deve evoluir de acordo com o problema real.
+
+Não adicionar componentes antecipadamente.
+
+Evitar infraestrutura antes de existir necessidade concreta.
+
+---
+
+## RD-004
+
+Toda nova funcionalidade deve justificar claramente seu benefício para a redução de contexto da LLM.
+
+Caso esse benefício não exista, sua implementação deverá ser questionada.
+
+---
+
+## RD-005
+
+Sempre priorizar simplicidade.
+
+Complexidade somente poderá ser introduzida quando resolver um problema já existente.
+
+---
+
+## RD-006
+
+Responsabilidades devem permanecer claramente separadas.
+
+Compilar.
+
+Consultar.
+
+Interpretar.
+
+Consumir.
+
+São responsabilidades independentes.
+
+---
+
+## RD-007
+
+Toda abstração introduzida deve representar um conceito do domínio arquitetural.
+
+Abstrações criadas apenas por conveniência de implementação devem ser evitadas.
+
+
+# 9. Armadilhas Conhecidas
+
+Esta seção registra erros de processo identificados durante a evolução do projeto.
+
+Essas armadilhas representam conhecimento adquirido e deverão orientar todas as decisões futuras.
+
+---
+
+# AC-001
+
+## Reabrir ADRs congeladas
+
+Foi identificado que, conforme o contexto da conversa crescia, decisões anteriormente aprovadas voltavam a ser discutidas como se nunca tivessem existido.
+
+Isso gera:
+
+- retrabalho;
+- inconsistência arquitetural;
+- perda de direção.
+
+### Regra
+
+Uma ADR aprovada permanece válida até que outra ADR a substitua explicitamente.
+
+---
+
+# AC-002
+
+## Confundir hipótese com decisão
+
+Grande parte da auditoria consistiu em explorar possibilidades.
+
+Nem toda hipótese se tornou arquitetura.
+
+### Regra
+
+Somente decisões explicitamente aprovadas fazem parte da Constituição.
+
+---
+
+# AC-003
+
+## Confundir representação com conhecimento
+
+Em diversos momentos Graph passou a ser tratado como se fosse o produto.
+
+Posteriormente ficou claro que:
+
+Graph representa conhecimento.
+
+Ele não é o conhecimento.
+
+### Regra
+
+Nunca permitir que uma representação tecnológica se torne o centro da arquitetura.
+
+---
+
+# AC-004
+
+## Misturar responsabilidades
+
+Diversos componentes começaram a acumular funções.
+
+Exemplos:
+
+- consulta;
+- compilação;
+- interpretação;
+- armazenamento.
+
+### Regra
+
+Cada componente deve possuir responsabilidade claramente definida.
+
+---
+
+# AC-005
+
+## Introduzir infraestrutura antes do problema existir
+
+Durante a auditoria foram discutidos diversos mecanismos de persistência e comunicação.
+
+A maior parte dessas discussões ocorreu antes da estabilização do modelo de conhecimento.
+
+### Regra
+
+Infraestrutura nunca deve anteceder a definição do modelo.
+
+---
+
+# AC-006
+
+## Projetar tecnologia em vez do problema
+
+Em diversos momentos a arquitetura começou a girar em torno de Graph, MCP, bancos ou servidores.
+
+Posteriormente concluiu-se que o centro deveria permanecer o conhecimento.
+
+### Regra
+
+Sempre projetar o modelo do problema.
+
+Tecnologias permanecem secundárias.
+
+---
+
+# AC-007
+
+## Otimizar componentes antes de compreender o domínio
+
+Algumas discussões focavam em melhorar implementações antes que o papel daqueles componentes estivesse claramente definido.
+
+### Regra
+
+Primeiro compreender.
+
+Depois organizar.
+
+Somente então otimizar.
+
+---
+
+# AC-008
+
+## Adicionar complexidade sem benefício mensurável
+
+A auditoria identificou diversas ideias interessantes que não produziam ganho concreto para a LLM.
+
+### Regra
+
+Toda complexidade introduzida deve possuir benefício objetivo.
+
+---
+
+# AC-009
+
+## Assumir que a arquitetura está correta apenas porque compila
+
+Foi identificado que um projeto pode possuir excelente qualidade técnica e ainda assim não resolver o problema original.
+
+### Regra
+
+Toda decisão arquitetural deve ser avaliada em relação ao objetivo do projeto.
+
+---
+
+# AC-010
+
+## Esquecer o objetivo original
+
+A conversa retornou diversas vezes ao problema inicial:
+
+Permitir que uma LLM compreenda rapidamente uma solução grande.
+
+Sempre que a arquitetura começou a se afastar desse objetivo, foi necessário reavaliar decisões.
+
+### Regra
+
+O problema original possui prioridade sobre qualquer solução técnica.
+
+---
+
+# AC-011
+
+## Produzir informação que não reduz contexto
+
+Nem toda informação agregada ao índice melhora sua utilidade.
+
+### Regra
+
+Se uma informação não reduz a quantidade de código necessária para realizar uma tarefa, sua existência deve ser questionada.
+
+---
+
+# AC-012
+
+## Confundir conhecimento estrutural com conhecimento semântico
+
+A auditoria demonstrou que esses conceitos pertencem a níveis diferentes da arquitetura.
+
+### Regra
+
+Conhecimento estrutural é produzido pelo compilador.
+
+Conhecimento semântico pertence ao consumidor.
+
+---
+
+# AC-013
+
+## Criar componentes sem uma pergunta clara
+
+Diversos componentes surgiram naturalmente durante a evolução do projeto.
+
+Nem todos possuíam uma justificativa funcional.
+
+### Regra
+
+Todo componente deve responder claramente:
+
+"Qual pergunta da LLM este componente responde?"
+
+---
+
+# AC-014
+
+## Reinventar funcionalidades já existentes nas ferramentas de IA
+
+O planejamento inicial aproximou-se da construção de um agente próprio.
+
+Posteriormente verificou-se que Claude Code já realizava boa parte dessas responsabilidades.
+
+### Regra
+
+O projeto deve complementar as ferramentas existentes.
+
+Não competir com elas.
+
+---
+
+# 10. Estado Atual da Implementação
+
+Esta seção descreve o estado do projeto ao término da conversa consolidada.
+
+Representa apenas informações que puderam ser determinadas com segurança.
+
+---
+
+## 10.1 Arquitetura
+
+Estado:
+
+DEFINIDA
+
+A missão do projeto encontra-se claramente estabelecida.
+
+Os princípios arquiteturais foram consolidados.
+
+As responsabilidades principais encontram-se definidas.
+
+---
+
+## 10.2 Modelo Conceitual
+
+Estado:
+
+DEFINIDO
+
+Foi estabelecido que:
+
+- existe uma Knowledge IR;
+- ela constitui o artefato central;
+- o pipeline principal encontra-se definido.
+
+---
+
+## 10.3 Pipeline
+
+Estado:
+
+DEFINIDO
+
+Fluxo oficial:
+
+Código
+
+↓
+
+Parsing
+
+↓
+
+Semantic Model
+
+↓
+
+Structural Knowledge
+
+↓
+
+Rule Inference
+
+↓
+
+Knowledge IR
+
+↓
+
+Consumidores
+
+---
+
+## 10.4 Separação Arquitetural
+
+Estado:
+
+DEFINIDA
+
+Foi estabelecida a separação entre:
+
+- compilação;
+- interpretação;
+- consumo.
+
+---
+
+## 10.5 Modelo de Conhecimento
+
+Estado:
+
+EM DEFINIÇÃO DURANTE A CONVERSA
+
+Ao final da auditoria ficou estabelecido que a próxima etapa seria definir detalhadamente o modelo canônico da Knowledge IR.
+
+A definição completa das entidades ainda não havia sido concluída.
+
+---
+
+## 10.6 Formato da Knowledge IR
+
+Estado:
+
+NÃO DETERMINADO
+
+A conversa consolidou que:
+
+- haverá uma Knowledge IR;
+
+porém
+
+o formato definitivo não foi congelado.
+
+---
+
+## 10.7 Organização Física
+
+Estado:
+
+PARCIALMENTE DEFINIDA
+
+Foi aprovada uma primeira versão baseada em arquivos.
+
+Detalhes de serialização permaneceram em aberto.
+
+---
+
+## 10.8 Knowledge Server
+
+Estado:
+
+NÃO IMPLEMENTADO
+
+Foi identificado como evolução arquitetural possível.
+
+Não fazia parte do núcleo do ProjectIndexer.
+
+---
+
+## 10.9 Semantic Enrichment
+
+Estado:
+
+NÃO IMPLEMENTADO
+
+Permaneceu como camada posterior à compilação.
+
+---
+
+## 10.10 Consumo por LLM
+
+Estado:
+
+NÃO IMPLEMENTADO
+
+A arquitetura foi definida.
+
+A implementação permaneceu para etapas posteriores.
+
+---
+
+## 10.11 Funcionalidades Existentes
+
+Da conversa foi possível determinar a existência de componentes como:
+
+- Parsing;
+- Semantic Analysis;
+- Relationship Extraction;
+- Graph Generation;
+- Analysis Pipeline;
+- Integrity Verification;
+- Knowledge Components.
+
+A implementação detalhada de cada componente não faz parte desta Constituição.
+
+---
+
+# 11. Roadmap
+
+Esta seção registra apenas próximos passos efetivamente aprovados durante a conversa.
+
+Não representa desejos futuros.
+
+Representa planejamento consolidado.
+
+---
+
+## R-001
+
+Concluir o modelo canônico da Knowledge IR.
+
+Prioridade máxima.
+
+---
+
+## R-002
+
+Definir oficialmente as entidades fundamentais da Knowledge IR.
+
+---
+
+## R-003
+
+Consolidar as relações existentes entre essas entidades.
+
+---
+
+## R-004
+
+Mapear quais fatos estruturais compõem o conhecimento oficial.
+
+---
+
+## R-005
+
+Implementar progressivamente os Compilers responsáveis pela geração da Knowledge IR.
+
+---
+
+## R-006
+
+Garantir que toda informação produzida seja determinística.
+
+---
+
+## R-007
+
+Validar continuamente o Princípio da Compressão de Conhecimento.
+
+Cada evolução deve demonstrar redução objetiva do contexto necessário para execução de tarefas.
+
+---
+
+## R-008
+
+Somente após estabilização da Knowledge IR iniciar a evolução da infraestrutura de consumo.
+
+---
+
+## R-009
+
+Avaliar posteriormente mecanismos especializados para disponibilização da Knowledge IR.
+
+Essa evolução não altera a responsabilidade do ProjectIndexer.
+
+---
+
+# Cláusula Final
+
+Este documento constitui a fonte oficial de verdade do projeto.
+
+Sempre que existir divergência entre:
+
+- conversas futuras;
+- documentação;
+- interpretações;
+- implementações;
+
+prevalece esta Constituição.
+
+Alterações arquiteturais somente poderão ocorrer mediante nova ADR.
+
+Nenhuma decisão congelada poderá ser reinterpretada informalmente.
+
+A missão do ProjectIndexer permanece inalterada:
+
+Compilar conhecimento estrutural de uma solução de software para reduzir drasticamente a quantidade de código que uma LLM precisa analisar para compreender e evoluir o projeto.
+
+
