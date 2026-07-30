@@ -91,3 +91,4 @@ D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.Projec
 D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CLI\obj\Debug\net10.0\X7.ProjectIndexer.CLI.pdb
 D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CLI\obj\Debug\net10.0\X7.ProjectIndexer.CLI.genruntimeconfig.cache
 D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CLI\obj\Debug\net10.0\ref\X7.ProjectIndexer.CLI.dll
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.CLI\obj\Debug\net10.0\X7.ProjectIndexer.CLI.sourcelink.json

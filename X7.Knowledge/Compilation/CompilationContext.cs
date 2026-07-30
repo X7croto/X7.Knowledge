@@ -1,21 +1,23 @@
-﻿using X7.Knowledge;
+using X7.Knowledge.Acquisition;
+using X7.Knowledge.Model;
 
-internal sealed class CompilationContext
+namespace X7.Knowledge.Compilation;
+
+/// <summary>Estado compartilhado por um único ciclo de compilação.</summary>
+public sealed class CompilationContext
 {
-    public string SolutionPath { get; }
-
-    public string OutputDirectory { get; }
-
-    public ProjectIndex ProjectIndex { get; set; }
-
-    public KnowledgeModel Knowledge { get; }
-
-    public CompilationContext(
-        string solutionPath,
-        string outputDirectory)
+    public CompilationContext(SolutionFile solution, AcquisitionLevel level)
     {
-        SolutionPath = solutionPath;
-        OutputDirectory = outputDirectory;
-        Knowledge = new KnowledgeModel();
+        Solution = solution;
+        AcquisitionLevel = level;
+        Knowledge = new KnowledgeModelBuilder();
     }
+
+    public SolutionFile Solution { get; }
+
+    public AcquisitionLevel AcquisitionLevel { get; }
+
+    public KnowledgeModelBuilder Knowledge { get; }
+
+    public KnowledgeId SolutionId => KnowledgeId.ForSolution(Solution.Name);
 }

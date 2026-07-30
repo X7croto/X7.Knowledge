@@ -1,0 +1,118 @@
+{
+  "benchmarkVersion": 1,
+  "coveragePerMille": 200,
+  "measurements": [
+    {
+      "codeTokens": 352,
+      "contextRatioPerMille": 1349,
+      "expectedCapability": "C01",
+      "id": "Q01",
+      "kbTokens": 475,
+      "supported": true
+    },
+    {
+      "codeTokens": 3203,
+      "contextRatioPerMille": 148,
+      "expectedCapability": "C01",
+      "id": "Q02",
+      "kbTokens": 475,
+      "supported": true
+    },
+    {
+      "codeTokens": 609,
+      "contextRatioPerMille": 780,
+      "expectedCapability": "C01",
+      "id": "Q03",
+      "kbTokens": 475,
+      "supported": true
+    },
+    {
+      "codeTokens": 503,
+      "expectedCapability": "C02",
+      "id": "Q04",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 295,
+      "expectedCapability": "C02",
+      "id": "Q05",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 301,
+      "expectedCapability": "C02",
+      "id": "Q06",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 376,
+      "expectedCapability": "C03",
+      "id": "Q07",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 1239,
+      "expectedCapability": "C04",
+      "id": "Q08",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 376,
+      "expectedCapability": "C05",
+      "id": "Q09",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 4716,
+      "expectedCapability": "C06",
+      "id": "Q10",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 3256,
+      "expectedCapability": "C07",
+      "id": "Q11",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 1332,
+      "expectedCapability": "C08",
+      "id": "Q12",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 727,
+      "expectedCapability": "C09",
+      "id": "Q13",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 1068,
+      "expectedCapability": "C10",
+      "id": "Q14",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 1341,
+      "expectedCapability": "C11",
+      "id": "Q15",
+      "kbTokens": 0,
+      "supported": false
+    }
+  ],
+  "medianContextRatioPerMille": 780,
+  "questionCount": 15,
+  "referenceSolution": "X7.ProjectIndexer.slnx",
+  "supportedCount": 3
+}

@@ -1,0 +1,886 @@
+# COMPILATION_PLAN.md
+
+> Status: Oficial
+>
+> Derivado de:
+>
+> - PROJECT_CONSTITUTION.md
+> - ROADMAP.md
+>
+> Este documento define a evolução das capacidades do compilador.
+>
+> Seu objetivo é estabelecer a ordem em que o compilador adquire conhecimento, preservando os princípios definidos na Constituição e materializando o Roadmap.
+>
+> Este documento **não descreve implementação**, **não descreve arquitetura interna** e **não define backlog técnico**.
+>
+> Ele representa o contrato permanente de evolução do compilador.
+
+---
+
+# 1. Propósito
+
+O X7.Knowledge é um Compilador de Conhecimento.
+
+Assim como um compilador tradicional evolui adquirindo novas capacidades de análise e transformação, o X7.Knowledge evolui adquirindo novas capacidades de compreensão sobre uma solução de software.
+
+Cada capacidade representa um novo conhecimento permanente incorporado ao compilador.
+
+Implementações podem ser substituídas.
+
+Capacidades permanecem.
+
+Este documento descreve exclusivamente essas capacidades.
+
+---
+
+# 2. Relação com a Constituição
+
+A Constituição responde:
+
+> O que o projeto é.
+
+O Compilation Plan responde:
+
+> Como o compilador evolui para cumprir essa missão.
+
+Nenhuma capacidade poderá contrariar qualquer princípio estabelecido pela Constituição.
+
+Caso exista conflito, a Constituição prevalece.
+
+---
+
+# 3. Relação com o Roadmap
+
+O Roadmap define:
+
+> O conhecimento que deverá existir na Base de Conhecimento.
+
+O Compilation Plan define:
+
+> As capacidades que o compilador deverá adquirir para produzir esse conhecimento.
+
+O Roadmap descreve o destino.
+
+O Compilation Plan descreve a evolução necessária para alcançá-lo.
+
+---
+
+# 4. Princípios
+
+Toda capacidade deverá obedecer aos seguintes princípios.
+
+## 4.1 Permanência
+
+Uma capacidade nunca é removida.
+
+Ela pode ser aprimorada.
+
+Nunca substituída.
+
+---
+
+## 4.2 Independência Tecnológica
+
+Capacidades nunca dependem de tecnologias.
+
+Roslyn.
+
+Markdown.
+
+SQLite.
+
+JSON.
+
+Revit.
+
+Git.
+
+Todos são detalhes de implementação.
+
+---
+
+## 4.3 Evolução Incremental
+
+Cada capacidade adiciona conhecimento novo.
+
+Nunca reduz conhecimento existente.
+
+---
+
+## 4.4 Determinismo
+
+Uma mesma entrada deverá produzir exatamente o mesmo conhecimento.
+
+Independentemente da máquina.
+
+Independentemente da execução.
+
+---
+
+## 4.5 Rastreabilidade
+
+Todo conhecimento produzido deverá possuir origem identificável.
+
+Sempre deverá ser possível responder:
+
+- de onde veio;
+- quem produziu;
+- por que existe.
+
+---
+
+## 4.6 Verificabilidade
+
+Toda capacidade deverá possuir critérios objetivos de conclusão.
+
+Nenhuma capacidade poderá depender de julgamento subjetivo.
+
+---
+
+# 5. Estrutura de uma Capacidade
+
+Todas as capacidades seguirão exatamente a mesma estrutura.
+
+## Nome
+
+Identifica a capacidade.
+
+---
+
+## Objetivo
+
+Descreve o novo comportamento adquirido pelo compilador.
+
+---
+
+## Conhecimento Produzido
+
+Define exatamente quais informações passam a existir na Base de Conhecimento.
+
+---
+
+## Dependências
+
+Lista apenas capacidades anteriores.
+
+Nunca tecnologias.
+
+Nunca implementações.
+
+---
+
+## Critério de Conclusão
+
+Define quando aquela capacidade pode ser considerada permanente.
+
+---
+
+# 6. Ordem de Evolução
+
+As capacidades deverão ser implementadas na seguinte ordem.
+
+C01
+
+↓
+
+C02
+
+↓
+
+C03
+
+↓
+
+C04
+
+↓
+
+C05
+
+↓
+
+C06
+
+↓
+
+C07
+
+↓
+
+C08
+
+↓
+
+C09
+
+↓
+
+C10
+
+↓
+
+C11
+
+↓
+
+C12
+
+↓
+
+C13
+
+↓
+
+C14
+
+Nenhuma capacidade poderá ser antecipada sem que todas as dependências estejam concluídas.
+
+---
+
+# CAPACIDADE 01
+
+## Nome
+
+Aquisição da Estrutura Física
+
+### Objetivo
+
+Permitir que o compilador compreenda a organização física de uma solução.
+
+Esta é a fundação de toda a Base de Conhecimento.
+
+Nenhuma outra capacidade poderá existir antes dela.
+
+---
+
+### Conhecimento Produzido
+
+- Solução.
+- Projetos.
+- Caminhos.
+- Organização física.
+- Frameworks.
+- Estrutura inicial.
+
+---
+
+### Dependências
+
+Nenhuma.
+
+---
+
+### Critério de Conclusão
+
+O compilador deverá ser capaz de representar completamente a estrutura física de qualquer solução suportada.
+
+---
+
+# CAPACIDADE 02
+
+## Nome
+
+Representação Arquitetural
+
+### Objetivo
+
+Permitir compreender como a solução é organizada.
+
+Esta capacidade introduz a visão arquitetural.
+
+---
+
+### Conhecimento Produzido
+
+- Dependências entre projetos.
+- Camadas.
+- Referências.
+- Organização arquitetural.
+- Limites estruturais.
+
+---
+
+### Dependências
+
+Capacidade 01.
+
+---
+
+### Critério de Conclusão
+
+A arquitetura da solução poderá ser compreendida sem consultar o código-fonte.
+
+---
+
+# CAPACIDADE 03
+
+## Nome
+
+Representação Estrutural
+
+### Objetivo
+
+Permitir representar todos os elementos estruturais existentes na solução.
+
+O compilador passa a conhecer os componentes do sistema.
+
+---
+
+### Conhecimento Produzido
+
+- Classes.
+- Interfaces.
+- Records.
+- Structs.
+- Enums.
+- Delegates.
+- Namespaces.
+
+---
+
+### Dependências
+
+Capacidade 02.
+
+---
+
+### Critério de Conclusão
+
+Todo componente estrutural deverá possuir representação própria na Base de Conhecimento.
+
+---
+
+# CAPACIDADE 04
+
+## Nome
+
+Representação Comportamental
+
+### Objetivo
+
+Adicionar comportamento aos componentes estruturais.
+
+O compilador passa a compreender não apenas o que existe, mas como cada componente se comporta.
+
+---
+
+### Conhecimento Produzido
+
+- Métodos.
+- Propriedades.
+- Campos.
+- Eventos.
+- Construtores.
+- Operadores.
+- Genéricos.
+
+---
+
+### Dependências
+
+Capacidade 03.
+
+---
+
+### Critério de Conclusão
+
+O comportamento público dos componentes deverá poder ser compreendido através da Base de Conhecimento.
+
+# CAPACIDADE 05
+
+## Nome
+
+Representação das Relações
+
+### Objetivo
+
+Permitir que o compilador compreenda como os componentes da solução se relacionam entre si.
+
+Até esta capacidade o compilador conhece componentes individualmente.
+
+A partir desta capacidade ele passa a compreender o sistema como um conjunto conectado.
+
+---
+
+### Conhecimento Produzido
+
+- Relações de herança.
+- Relações de implementação.
+- Relações de composição.
+- Relações de agregação.
+- Dependências entre componentes.
+- Referências estruturais.
+- Associações entre elementos.
+
+---
+
+### Dependências
+
+- Capacidade 03.
+- Capacidade 04.
+
+---
+
+### Critério de Conclusão
+
+Toda relação existente entre componentes deverá possuir representação explícita na Base de Conhecimento.
+
+Será possível navegar entre componentes relacionados sem consultar o código-fonte.
+
+---
+
+# CAPACIDADE 06
+
+## Nome
+
+Representação dos Fluxos
+
+### Objetivo
+
+Permitir compreender como o comportamento percorre a solução.
+
+O objetivo desta capacidade não é executar código.
+
+O objetivo é compreender sua organização lógica.
+
+---
+
+### Conhecimento Produzido
+
+- Fluxos principais.
+- Cadeias de chamadas.
+- Pontos de entrada.
+- Pontos de saída.
+- Dependências comportamentais.
+- Sequências lógicas entre componentes.
+
+---
+
+### Dependências
+
+Capacidade 05.
+
+---
+
+### Critério de Conclusão
+
+A Base de Conhecimento deverá responder perguntas como:
+
+- Quem utiliza este componente?
+- O que acontece após esta operação?
+- Quais componentes participam deste fluxo?
+- Qual é o caminho principal de execução?
+
+---
+
+# CAPACIDADE 07
+
+## Nome
+
+Inferência de Convenções
+
+### Objetivo
+
+Transformar padrões recorrentes observados na solução em conhecimento explícito.
+
+O compilador deixa de apenas representar estruturas e passa a compreender a forma como a equipe desenvolve software.
+
+---
+
+### Conhecimento Produzido
+
+- Convenções de nomenclatura.
+- Convenções arquiteturais.
+- Convenções de organização.
+- Convenções de persistência.
+- Convenções de testes.
+- Convenções de validação.
+- Convenções específicas do projeto.
+
+---
+
+### Dependências
+
+Capacidade 06.
+
+---
+
+### Critério de Conclusão
+
+A Base de Conhecimento deverá ser capaz de explicar como um novo componente deve ser construído para seguir o padrão estabelecido pela solução.
+
+---
+
+# CAPACIDADE 08
+
+## Nome
+
+Inferência de Padrões
+
+### Objetivo
+
+Identificar abstrações recorrentes utilizadas pela solução.
+
+Enquanto a capacidade anterior identifica convenções, esta identifica padrões de construção.
+
+---
+
+### Conhecimento Produzido
+
+- Padrões arquiteturais.
+- Padrões de domínio.
+- Padrões de infraestrutura.
+- Padrões de interface.
+- Padrões específicos do projeto.
+
+Cada padrão deverá possuir:
+
+- descrição;
+- objetivo;
+- motivação;
+- contexto de utilização;
+- exemplos encontrados.
+
+---
+
+### Dependências
+
+Capacidade 07.
+
+---
+
+### Critério de Conclusão
+
+A Base de Conhecimento deverá explicar:
+
+- quais padrões existem;
+- quando são utilizados;
+- por que são utilizados;
+- onde aparecem na solução.
+
+---
+
+# CAPACIDADE 09
+
+## Nome
+
+Construção da Linguagem Ubíqua
+
+### Objetivo
+
+Descobrir e consolidar os conceitos utilizados pelo domínio da solução.
+
+A partir desta capacidade o compilador passa a compreender o significado do software.
+
+---
+
+### Conhecimento Produzido
+
+- Conceitos.
+- Entidades.
+- Objetos de Valor.
+- Agregados.
+- Serviços.
+- Casos de Uso.
+- Glossário.
+- Linguagem Ubíqua.
+
+---
+
+### Dependências
+
+Capacidade 08.
+
+---
+
+### Critério de Conclusão
+
+Toda terminologia utilizada pela solução deverá estar representada na Base de Conhecimento de forma consistente.
+
+---
+
+# CAPACIDADE 10
+
+## Nome
+
+Representação das Regras de Negócio
+
+### Objetivo
+
+Representar as regras que governam o domínio da aplicação.
+
+O foco deixa de ser exclusivamente técnico e passa a incluir conhecimento funcional.
+
+---
+
+### Conhecimento Produzido
+
+- Regras de negócio.
+- Invariantes.
+- Pré-condições.
+- Pós-condições.
+- Restrições.
+- Políticas.
+- Regras transversais.
+
+---
+
+### Dependências
+
+Capacidade 09.
+
+---
+
+### Critério de Conclusão
+
+As regras de negócio deverão poder ser compreendidas independentemente da implementação utilizada.
+
+# CAPACIDADE 11
+
+## Nome
+
+Consolidação da Base de Conhecimento
+
+### Objetivo
+
+Transformar todos os conhecimentos produzidos nas capacidades anteriores em uma Base de Conhecimento única, consistente, integrada e navegável.
+
+Esta capacidade não cria novos conhecimentos.
+
+Ela consolida os conhecimentos existentes em uma representação coesa.
+
+---
+
+### Conhecimento Produzido
+
+- Índices globais.
+- Referências cruzadas.
+- Navegação contextual.
+- Estrutura hierárquica.
+- Organização temática.
+- Ligações semânticas.
+- Visões consolidadas.
+
+---
+
+### Dependências
+
+- Capacidade 01
+- Capacidade 02
+- Capacidade 03
+- Capacidade 04
+- Capacidade 05
+- Capacidade 06
+- Capacidade 07
+- Capacidade 08
+- Capacidade 09
+- Capacidade 10
+
+---
+
+### Critério de Conclusão
+
+Toda informação produzida anteriormente deverá estar integrada.
+
+Nenhum conhecimento poderá permanecer isolado.
+
+Toda informação deverá possuir contexto, origem e relacionamentos.
+
+---
+
+# CAPACIDADE 12
+
+## Nome
+
+Publicação da Base de Conhecimento
+
+### Objetivo
+
+Materializar a Base de Conhecimento em formatos próprios para consumo.
+
+A publicação não produz conhecimento.
+
+Ela apenas organiza e disponibiliza o conhecimento existente.
+
+---
+
+### Conhecimento Produzido
+
+Nenhum.
+
+---
+
+### Dependências
+
+Capacidade 11.
+
+---
+
+### Critério de Conclusão
+
+A mesma Base de Conhecimento poderá ser publicada em diferentes formatos preservando integralmente seu modelo conceitual.
+
+Os formatos de saída poderão evoluir sem alterar o modelo de conhecimento.
+
+---
+
+# CAPACIDADE 13
+
+## Nome
+
+Consulta da Base de Conhecimento
+
+### Objetivo
+
+Permitir que consumidores naveguem pela Base de Conhecimento sem depender da estrutura física dos arquivos.
+
+Esta capacidade estabelece a Base de Conhecimento como um sistema consultável.
+
+---
+
+### Conhecimento Produzido
+
+Nenhum.
+
+Esta capacidade disponibiliza mecanismos de acesso ao conhecimento existente.
+
+---
+
+### Dependências
+
+Capacidade 12.
+
+---
+
+### Critério de Conclusão
+
+Qualquer conhecimento produzido pelo compilador deverá ser localizável através de mecanismos de consulta, independentemente do formato de armazenamento.
+
+---
+
+# CAPACIDADE 14
+
+## Nome
+
+Consumo por Agentes
+
+### Objetivo
+
+Disponibilizar a Base de Conhecimento para agentes automatizados e modelos de linguagem.
+
+O compilador encerra sua responsabilidade produzindo uma representação suficientemente rica para ser utilizada como contexto por consumidores externos.
+
+---
+
+### Conhecimento Produzido
+
+Nenhum.
+
+Esta capacidade representa a utilização da Base de Conhecimento, e não sua construção.
+
+---
+
+### Dependências
+
+Capacidade 13.
+
+---
+
+### Critério de Conclusão
+
+Um agente deverá conseguir compreender uma solução utilizando exclusivamente a Base de Conhecimento produzida pelo compilador, sem necessidade de acesso direto ao código-fonte.
+
+---
+
+# 7. Dependências entre Capacidades
+
+A evolução do compilador segue uma cadeia linear de aquisição de conhecimento.
+
+```text
+C01
+ │
+ ▼
+C02
+ │
+ ▼
+C03
+ │
+ ▼
+C04
+ │
+ ▼
+C05
+ │
+ ▼
+C06
+ │
+ ▼
+C07
+ │
+ ▼
+C08
+ │
+ ▼
+C09
+ │
+ ▼
+C10
+ │
+ ▼
+C11
+ │
+ ▼
+C12
+ │
+ ▼
+C13
+ │
+ ▼
+C14
+```
+
+Nenhuma capacidade poderá ser implementada antes da conclusão de todas as suas dependências.
+
+Quando uma nova capacidade for adicionada ao compilador, sua posição nesta cadeia deverá ser explicitamente definida.
+
+---
+
+# 8. Evolução do Plano
+
+O `COMPILATION_PLAN.md` é um documento vivo.
+
+Novas capacidades poderão ser adicionadas quando ampliarem o conhecimento produzido pelo compilador.
+
+Entretanto:
+
+- nenhuma capacidade existente poderá ser removida;
+- nenhuma capacidade poderá alterar a finalidade de uma capacidade anterior;
+- capacidades já concluídas passam a integrar permanentemente o compilador.
+
+Toda nova capacidade deverá justificar claramente:
+
+- qual lacuna de conhecimento resolve;
+- por que não pode ser incorporada a uma capacidade existente;
+- quais novas informações passarão a existir na Base de Conhecimento.
+
+---
+
+# 9. Estado Final Esperado
+
+Ao término deste plano, o X7.Knowledge deverá possuir todas as capacidades necessárias para transformar uma ou mais fontes de informação em uma Base de Conhecimento estruturada, consistente, rastreável e independente de tecnologia.
+
+A Base de Conhecimento deverá ser:
+
+- navegável;
+- verificável;
+- incremental;
+- determinística;
+- extensível;
+- consumível por pessoas e agentes.
+
+As implementações poderão evoluir continuamente.
+
+As capacidades definidas neste documento constituem o contrato permanente do compilador e deverão permanecer estáveis ao longo de sua evolução.
+
+---
+**Fim do documento `COMPILATION_PLAN.md`.**

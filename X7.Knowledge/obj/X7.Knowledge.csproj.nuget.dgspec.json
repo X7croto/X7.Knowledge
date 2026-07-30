@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\Nuvem\\GoogleDrive - segundio\\X7Dev - Programas\\DevEnvironment\\Tools\\X7.ProjectIndexer\\X7.Knowledge\\X7.Knowledge.csproj": {
-      "version": "1.0.0",
+      "version": "0.1.0",
       "restore": {
         "projectUniqueName": "D:\\Nuvem\\GoogleDrive - segundio\\X7Dev - Programas\\DevEnvironment\\Tools\\X7.ProjectIndexer\\X7.Knowledge\\X7.Knowledge.csproj",
         "projectName": "X7.Knowledge",
@@ -32,6 +32,7 @@
           }
         },
         "warningProperties": {
+          "allWarningsAsErrors": true,
           "warnAsError": [
             "NU1605"
           ]
@@ -63,7 +64,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.302/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",

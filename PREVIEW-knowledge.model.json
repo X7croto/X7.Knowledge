@@ -1,0 +1,1242 @@
+{
+  "entities": {
+    "folders": [
+      {
+        "children": [
+          "proj:X7.Knowledge/X7.Knowledge.csproj"
+        ],
+        "id": "slnfolder:src",
+        "name": "src"
+      },
+      {
+        "children": [
+          "proj:X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj",
+          "proj:X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+        ],
+        "id": "slnfolder:tests",
+        "name": "tests"
+      }
+    ],
+    "projects": [
+      {
+        "directory": "X7.Knowledge.Specifications",
+        "id": "proj:X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj",
+        "isTestProject": true,
+        "name": "X7.Knowledge.Specifications",
+        "relativePath": "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj",
+        "targetFrameworks": [
+          "net10.0"
+        ]
+      },
+      {
+        "directory": "X7.Knowledge",
+        "id": "proj:X7.Knowledge/X7.Knowledge.csproj",
+        "name": "X7.Knowledge",
+        "relativePath": "X7.Knowledge/X7.Knowledge.csproj",
+        "targetFrameworks": [
+          "net10.0"
+        ]
+      },
+      {
+        "directory": "X7.KnowledgeTests",
+        "id": "proj:X7.KnowledgeTests/X7.KnowledgeTests.csproj",
+        "isTestProject": true,
+        "languageVersion": "latest",
+        "name": "X7.KnowledgeTests",
+        "relativePath": "X7.KnowledgeTests/X7.KnowledgeTests.csproj",
+        "targetFrameworks": [
+          "net10.0"
+        ]
+      },
+      {
+        "directory": "X7.ProjectIndexer.CLI",
+        "id": "proj:X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj",
+        "name": "X7.ProjectIndexer.CLI",
+        "outputKind": "Exe",
+        "relativePath": "X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj",
+        "targetFrameworks": [
+          "net10.0"
+        ]
+      },
+      {
+        "directory": "X7.ProjectIndexer.CSharp",
+        "id": "proj:X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj",
+        "name": "X7.ProjectIndexer.CSharp",
+        "relativePath": "X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj",
+        "targetFrameworks": [
+          "net10.0"
+        ]
+      },
+      {
+        "directory": "X7.ProjectIndexer.Core",
+        "id": "proj:X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj",
+        "name": "X7.ProjectIndexer.Core",
+        "relativePath": "X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj",
+        "targetFrameworks": [
+          "net10.0"
+        ]
+      },
+      {
+        "directory": "X7.ProjectIndexer.Graph",
+        "id": "proj:X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj",
+        "name": "X7.ProjectIndexer.Graph",
+        "relativePath": "X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj",
+        "targetFrameworks": [
+          "net10.0"
+        ]
+      },
+      {
+        "directory": "X7.ProjectIndexer.Knowledge",
+        "id": "proj:X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj",
+        "name": "X7.ProjectIndexer.Knowledge",
+        "relativePath": "X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj",
+        "targetFrameworks": [
+          "net10.0"
+        ]
+      },
+      {
+        "directory": "X7.ProjectIndexer.Markdown",
+        "id": "proj:X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj",
+        "name": "X7.ProjectIndexer.Markdown",
+        "relativePath": "X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj",
+        "targetFrameworks": [
+          "net10.0"
+        ]
+      },
+      {
+        "directory": "X7.ProjectIndexer.Output",
+        "id": "proj:X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj",
+        "name": "X7.ProjectIndexer.Output",
+        "relativePath": "X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj",
+        "targetFrameworks": [
+          "net10.0"
+        ]
+      },
+      {
+        "directory": "X7.ProjectIndexer.Tests",
+        "id": "proj:X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj",
+        "isTestProject": true,
+        "name": "X7.ProjectIndexer.Tests",
+        "relativePath": "X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj",
+        "targetFrameworks": [
+          "net10.0"
+        ]
+      }
+    ],
+    "solution": {
+      "folders": [
+        "slnfolder:src",
+        "slnfolder:tests"
+      ],
+      "id": "sln:X7_ProjectIndexer",
+      "name": "X7_ProjectIndexer",
+      "projects": [
+        "proj:X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj",
+        "proj:X7.Knowledge/X7.Knowledge.csproj",
+        "proj:X7.KnowledgeTests/X7.KnowledgeTests.csproj",
+        "proj:X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj",
+        "proj:X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj",
+        "proj:X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj",
+        "proj:X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj",
+        "proj:X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj",
+        "proj:X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj",
+        "proj:X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj",
+        "proj:X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+      ]
+    }
+  },
+  "manifest": {
+    "acquisitionLevel": "X",
+    "capabilities": [
+      "C01"
+    ],
+    "compilerVersion": "0.1.0",
+    "inputDigest": "3588118239d2322aaf723b8efeb56cd4e0ba7eca9914880c21718a1613112fb4",
+    "modelVersion": "0.1.0",
+    "observationCount": 69,
+    "solutionId": "sln:X7_ProjectIndexer"
+  },
+  "observations": [
+    {
+      "id": "obs:e3fc2d26810d0853",
+      "kind": "project.declared",
+      "payload": {
+        "directory": "X7.Knowledge.Specifications",
+        "name": "X7.Knowledge.Specifications",
+        "relativePath": "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj",
+        "producer": "ProjectProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "proj:X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj"
+    },
+    {
+      "id": "obs:e885e06ad258311b",
+      "kind": "project.is-test-project",
+      "payload": {
+        "evidence": "package:Microsoft.NET.Test.Sdk"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "package:Microsoft.NET.Test.Sdk",
+        "producer": "ProjectProducer",
+        "source": "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj"
+      },
+      "subject": "proj:X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj"
+    },
+    {
+      "id": "obs:22de5fc93f8098f5",
+      "kind": "project.property",
+      "payload": {
+        "name": "ImplicitUsings",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "ImplicitUsings",
+        "producer": "ProjectProducer",
+        "source": "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj"
+      },
+      "subject": "proj:X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj"
+    },
+    {
+      "id": "obs:496b41c5e5ba7921",
+      "kind": "project.property",
+      "payload": {
+        "name": "Nullable",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "Nullable",
+        "producer": "ProjectProducer",
+        "source": "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj"
+      },
+      "subject": "proj:X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj"
+    },
+    {
+      "id": "obs:c0124320bb7b7f7e",
+      "kind": "project.property",
+      "payload": {
+        "name": "IsPackable",
+        "value": "false"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "IsPackable",
+        "producer": "ProjectProducer",
+        "source": "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj"
+      },
+      "subject": "proj:X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj"
+    },
+    {
+      "id": "obs:aded8012baca3580",
+      "kind": "project.target-framework",
+      "payload": {
+        "moniker": "net10.0"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "TargetFramework",
+        "producer": "ProjectProducer",
+        "source": "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj"
+      },
+      "subject": "proj:X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj"
+    },
+    {
+      "id": "obs:c23c81fd294c4ebd",
+      "kind": "project.declared",
+      "payload": {
+        "directory": "X7.Knowledge",
+        "name": "X7.Knowledge",
+        "relativePath": "X7.Knowledge/X7.Knowledge.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.Knowledge/X7.Knowledge.csproj",
+        "producer": "ProjectProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "proj:X7.Knowledge/X7.Knowledge.csproj"
+    },
+    {
+      "id": "obs:147599dacef5a9db",
+      "kind": "project.property",
+      "payload": {
+        "name": "Nullable",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "Nullable",
+        "producer": "ProjectProducer",
+        "source": "X7.Knowledge/X7.Knowledge.csproj"
+      },
+      "subject": "proj:X7.Knowledge/X7.Knowledge.csproj"
+    },
+    {
+      "id": "obs:2b13ad67ee67f5b3",
+      "kind": "project.property",
+      "payload": {
+        "name": "ImplicitUsings",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "ImplicitUsings",
+        "producer": "ProjectProducer",
+        "source": "X7.Knowledge/X7.Knowledge.csproj"
+      },
+      "subject": "proj:X7.Knowledge/X7.Knowledge.csproj"
+    },
+    {
+      "id": "obs:1ac8b24113737eea",
+      "kind": "project.target-framework",
+      "payload": {
+        "moniker": "net10.0"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "TargetFramework",
+        "producer": "ProjectProducer",
+        "source": "X7.Knowledge/X7.Knowledge.csproj"
+      },
+      "subject": "proj:X7.Knowledge/X7.Knowledge.csproj"
+    },
+    {
+      "id": "obs:852bf8a8dc7d5737",
+      "kind": "project.declared",
+      "payload": {
+        "directory": "X7.KnowledgeTests",
+        "name": "X7.KnowledgeTests",
+        "relativePath": "X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.KnowledgeTests/X7.KnowledgeTests.csproj",
+        "producer": "ProjectProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "proj:X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+    },
+    {
+      "id": "obs:6493713409c53fec",
+      "kind": "project.is-test-project",
+      "payload": {
+        "evidence": "package:Microsoft.NET.Test.Sdk"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "package:Microsoft.NET.Test.Sdk",
+        "producer": "ProjectProducer",
+        "source": "X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+      },
+      "subject": "proj:X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+    },
+    {
+      "id": "obs:a3bfd71bd1ef55a7",
+      "kind": "project.language-version",
+      "payload": {
+        "version": "latest"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "LangVersion",
+        "producer": "ProjectProducer",
+        "source": "X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+      },
+      "subject": "proj:X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+    },
+    {
+      "id": "obs:5c9c6224273d2cb1",
+      "kind": "project.property",
+      "payload": {
+        "name": "Nullable",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "Nullable",
+        "producer": "ProjectProducer",
+        "source": "X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+      },
+      "subject": "proj:X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+    },
+    {
+      "id": "obs:dd2c556a84537c18",
+      "kind": "project.property",
+      "payload": {
+        "name": "IsPackable",
+        "value": "false"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "IsPackable",
+        "producer": "ProjectProducer",
+        "source": "X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+      },
+      "subject": "proj:X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+    },
+    {
+      "id": "obs:e8cda14c44d235b6",
+      "kind": "project.property",
+      "payload": {
+        "name": "ImplicitUsings",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "ImplicitUsings",
+        "producer": "ProjectProducer",
+        "source": "X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+      },
+      "subject": "proj:X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+    },
+    {
+      "id": "obs:93d30269b4c0cdd6",
+      "kind": "project.target-framework",
+      "payload": {
+        "moniker": "net10.0"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "TargetFramework",
+        "producer": "ProjectProducer",
+        "source": "X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+      },
+      "subject": "proj:X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+    },
+    {
+      "id": "obs:1d99df4d27607d7c",
+      "kind": "project.declared",
+      "payload": {
+        "directory": "X7.ProjectIndexer.CLI",
+        "name": "X7.ProjectIndexer.CLI",
+        "relativePath": "X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj",
+        "producer": "ProjectProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "proj:X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj"
+    },
+    {
+      "id": "obs:7e15c123963a1b96",
+      "kind": "project.output-kind",
+      "payload": {
+        "kind": "Exe"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "OutputType",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj"
+    },
+    {
+      "id": "obs:029551fa4aa5627c",
+      "kind": "project.property",
+      "payload": {
+        "name": "Nullable",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "Nullable",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj"
+    },
+    {
+      "id": "obs:09d36247a42dc4f5",
+      "kind": "project.property",
+      "payload": {
+        "name": "ImplicitUsings",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "ImplicitUsings",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj"
+    },
+    {
+      "id": "obs:77a6006ee8b2ea47",
+      "kind": "project.target-framework",
+      "payload": {
+        "moniker": "net10.0"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "TargetFramework",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj"
+    },
+    {
+      "id": "obs:53fbd5d339766397",
+      "kind": "project.declared",
+      "payload": {
+        "directory": "X7.ProjectIndexer.CSharp",
+        "name": "X7.ProjectIndexer.CSharp",
+        "relativePath": "X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj",
+        "producer": "ProjectProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "proj:X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj"
+    },
+    {
+      "id": "obs:4d1110eea023b7ce",
+      "kind": "project.property",
+      "payload": {
+        "name": "Nullable",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "Nullable",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj"
+    },
+    {
+      "id": "obs:f3b4a81fa482b589",
+      "kind": "project.property",
+      "payload": {
+        "name": "ImplicitUsings",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "ImplicitUsings",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj"
+    },
+    {
+      "id": "obs:321feac3e558f342",
+      "kind": "project.target-framework",
+      "payload": {
+        "moniker": "net10.0"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "TargetFramework",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj"
+    },
+    {
+      "id": "obs:b01240a20b8dcca8",
+      "kind": "project.declared",
+      "payload": {
+        "directory": "X7.ProjectIndexer.Core",
+        "name": "X7.ProjectIndexer.Core",
+        "relativePath": "X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj",
+        "producer": "ProjectProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "proj:X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj"
+    },
+    {
+      "id": "obs:140bafe7817c67cc",
+      "kind": "project.property",
+      "payload": {
+        "name": "Nullable",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "Nullable",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj"
+    },
+    {
+      "id": "obs:1751d1b35f539810",
+      "kind": "project.property",
+      "payload": {
+        "name": "ImplicitUsings",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "ImplicitUsings",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj"
+    },
+    {
+      "id": "obs:bb178f2c6c5ed580",
+      "kind": "project.target-framework",
+      "payload": {
+        "moniker": "net10.0"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "TargetFramework",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj"
+    },
+    {
+      "id": "obs:953416d88630ccff",
+      "kind": "project.declared",
+      "payload": {
+        "directory": "X7.ProjectIndexer.Graph",
+        "name": "X7.ProjectIndexer.Graph",
+        "relativePath": "X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj",
+        "producer": "ProjectProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "proj:X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj"
+    },
+    {
+      "id": "obs:a7bace7a80cc10c9",
+      "kind": "project.property",
+      "payload": {
+        "name": "ImplicitUsings",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "ImplicitUsings",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj"
+    },
+    {
+      "id": "obs:d758b20005605e99",
+      "kind": "project.property",
+      "payload": {
+        "name": "Nullable",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "Nullable",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj"
+    },
+    {
+      "id": "obs:880bf87cd93621a3",
+      "kind": "project.target-framework",
+      "payload": {
+        "moniker": "net10.0"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "TargetFramework",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj"
+    },
+    {
+      "id": "obs:fa9d91c8a38c0324",
+      "kind": "project.declared",
+      "payload": {
+        "directory": "X7.ProjectIndexer.Knowledge",
+        "name": "X7.ProjectIndexer.Knowledge",
+        "relativePath": "X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj",
+        "producer": "ProjectProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "proj:X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj"
+    },
+    {
+      "id": "obs:3db85e9e4685943f",
+      "kind": "project.property",
+      "payload": {
+        "name": "ImplicitUsings",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "ImplicitUsings",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj"
+    },
+    {
+      "id": "obs:7e794171b005b424",
+      "kind": "project.property",
+      "payload": {
+        "name": "Nullable",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "Nullable",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj"
+    },
+    {
+      "id": "obs:ff3e19875fe4829c",
+      "kind": "project.target-framework",
+      "payload": {
+        "moniker": "net10.0"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "TargetFramework",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj"
+    },
+    {
+      "id": "obs:5f54a498720d951b",
+      "kind": "project.declared",
+      "payload": {
+        "directory": "X7.ProjectIndexer.Markdown",
+        "name": "X7.ProjectIndexer.Markdown",
+        "relativePath": "X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj",
+        "producer": "ProjectProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "proj:X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj"
+    },
+    {
+      "id": "obs:1d94bebb8dfe0334",
+      "kind": "project.property",
+      "payload": {
+        "name": "ImplicitUsings",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "ImplicitUsings",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj"
+    },
+    {
+      "id": "obs:3b8ed8b37c042f27",
+      "kind": "project.property",
+      "payload": {
+        "name": "Nullable",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "Nullable",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj"
+    },
+    {
+      "id": "obs:5532950a87c82dd3",
+      "kind": "project.target-framework",
+      "payload": {
+        "moniker": "net10.0"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "TargetFramework",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj"
+    },
+    {
+      "id": "obs:7742a570c0568c07",
+      "kind": "project.declared",
+      "payload": {
+        "directory": "X7.ProjectIndexer.Output",
+        "name": "X7.ProjectIndexer.Output",
+        "relativePath": "X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj",
+        "producer": "ProjectProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "proj:X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj"
+    },
+    {
+      "id": "obs:c8d5733ad8113f58",
+      "kind": "project.property",
+      "payload": {
+        "name": "ImplicitUsings",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "ImplicitUsings",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj"
+    },
+    {
+      "id": "obs:f2cb6204a5e7303a",
+      "kind": "project.property",
+      "payload": {
+        "name": "Nullable",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "Nullable",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj"
+    },
+    {
+      "id": "obs:9d18839768226103",
+      "kind": "project.target-framework",
+      "payload": {
+        "moniker": "net10.0"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "TargetFramework",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj"
+    },
+    {
+      "id": "obs:b8ff1cfad13685cd",
+      "kind": "project.declared",
+      "payload": {
+        "directory": "X7.ProjectIndexer.Tests",
+        "name": "X7.ProjectIndexer.Tests",
+        "relativePath": "X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj",
+        "producer": "ProjectProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "proj:X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+    },
+    {
+      "id": "obs:016bac6b53f07760",
+      "kind": "project.is-test-project",
+      "payload": {
+        "evidence": "package:Microsoft.NET.Test.Sdk"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "package:Microsoft.NET.Test.Sdk",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+    },
+    {
+      "id": "obs:327beb1f9f677613",
+      "kind": "project.property",
+      "payload": {
+        "name": "Nullable",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "Nullable",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+    },
+    {
+      "id": "obs:8d26ca0d11267307",
+      "kind": "project.property",
+      "payload": {
+        "name": "IsPackable",
+        "value": "false"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "IsPackable",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+    },
+    {
+      "id": "obs:f72e6c0b4764c5a7",
+      "kind": "project.property",
+      "payload": {
+        "name": "ImplicitUsings",
+        "value": "enable"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "ImplicitUsings",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+    },
+    {
+      "id": "obs:ca0652fc3ea10c4a",
+      "kind": "project.target-framework",
+      "payload": {
+        "moniker": "net10.0"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "TargetFramework",
+        "producer": "ProjectProducer",
+        "source": "X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+      },
+      "subject": "proj:X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+    },
+    {
+      "id": "obs:1074b7cbfb8faba2",
+      "kind": "solution.contains-project",
+      "payload": {
+        "projectId": "proj:X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "sln:X7_ProjectIndexer"
+    },
+    {
+      "id": "obs:32c059e9fe1c3bf2",
+      "kind": "solution.contains-project",
+      "payload": {
+        "projectId": "proj:X7.Knowledge/X7.Knowledge.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.Knowledge/X7.Knowledge.csproj",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "sln:X7_ProjectIndexer"
+    },
+    {
+      "id": "obs:50bc1c105250c70e",
+      "kind": "solution.contains-project",
+      "payload": {
+        "projectId": "proj:X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "sln:X7_ProjectIndexer"
+    },
+    {
+      "id": "obs:5c846c9db58d6e4b",
+      "kind": "solution.contains-project",
+      "payload": {
+        "projectId": "proj:X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "sln:X7_ProjectIndexer"
+    },
+    {
+      "id": "obs:6e10fc9856b315d1",
+      "kind": "solution.contains-project",
+      "payload": {
+        "projectId": "proj:X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "sln:X7_ProjectIndexer"
+    },
+    {
+      "id": "obs:79c36839c592c23d",
+      "kind": "solution.contains-project",
+      "payload": {
+        "projectId": "proj:X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "sln:X7_ProjectIndexer"
+    },
+    {
+      "id": "obs:9c326452f2911e41",
+      "kind": "solution.contains-project",
+      "payload": {
+        "projectId": "proj:X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "sln:X7_ProjectIndexer"
+    },
+    {
+      "id": "obs:9e244f18dd496889",
+      "kind": "solution.contains-project",
+      "payload": {
+        "projectId": "proj:X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "sln:X7_ProjectIndexer"
+    },
+    {
+      "id": "obs:a0a947d3863c5283",
+      "kind": "solution.contains-project",
+      "payload": {
+        "projectId": "proj:X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "sln:X7_ProjectIndexer"
+    },
+    {
+      "id": "obs:c6d316bcc979c88a",
+      "kind": "solution.contains-project",
+      "payload": {
+        "projectId": "proj:X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.KnowledgeTests/X7.KnowledgeTests.csproj",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "sln:X7_ProjectIndexer"
+    },
+    {
+      "id": "obs:eb49155202831c08",
+      "kind": "solution.contains-project",
+      "payload": {
+        "projectId": "proj:X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "sln:X7_ProjectIndexer"
+    },
+    {
+      "id": "obs:8b823d2a374c5af3",
+      "kind": "solution.declared",
+      "payload": {
+        "name": "X7_ProjectIndexer"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "sln:X7_ProjectIndexer"
+    },
+    {
+      "id": "obs:13e8183eefe64802",
+      "kind": "solution.folder",
+      "payload": {
+        "name": "src"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "src",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "slnfolder:src"
+    },
+    {
+      "id": "obs:cbd9d3188e1e8c4e",
+      "kind": "solution.folder-contains",
+      "payload": {
+        "childId": "proj:X7.Knowledge/X7.Knowledge.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.Knowledge/X7.Knowledge.csproj",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "slnfolder:src"
+    },
+    {
+      "id": "obs:368d2affc1b7ea78",
+      "kind": "solution.folder",
+      "payload": {
+        "name": "tests"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "tests",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "slnfolder:tests"
+    },
+    {
+      "id": "obs:216def7c1df45421",
+      "kind": "solution.folder-contains",
+      "payload": {
+        "childId": "proj:X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.KnowledgeTests/X7.KnowledgeTests.csproj",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "slnfolder:tests"
+    },
+    {
+      "id": "obs:9ce6e53fb9de1c03",
+      "kind": "solution.folder-contains",
+      "payload": {
+        "childId": "proj:X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj"
+      },
+      "provenance": {
+        "acquisitionLevel": "X",
+        "capability": "C01",
+        "locator": "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj",
+        "producer": "SolutionProducer",
+        "source": "X7_ProjectIndexer.slnx"
+      },
+      "subject": "slnfolder:tests"
+    }
+  ]
+}

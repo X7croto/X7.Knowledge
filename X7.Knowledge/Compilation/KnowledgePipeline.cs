@@ -1,7 +1,22 @@
-﻿internal sealed class KnowledgePipeline
+namespace X7.Knowledge.Compilation;
+
+/// <summary>Executa os Producers em ordem declarada e estável.</summary>
+public sealed class KnowledgePipeline
 {
-    public Task ExecuteAsync(CompilationContext context, CancellationToken cancellationToken)
+    private readonly IReadOnlyList<IProducer> _producers;
+
+    public KnowledgePipeline(IReadOnlyList<IProducer> producers)
+        => _producers = producers;
+
+    public async ValueTask ExecuteAsync(
+        CompilationContext context,
+        CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        foreach (var producer in _producers)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            await producer.ProduceAsync(context, cancellationToken);
+        }
     }
 }

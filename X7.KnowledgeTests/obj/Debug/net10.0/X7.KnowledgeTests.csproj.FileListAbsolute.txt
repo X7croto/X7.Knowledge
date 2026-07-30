@@ -1,5 +1,4 @@
 D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.KnowledgeTests\bin\Debug\net10.0\.msCoverageSourceRootsMapping_X7.KnowledgeTests
-D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.KnowledgeTests\bin\Debug\net10.0\CoverletSourceRootsMapping_X7.KnowledgeTests
 D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.KnowledgeTests\bin\Debug\net10.0\testhost.dll
 D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.KnowledgeTests\bin\Debug\net10.0\xunit.abstractions.dll
 D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.KnowledgeTests\bin\Debug\net10.0\testhost.exe
@@ -98,3 +97,4 @@ D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.Projec
 D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.KnowledgeTests\obj\Debug\net10.0\X7.KnowledgeTests.pdb
 D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.KnowledgeTests\obj\Debug\net10.0\X7.KnowledgeTests.genruntimeconfig.cache
 D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.KnowledgeTests\obj\Debug\net10.0\ref\X7.KnowledgeTests.dll
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.KnowledgeTests\obj\Debug\net10.0\X7.KnowledgeTests.sourcelink.json

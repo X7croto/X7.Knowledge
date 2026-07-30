@@ -2,13 +2,7 @@
   "version": 4,
   "targets": {
     "net10.0": {
-      "coverlet.collector/6.0.4": {
-        "type": "package",
-        "build": {
-          "build/netstandard2.0/coverlet.collector.targets": {}
-        }
-      },
-      "Microsoft.CodeCoverage/17.14.0": {
+      "Microsoft.CodeCoverage/17.14.1": {
         "type": "package",
         "compile": {
           "lib/net8.0/Microsoft.VisualStudio.CodeCoverage.Shim.dll": {}
@@ -21,11 +15,11 @@
           "build/netstandard2.0/Microsoft.CodeCoverage.targets": {}
         }
       },
-      "Microsoft.NET.Test.Sdk/17.14.0": {
+      "Microsoft.NET.Test.Sdk/17.14.1": {
         "type": "package",
         "dependencies": {
-          "Microsoft.CodeCoverage": "17.14.0",
-          "Microsoft.TestPlatform.TestHost": "17.14.0"
+          "Microsoft.CodeCoverage": "17.14.1",
+          "Microsoft.TestPlatform.TestHost": "17.14.1"
         },
         "compile": {
           "lib/net8.0/_._": {}
@@ -36,12 +30,9 @@
         "build": {
           "build/net8.0/Microsoft.NET.Test.Sdk.props": {},
           "build/net8.0/Microsoft.NET.Test.Sdk.targets": {}
-        },
-        "buildMultiTargeting": {
-          "buildMultiTargeting/Microsoft.NET.Test.Sdk.props": {}
         }
       },
-      "Microsoft.TestPlatform.ObjectModel/17.14.0": {
+      "Microsoft.TestPlatform.ObjectModel/17.14.1": {
         "type": "package",
         "compile": {
           "lib/net8.0/Microsoft.TestPlatform.CoreUtilities.dll": {},
@@ -134,10 +125,10 @@
           }
         }
       },
-      "Microsoft.TestPlatform.TestHost/17.14.0": {
+      "Microsoft.TestPlatform.TestHost/17.14.1": {
         "type": "package",
         "dependencies": {
-          "Microsoft.TestPlatform.ObjectModel": "17.14.0",
+          "Microsoft.TestPlatform.ObjectModel": "17.14.1",
           "Newtonsoft.Json": "13.0.3"
         },
         "compile": {
@@ -385,7 +376,7 @@
           }
         }
       },
-      "xunit.runner.visualstudio/3.1.4": {
+      "xunit.runner.visualstudio/3.1.0": {
         "type": "package",
         "compile": {
           "lib/net8.0/_._": {}
@@ -397,7 +388,7 @@
           "build/net8.0/xunit.runner.visualstudio.props": {}
         }
       },
-      "X7.Knowledge/1.0.0": {
+      "X7.Knowledge/0.1.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "compile": {
@@ -410,80 +401,10 @@
     }
   },
   "libraries": {
-    "coverlet.collector/6.0.4": {
-      "sha512": "lkhqpF8Pu2Y7IiN7OntbsTtdbpR1syMsm2F3IgX6ootA4ffRqWL5jF7XipHuZQTdVuWG/gVAAcf8mjk8Tz0xPg==",
+    "Microsoft.CodeCoverage/17.14.1": {
+      "sha512": "pmTrhfFIoplzFVbhVwUquT+77CbGH+h4/3mBpdmIlYtBi9nAB+kKI6dN3A/nV4DFi3wLLx/BlHIPK+MkbQ6Tpg==",
       "type": "package",
-      "path": "coverlet.collector/6.0.4",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "VSTestIntegration.md",
-        "build/netstandard2.0/Microsoft.Bcl.AsyncInterfaces.dll",
-        "build/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
-        "build/netstandard2.0/Microsoft.Extensions.DependencyInjection.dll",
-        "build/netstandard2.0/Microsoft.Extensions.DependencyModel.dll",
-        "build/netstandard2.0/Microsoft.Extensions.FileSystemGlobbing.dll",
-        "build/netstandard2.0/Microsoft.TestPlatform.CoreUtilities.dll",
-        "build/netstandard2.0/Microsoft.TestPlatform.PlatformAbstractions.dll",
-        "build/netstandard2.0/Microsoft.VisualStudio.TestPlatform.ObjectModel.dll",
-        "build/netstandard2.0/Mono.Cecil.Mdb.dll",
-        "build/netstandard2.0/Mono.Cecil.Pdb.dll",
-        "build/netstandard2.0/Mono.Cecil.Rocks.dll",
-        "build/netstandard2.0/Mono.Cecil.dll",
-        "build/netstandard2.0/Newtonsoft.Json.dll",
-        "build/netstandard2.0/NuGet.Frameworks.dll",
-        "build/netstandard2.0/NuGet.Versioning.dll",
-        "build/netstandard2.0/System.Buffers.dll",
-        "build/netstandard2.0/System.Collections.Immutable.dll",
-        "build/netstandard2.0/System.Memory.dll",
-        "build/netstandard2.0/System.Numerics.Vectors.dll",
-        "build/netstandard2.0/System.Reflection.Metadata.dll",
-        "build/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
-        "build/netstandard2.0/System.Text.Encodings.Web.dll",
-        "build/netstandard2.0/System.Text.Json.dll",
-        "build/netstandard2.0/System.Threading.Tasks.Extensions.dll",
-        "build/netstandard2.0/coverlet.collector.deps.json",
-        "build/netstandard2.0/coverlet.collector.dll",
-        "build/netstandard2.0/coverlet.collector.pdb",
-        "build/netstandard2.0/coverlet.collector.targets",
-        "build/netstandard2.0/coverlet.core.dll",
-        "build/netstandard2.0/coverlet.core.pdb",
-        "build/netstandard2.0/coverlet.core.xml",
-        "build/netstandard2.0/cs/Microsoft.TestPlatform.CoreUtilities.resources.dll",
-        "build/netstandard2.0/cs/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
-        "build/netstandard2.0/de/Microsoft.TestPlatform.CoreUtilities.resources.dll",
-        "build/netstandard2.0/de/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
-        "build/netstandard2.0/es/Microsoft.TestPlatform.CoreUtilities.resources.dll",
-        "build/netstandard2.0/es/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
-        "build/netstandard2.0/fr/Microsoft.TestPlatform.CoreUtilities.resources.dll",
-        "build/netstandard2.0/fr/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
-        "build/netstandard2.0/it/Microsoft.TestPlatform.CoreUtilities.resources.dll",
-        "build/netstandard2.0/it/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
-        "build/netstandard2.0/ja/Microsoft.TestPlatform.CoreUtilities.resources.dll",
-        "build/netstandard2.0/ja/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
-        "build/netstandard2.0/ko/Microsoft.TestPlatform.CoreUtilities.resources.dll",
-        "build/netstandard2.0/ko/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
-        "build/netstandard2.0/pl/Microsoft.TestPlatform.CoreUtilities.resources.dll",
-        "build/netstandard2.0/pl/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
-        "build/netstandard2.0/pt-BR/Microsoft.TestPlatform.CoreUtilities.resources.dll",
-        "build/netstandard2.0/pt-BR/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
-        "build/netstandard2.0/ru/Microsoft.TestPlatform.CoreUtilities.resources.dll",
-        "build/netstandard2.0/ru/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
-        "build/netstandard2.0/tr/Microsoft.TestPlatform.CoreUtilities.resources.dll",
-        "build/netstandard2.0/tr/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
-        "build/netstandard2.0/zh-Hans/Microsoft.TestPlatform.CoreUtilities.resources.dll",
-        "build/netstandard2.0/zh-Hans/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
-        "build/netstandard2.0/zh-Hant/Microsoft.TestPlatform.CoreUtilities.resources.dll",
-        "build/netstandard2.0/zh-Hant/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
-        "coverlet-icon.png",
-        "coverlet.collector.6.0.4.nupkg.sha512",
-        "coverlet.collector.nuspec"
-      ]
-    },
-    "Microsoft.CodeCoverage/17.14.0": {
-      "sha512": "z2GYXGG6LjGoumT59xSB2dMnqSwQBjkxdDJmSJHwy5nPtZ435GXa6wj5hz/lRrAZ7NyXXxZNXVsiHXzHRru5eA==",
-      "type": "package",
-      "path": "microsoft.codecoverage/17.14.0",
+      "path": "microsoft.codecoverage/17.14.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -542,14 +463,14 @@
         "build/netstandard2.0/zh-Hant/Microsoft.VisualStudio.TraceDataCollector.resources.dll",
         "lib/net462/Microsoft.VisualStudio.CodeCoverage.Shim.dll",
         "lib/net8.0/Microsoft.VisualStudio.CodeCoverage.Shim.dll",
-        "microsoft.codecoverage.17.14.0.nupkg.sha512",
+        "microsoft.codecoverage.17.14.1.nupkg.sha512",
         "microsoft.codecoverage.nuspec"
       ]
     },
-    "Microsoft.NET.Test.Sdk/17.14.0": {
-      "sha512": "rTtdOm6C96q9QgP3mS8nUGPGPh5Xm2HnBYJggNmNrJ3LDmX9lJuUIgnJEfvX6wSQY4swUMiCcIXd3OkjhYCgtw==",
+    "Microsoft.NET.Test.Sdk/17.14.1": {
+      "sha512": "HJKqKOE+vshXra2aEHpi2TlxYX7Z9VFYkr+E5rwEvHC8eIXiyO+K9kNm8vmNom3e2rA56WqxU+/N9NJlLGXsJQ==",
       "type": "package",
-      "path": "microsoft.net.test.sdk/17.14.0",
+      "path": "microsoft.net.test.sdk/17.14.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -561,17 +482,27 @@
         "build/net8.0/Microsoft.NET.Test.Sdk.Program.vb",
         "build/net8.0/Microsoft.NET.Test.Sdk.props",
         "build/net8.0/Microsoft.NET.Test.Sdk.targets",
-        "buildMultiTargeting/Microsoft.NET.Test.Sdk.props",
+        "build/netcoreapp2.0/Microsoft.NET.Test.Sdk.props",
+        "build/netcoreapp2.0/Microsoft.NET.Test.Sdk.targets",
+        "build/netstandard2.0/Microsoft.NET.Test.Sdk.props",
+        "build/netstandard2.0/Microsoft.NET.Test.Sdk.targets",
+        "buildMultiTargeting/net462/Microsoft.NET.Test.Sdk.props",
+        "buildMultiTargeting/net8.0/Microsoft.NET.Test.Sdk.props",
+        "buildMultiTargeting/netcoreapp2.0/Microsoft.NET.Test.Sdk.props",
+        "buildMultiTargeting/netcoreapp2.0/Microsoft.NET.Test.Sdk.targets",
+        "buildMultiTargeting/netstandard2.0/Microsoft.NET.Test.Sdk.props",
+        "buildMultiTargeting/netstandard2.0/Microsoft.NET.Test.Sdk.targets",
+        "lib/native/_._",
         "lib/net462/_._",
         "lib/net8.0/_._",
-        "microsoft.net.test.sdk.17.14.0.nupkg.sha512",
+        "microsoft.net.test.sdk.17.14.1.nupkg.sha512",
         "microsoft.net.test.sdk.nuspec"
       ]
     },
-    "Microsoft.TestPlatform.ObjectModel/17.14.0": {
-      "sha512": "3h7y7f/HuY8jdZa163p/55VmGw/fYJwrI8FOtsp4aEQAJaPgBr5LBS25uOfBwRYI95QDiByfaqSPBcWEvuHEwA==",
+    "Microsoft.TestPlatform.ObjectModel/17.14.1": {
+      "sha512": "xTP1W6Mi6SWmuxd3a+jj9G9UoC850WGwZUps1Wah9r1ZxgXhdJfj1QqDLJkFjHDCvN42qDL2Ps5KjQYWUU0zcQ==",
       "type": "package",
-      "path": "microsoft.testplatform.objectmodel/17.14.0",
+      "path": "microsoft.testplatform.objectmodel/17.14.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -663,14 +594,14 @@
         "lib/netstandard2.0/zh-Hans/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
         "lib/netstandard2.0/zh-Hant/Microsoft.TestPlatform.CoreUtilities.resources.dll",
         "lib/netstandard2.0/zh-Hant/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
-        "microsoft.testplatform.objectmodel.17.14.0.nupkg.sha512",
+        "microsoft.testplatform.objectmodel.17.14.1.nupkg.sha512",
         "microsoft.testplatform.objectmodel.nuspec"
       ]
     },
-    "Microsoft.TestPlatform.TestHost/17.14.0": {
-      "sha512": "8htQBKM92s/NXUI/U0/CKKLlvlDfWIo3/mbnY/GS/2XLkBGNIVQufmUpDIzznaZqUpdzspGSsJcLhVN8aRoMaA==",
+    "Microsoft.TestPlatform.TestHost/17.14.1": {
+      "sha512": "d78LPzGKkJwsJXAQwsbJJ7LE7D1wB+rAyhHHAaODF+RDSQ0NgMjDFkSA1Djw18VrxO76GlKAjRUhl+H8NL8Z+Q==",
       "type": "package",
-      "path": "microsoft.testplatform.testhost/17.14.0",
+      "path": "microsoft.testplatform.testhost/17.14.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -733,7 +664,7 @@
         "lib/net8.0/zh-Hant/Microsoft.TestPlatform.CommunicationUtilities.resources.dll",
         "lib/net8.0/zh-Hant/Microsoft.TestPlatform.CrossPlatEngine.resources.dll",
         "lib/net8.0/zh-Hant/Microsoft.VisualStudio.TestPlatform.Common.resources.dll",
-        "microsoft.testplatform.testhost.17.14.0.nupkg.sha512",
+        "microsoft.testplatform.testhost.17.14.1.nupkg.sha512",
         "microsoft.testplatform.testhost.nuspec"
       ]
     },
@@ -886,10 +817,10 @@
         "xunit.extensibility.execution.nuspec"
       ]
     },
-    "xunit.runner.visualstudio/3.1.4": {
-      "sha512": "5mj99LvCqrq3CNi06xYdyIAXOEh+5b33F2nErCzI5zWiDdLHXiPXEWFSUAF8zlIv0ZWqjZNCwHTQeAPYbF3pCg==",
+    "xunit.runner.visualstudio/3.1.0": {
+      "sha512": "K9O9TOzugqOo4LJ87uuq1VG8RAqGp20Ng85Wx932oT5LNBkIgeeGYubVW5UMnOOTanFNbGavmbuYrJr4INzSwg==",
       "type": "package",
-      "path": "xunit.runner.visualstudio/3.1.4",
+      "path": "xunit.runner.visualstudio/3.1.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -903,11 +834,11 @@
         "build/net8.0/xunit.runner.visualstudio.testadapter.dll",
         "lib/net472/_._",
         "lib/net8.0/_._",
-        "xunit.runner.visualstudio.3.1.4.nupkg.sha512",
+        "xunit.runner.visualstudio.3.1.0.nupkg.sha512",
         "xunit.runner.visualstudio.nuspec"
       ]
     },
-    "X7.Knowledge/1.0.0": {
+    "X7.Knowledge/0.1.0": {
       "type": "project",
       "path": "../X7.Knowledge/X7.Knowledge.csproj",
       "msbuildProject": "../X7.Knowledge/X7.Knowledge.csproj"
@@ -915,11 +846,10 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "Microsoft.NET.Test.Sdk >= 17.14.0",
-      "X7.Knowledge >= 1.0.0",
-      "coverlet.collector >= 6.0.4",
+      "Microsoft.NET.Test.Sdk >= 17.14.1",
+      "X7.Knowledge >= 0.1.0",
       "xunit >= 2.9.3",
-      "xunit.runner.visualstudio >= 3.1.4"
+      "xunit.runner.visualstudio >= 3.1.0"
     ]
   },
   "packageFolders": {
@@ -975,21 +905,15 @@
         "dependencies": {
           "Microsoft.NET.Test.Sdk": {
             "target": "Package",
-            "version": "[17.14.0, )"
-          },
-          "coverlet.collector": {
-            "target": "Package",
-            "version": "[6.0.4, )"
+            "version": "[17.14.1, )"
           },
           "xunit": {
             "target": "Package",
             "version": "[2.9.3, )"
           },
           "xunit.runner.visualstudio": {
-            "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-            "suppressParent": "All",
             "target": "Package",
-            "version": "[3.1.4, )"
+            "version": "[3.1.0, )"
           }
         },
         "imports": [
@@ -1008,7 +932,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.302/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",

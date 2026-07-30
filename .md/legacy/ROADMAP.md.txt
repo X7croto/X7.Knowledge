@@ -1,0 +1,763 @@
+# ROADMAP.md
+
+> Status: Oficial
+>
+> Derivado de: PROJECT_CONSTITUTION.md
+>
+> Este documento define a evolução planejada do X7.Knowledge.
+>
+> A Constituição define **o que o projeto é**.
+>
+> O Roadmap define **o que será desenvolvido ao longo da evolução do projeto**.
+>
+> Este documento não substitui a Constituição.
+>
+> Nenhuma decisão arquitetural pode ser tomada utilizando apenas este documento.
+>
+> Todas as decisões devem ser rastreáveis até a Constituição.
+
+---
+
+# 1. Objetivo
+
+O X7.Knowledge possui um único objetivo permanente.
+
+Transformar uma solução de software em uma Base de Conhecimento estruturada capaz de representar o projeto de maneira compreensível para seres humanos e modelos de linguagem.
+
+O foco do projeto não é produzir um índice.
+
+Não é produzir um parser.
+
+Não é produzir um grafo.
+
+Não é produzir documentação.
+
+Todos esses artefatos são meios.
+
+O produto final sempre é uma Base de Conhecimento.
+
+---
+
+# 2. Princípios do Roadmap
+
+Toda evolução do projeto deverá respeitar os seguintes princípios.
+
+## 2.1 Evolução incremental
+
+Cada etapa adiciona conhecimento novo.
+
+Nenhuma etapa substitui conhecimento anteriormente produzido.
+
+---
+
+## 2.2 Conhecimento monotônico
+
+Uma etapa nunca remove informação produzida anteriormente.
+
+Ela apenas amplia o conhecimento disponível.
+
+---
+
+## 2.3 Publicação contínua
+
+Toda etapa deve produzir documentação utilizável.
+
+Não existem etapas cujo único resultado seja código interno.
+
+Sempre deve existir ganho perceptível na Base de Conhecimento.
+
+---
+
+## 2.4 Independência
+
+Cada etapa deve possuir objetivo próprio.
+
+Cada etapa deve possuir critério de conclusão.
+
+Cada etapa deve produzir artefatos verificáveis.
+
+---
+
+## 2.5 Não regressão
+
+Nenhuma evolução poderá reduzir a qualidade da documentação produzida.
+
+---
+
+# 3. Estado Atual
+
+No início deste Roadmap o projeto possui:
+
+- Estrutura inicial do compilador.
+- Pipeline em desenvolvimento.
+- Modelo de conhecimento em evolução.
+- Publicação Markdown inicial.
+- Constituição congelada.
+
+Ainda não existe uma Base de Conhecimento completa.
+
+---
+
+# 4. Macroetapas
+
+A evolução do projeto ocorrerá através das seguintes macroetapas.
+
+1. Estrutura Física
+2. Estrutura Arquitetural
+3. Estrutura do Código
+4. Modelo Estrutural
+5. Modelo Comportamental
+6. Dependências
+7. Convenções
+8. Padrões
+9. Conhecimento de Domínio
+10. Consolidação da Base de Conhecimento
+11. Consumo por Agentes
+
+Cada macroetapa é cumulativa.
+
+---
+
+# 5. Macroetapa 1 — Estrutura Física
+
+## Objetivo
+
+Permitir que o compilador compreenda a organização física de uma solução.
+
+Esta etapa representa a fundação de toda a Base de Conhecimento.
+
+Nenhuma etapa posterior poderá existir sem esta.
+
+---
+
+## Conhecimento adquirido
+
+Ao término desta etapa o compilador deverá conhecer:
+
+- Nome da solução.
+- Localização da solução.
+- Lista de projetos.
+- Caminhos físicos.
+- Target Framework.
+- Organização da árvore de projetos.
+
+---
+
+## Artefatos produzidos
+
+Ao término desta etapa deverão existir, no mínimo:
+
+```text
+Knowledge/
+
+README.md
+
+Project/
+
+Project.md
+```
+
+README.md deverá apresentar uma visão geral da Base de Conhecimento.
+
+Project.md deverá representar a estrutura física da solução.
+
+---
+
+## Critério de conclusão
+
+Esta etapa será considerada concluída quando:
+
+- qualquer solução suportada puder ser compilada;
+- a estrutura física for identificada corretamente;
+- a documentação correspondente for publicada;
+- nenhum conhecimento depender de análise semântica do código.
+
+---
+
+# 6. Macroetapa 2 — Estrutura Arquitetural
+
+## Objetivo
+
+Representar como os projetos se relacionam dentro da solução.
+
+Esta etapa introduz o conceito de arquitetura da solução.
+
+---
+
+## Conhecimento adquirido
+
+Ao término desta etapa o compilador compreenderá:
+
+- dependências entre projetos;
+- referências de compilação;
+- organização em camadas;
+- fronteiras arquiteturais;
+- composição geral da solução.
+
+---
+
+## Artefatos produzidos
+
+```text
+Knowledge/
+
+Architecture/
+
+Architecture.md
+```
+
+Architecture.md deverá apresentar uma visão arquitetural da solução sem depender da leitura do código-fonte.
+
+---
+
+## Critério de conclusão
+
+Esta etapa será considerada concluída quando for possível compreender a arquitetura da solução exclusivamente através da documentação publicada.
+
+# 7. Macroetapa 3 — Estrutura do Código
+
+## Objetivo
+
+Representar a organização lógica do código-fonte sem interpretar seu comportamento.
+
+Esta etapa introduz a visão estrutural do código, permitindo compreender como a solução está organizada internamente.
+
+---
+
+## Conhecimento adquirido
+
+Ao término desta etapa o compilador deverá compreender:
+
+- Namespaces.
+- Organização dos arquivos.
+- Hierarquia lógica dos diretórios.
+- Tipos existentes.
+- Localização de cada tipo.
+- Distribuição dos componentes dentro dos projetos.
+
+Esta etapa ainda não interpreta comportamento.
+
+---
+
+## Artefatos produzidos
+
+```text
+Knowledge/
+
+Types/
+
+    Index.md
+
+Namespaces/
+
+    Index.md
+```
+
+Os documentos produzidos deverão permitir localizar qualquer tipo existente na solução.
+
+---
+
+## Critério de conclusão
+
+Esta etapa será considerada concluída quando toda a estrutura lógica da solução puder ser navegada sem consultar o código-fonte.
+
+---
+
+# 8. Macroetapa 4 — Modelo Estrutural
+
+## Objetivo
+
+Transformar os tipos encontrados em entidades estruturadas da Base de Conhecimento.
+
+Nesta etapa o compilador deixa de conhecer apenas arquivos e passa a conhecer modelos.
+
+---
+
+## Conhecimento adquirido
+
+Ao término desta etapa deverão ser identificados:
+
+- Classes.
+- Interfaces.
+- Records.
+- Structs.
+- Enums.
+- Delegates.
+
+Para cada tipo deverão ser conhecidos:
+
+- Nome.
+- Namespace.
+- Projeto.
+- Localização.
+- Tipo estrutural.
+- Modificadores de acesso.
+- Relações de herança.
+- Relações de implementação.
+
+Ainda não serão analisados métodos.
+
+---
+
+## Artefatos produzidos
+
+```text
+Knowledge/
+
+Types/
+
+    Classes.md
+
+    Interfaces.md
+
+    Records.md
+
+    Structs.md
+
+    Enums.md
+```
+
+---
+
+## Critério de conclusão
+
+Todo tipo existente na solução deverá possuir representação própria na Base de Conhecimento.
+
+---
+
+# 9. Macroetapa 5 — Modelo Comportamental
+
+## Objetivo
+
+Adicionar comportamento aos modelos estruturais.
+
+Nesta etapa o compilador deixa de conhecer apenas "o que existe" e passa a conhecer "como funciona".
+
+---
+
+## Conhecimento adquirido
+
+Ao término desta etapa deverão ser conhecidos:
+
+- Métodos.
+- Construtores.
+- Propriedades.
+- Campos.
+- Eventos.
+- Operadores.
+- Genéricos.
+- Restrições.
+
+Sempre preservando a separação entre representação estrutural e representação comportamental.
+
+---
+
+## Artefatos produzidos
+
+```text
+Knowledge/
+
+Behavior/
+
+    Methods.md
+
+    Properties.md
+
+    Constructors.md
+```
+
+---
+
+## Critério de conclusão
+
+O comportamento público da solução deverá poder ser compreendido sem abrir o código.
+
+---
+
+# 10. Macroetapa 6 — Dependências
+
+## Objetivo
+
+Representar como os componentes colaboram entre si.
+
+A partir desta etapa o compilador passa a produzir conhecimento relacional.
+
+---
+
+## Conhecimento adquirido
+
+Ao término desta etapa deverão ser conhecidos:
+
+- Dependências entre tipos.
+- Dependências entre projetos.
+- Chamadas entre componentes.
+- Instanciações.
+- Injeções de dependência.
+- Uso de interfaces.
+- Fluxo de referências.
+
+---
+
+## Artefatos produzidos
+
+```text
+Knowledge/
+
+Dependencies/
+
+    Dependencies.md
+
+    ProjectDependencies.md
+
+    TypeDependencies.md
+```
+
+---
+
+## Critério de conclusão
+
+Será possível navegar entre componentes relacionados sem consultar o código-fonte.
+
+---
+
+# 11. Macroetapa 7 — Convenções
+
+## Objetivo
+
+Descobrir padrões recorrentes adotados pela solução.
+
+Esta etapa representa a transição entre estrutura e conhecimento arquitetural.
+
+---
+
+## Conhecimento adquirido
+
+Ao término desta etapa deverão ser identificadas:
+
+- Convenções explícitas.
+- Convenções implícitas.
+- Convenções de nomenclatura.
+- Convenções arquiteturais.
+- Convenções de organização.
+- Convenções de implementação.
+
+Estas convenções deverão ser inferidas a partir da solução e também registradas quando existirem documentos oficiais.
+
+---
+
+## Artefatos produzidos
+
+```text
+Knowledge/
+
+Conventions/
+
+    Naming.md
+
+    Architecture.md
+
+    Organization.md
+
+    Coding.md
+```
+
+---
+
+## Critério de conclusão
+
+A Base de Conhecimento deverá responder como novos componentes devem ser criados seguindo o padrão da solução.
+# 12. Macroetapa 8 — Padrões
+
+## Objetivo
+
+Identificar padrões recorrentes presentes na solução e transformá-los em conhecimento explícito.
+
+Enquanto a etapa anterior identifica convenções, esta etapa identifica padrões de construção.
+
+O objetivo não é reconhecer padrões conhecidos da literatura.
+
+O objetivo é compreender os padrões específicos adotados pela solução.
+
+---
+
+## Conhecimento adquirido
+
+Ao término desta etapa deverão ser conhecidos:
+
+- Padrões arquiteturais utilizados.
+- Padrões de criação.
+- Padrões de composição.
+- Padrões de persistência.
+- Padrões de comunicação.
+- Padrões específicos do projeto.
+
+Sempre distinguindo:
+
+- padrões oficialmente documentados;
+- padrões inferidos pela recorrência do código.
+
+---
+
+## Artefatos produzidos
+
+```text
+Knowledge/
+
+Patterns/
+
+    Index.md
+
+    ArchitecturalPatterns.md
+
+    CodingPatterns.md
+
+    DomainPatterns.md
+```
+
+Cada padrão deverá conter:
+
+- descrição;
+- motivação;
+- exemplos encontrados;
+- componentes relacionados;
+- frequência de utilização.
+
+---
+
+## Critério de conclusão
+
+A Base de Conhecimento deverá permitir responder:
+
+- Como um novo componente semelhante deve ser implementado.
+- Quais padrões são obrigatórios.
+- Quais padrões são opcionais.
+- Onde cada padrão é utilizado.
+
+---
+
+# 13. Macroetapa 9 — Conhecimento de Domínio
+
+## Objetivo
+
+Ultrapassar a compreensão do código e compreender o domínio da solução.
+
+Nesta etapa o compilador deixa de produzir apenas conhecimento técnico.
+
+Passa a produzir conhecimento funcional.
+
+---
+
+## Conhecimento adquirido
+
+Ao término desta etapa deverão ser identificados:
+
+- Features.
+- Casos de uso.
+- Fluxos.
+- Regras de negócio.
+- Conceitos do domínio.
+- Linguagem ubíqua.
+- Limites de contexto.
+
+Sempre que possível essas informações deverão ser obtidas a partir de documentação existente.
+
+Na ausência de documentação poderão ser inferidas através da organização do código.
+
+---
+
+## Artefatos produzidos
+
+```text
+Knowledge/
+
+Domain/
+
+    Overview.md
+
+    Features.md
+
+    UseCases.md
+
+    BusinessRules.md
+
+    Glossary.md
+```
+
+---
+
+## Critério de conclusão
+
+Será possível compreender o propósito da solução sem depender da leitura do código.
+
+---
+
+# 14. Macroetapa 10 — Consolidação da Base de Conhecimento
+
+## Objetivo
+
+Transformar todos os conhecimentos produzidos nas etapas anteriores em uma Base de Conhecimento única, consistente e navegável.
+
+Esta etapa não adiciona novas fontes de informação.
+
+Seu objetivo é consolidar.
+
+---
+
+## Conhecimento adquirido
+
+Ao término desta etapa o compilador deverá produzir:
+
+- referências cruzadas;
+- navegação entre documentos;
+- índices globais;
+- sumários;
+- mapas de relacionamento;
+- documentação integrada.
+
+Todos os documentos deverão estar conectados.
+
+Nenhum conhecimento deverá existir isoladamente.
+
+---
+
+## Artefatos produzidos
+
+```text
+Knowledge/
+
+README.md
+
+SUMMARY.md
+
+INDEX.md
+
+Navigation/
+
+CrossReferences.md
+
+KnowledgeMap.md
+```
+
+---
+
+## Critério de conclusão
+
+Toda informação produzida anteriormente deverá ser acessível através da própria Base de Conhecimento.
+
+O usuário não deverá depender da estrutura física dos arquivos para localizar informações.
+
+---
+
+# 15. Macroetapa 11 — Consumo por Agentes
+
+## Objetivo
+
+Disponibilizar a Base de Conhecimento para consumo automatizado.
+
+O foco desta etapa não é produzir novo conhecimento.
+
+É disponibilizar o conhecimento produzido.
+
+---
+
+## Conhecimento adquirido
+
+Nenhum.
+
+Todo conhecimento deverá já existir nas etapas anteriores.
+
+Esta etapa apenas define mecanismos de consumo.
+
+---
+
+## Artefatos produzidos
+
+A Base de Conhecimento deverá poder ser consumida por:
+
+- Modelos de Linguagem.
+- Agentes.
+- Ferramentas de documentação.
+- Ferramentas de busca.
+- Interfaces de consulta.
+
+Os formatos poderão incluir:
+
+- Markdown.
+- JSON.
+- SQLite.
+- Outros formatos derivados.
+
+Sem alterar a representação conceitual da Base.
+
+---
+
+## Critério de conclusão
+
+Um consumidor deverá conseguir responder perguntas sobre a solução utilizando exclusivamente a Base de Conhecimento produzida pelo compilador.
+
+---
+
+# 16. Critérios Gerais de Evolução
+
+Toda evolução do projeto deverá respeitar os seguintes critérios.
+
+## Incrementalidade
+
+Nenhuma etapa poderá invalidar etapas anteriores.
+
+---
+
+## Compatibilidade
+
+Novas capacidades deverão preservar compatibilidade com a Base de Conhecimento já produzida.
+
+---
+
+## Determinismo
+
+A mesma solução deverá produzir a mesma Base de Conhecimento.
+
+Diferenças de execução não poderão alterar o resultado.
+
+---
+
+## Rastreabilidade
+
+Todo documento produzido deverá possuir origem identificável.
+
+Sempre deverá ser possível determinar:
+
+- de qual fonte a informação foi extraída;
+- qual etapa a produziu;
+- qual componente do compilador foi responsável pela produção.
+
+---
+
+## Verificabilidade
+
+Toda etapa deverá possuir critérios objetivos de conclusão.
+
+Não serão aceitas etapas cuja conclusão dependa de julgamento subjetivo.
+
+---
+
+# 17. Estado Final Esperado
+
+Ao término deste Roadmap, o X7.Knowledge deverá ser capaz de:
+
+- compreender a estrutura física de uma solução;
+- compreender sua arquitetura;
+- compreender seus componentes;
+- compreender seu comportamento;
+- compreender suas convenções;
+- compreender seus padrões;
+- compreender seu domínio;
+- consolidar esse conhecimento em uma Base de Conhecimento única;
+- disponibilizar essa Base para consumo por pessoas e agentes.
+
+A Base de Conhecimento será o produto final do compilador.
+
+Todas as futuras evoluções do projeto deverão contribuir direta ou indiretamente para esse objetivo.
+
+---
+**Fim do documento `ROADMAP.md`.**

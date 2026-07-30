@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "x7k-bench/1.0.0": {
+        "dependencies": {
+          "X7.Knowledge": "0.1.0"
+        },
+        "runtime": {
+          "x7k-bench.dll": {}
+        }
+      },
+      "X7.Knowledge/0.1.0": {
+        "runtime": {
+          "X7.Knowledge.dll": {
+            "assemblyVersion": "0.1.0.0",
+            "fileVersion": "0.1.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "x7k-bench/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "X7.Knowledge/0.1.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

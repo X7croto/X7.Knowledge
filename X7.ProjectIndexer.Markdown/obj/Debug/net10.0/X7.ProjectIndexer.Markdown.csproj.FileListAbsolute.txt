@@ -13,3 +13,4 @@ D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.Projec
 D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Markdown\obj\Debug\net10.0\refint\X7.ProjectIndexer.Markdown.dll
 D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Markdown\obj\Debug\net10.0\X7.ProjectIndexer.Markdown.pdb
 D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Markdown\obj\Debug\net10.0\ref\X7.ProjectIndexer.Markdown.dll
+D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.ProjectIndexer.Markdown\obj\Debug\net10.0\X7.ProjectIndexer.Markdown.sourcelink.json
