@@ -187,7 +187,11 @@ public sealed class CodeStructureProducer : IProducer
 
                         results.Add(new Declaration
                         {
-                            MetadataName = type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
+                            // OriginalDefinition explícito: a identidade de um
+                            // genérico é sempre a declaração, nunca uma
+                            // instanciação. C04 depende dessa mesma regra.
+                            MetadataName = type.OriginalDefinition
+                                .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
                                 .Replace("global::", string.Empty, StringComparison.Ordinal),
                             Namespace = type.ContainingNamespace.IsGlobalNamespace
                                 ? string.Empty

@@ -1,5 +1,5 @@
 {
-  "benchmarkVersion": 3,
+  "benchmarkVersion": 5,
   "questions": [
     {
       "codeFiles": [
@@ -138,7 +138,10 @@
       ],
       "expectedCapability": "C04",
       "id": "Q08",
-      "kbFiles": [],
+      "kbFiles": [
+        "Relations/INDEX.md",
+        "Relations/X7.Knowledge.md"
+      ],
       "retired": false,
       "text": "Que tipos implementam IProducer e onde estão?"
     },

@@ -41,17 +41,23 @@ substituí-las.
   `retired`, não apagada, e para de contar.
 - **BM-06** `codeFiles` de uma pergunta só muda se a solução de referência
   mudar. Ajustar a lista para melhorar o número é fraude de medição.
-- **BM-07** Duas medições só são comparáveis se a **solução de referência for
-  a mesma**. Mudou a solução — projeto adicionado, removido ou renomeado — a
-  linha de base é refeita, e a medição anterior deixa de ser termo de
-  comparação. `results.json` registra `solutionDigest` e `projectCount` para
-  que a incomparabilidade seja detectável, e não uma conclusão errada.
+- **BM-07** A comparabilidade é decidida **por pergunta**, não pela solução
+  inteira. Uma pergunta é comparável entre duas medições quando seu `T_code`
+  não mudou: aí a variação de CR vem da Base, que é o que se quer medir.
+  `T_code` diferente significa denominador diferente, e a pergunta sai do
+  cálculo — sem invalidar as demais. `results.json` registra `solutionDigest`
+  e `projectCount` como informação de contexto, não como trava.
 - **BM-08** MT-02 se aplica a **capacidades**, não a mudanças da solução de
   referência. Aumento de CR causado por crescimento da solução não bloqueia
   conclusão de capacidade; aumento causado por capacidade nova, sim.
 - **BM-09** A verificação de MT-02 é feita por **comparação pareada** sobre as
   perguntas sustentadas em ambas as medições. Comparar medianas de populações
   diferentes não mede nada.
+- **BM-11** A mediana pareada é o critério de MT-02, mas **não é o único
+  número olhado**. Com poucas perguntas comparáveis, uma resposta pode
+  degradar sem deslocar o centro. A ferramenta reporta nominalmente toda
+  pergunta cujo CR piorou, e uma piora individual relevante exige justificativa
+  no fechamento da capacidade, mesmo com a mediana estável.
 - **BM-10** `codeFiles` que pressupõe a resposta é defeito, não escolha.
   Listar só os projetos que participam da resposta a uma pergunta do tipo
   "quem depende de X" exige já saber a resposta. A correção desse tipo de erro
@@ -154,12 +160,16 @@ repositório e comparado entre capacidades.
 
 Antes de concluir qualquer capacidade:
 
-1. Verificar que `solutionDigest` das duas medições é o mesmo (BM-07). Se não
-   for, refazer a linha de base antes de comparar.
-2. Rodar o benchmark contra a Base anterior → `mediana_antes`, `cobertura_antes`
-3. Rodar contra a Base nova → `mediana_depois`, `cobertura_depois`
-4. **Bloqueia a conclusão** se `mediana_depois > mediana_antes` (MT-02)
-5. Registrar ambos no fechamento da capacidade
+1. Rodar o benchmark com `--baseline` apontando para a medição anterior.
+2. A ferramenta seleciona as perguntas comparáveis (BM-07) e calcula a mediana
+   pareada sobre elas.
+3. **Bloqueia a conclusão** se a mediana pareada aumentar (MT-02).
+4. Registrar mediana pareada, cobertura e quantas perguntas ficaram fora do
+   cálculo, no fechamento da capacidade.
+
+Perguntas excluídas por `T_code` alterado são reportadas nominalmente. Muitas
+exclusões seguidas indicam que a solução de referência está mudando rápido
+demais para sustentar comparação — sinal para congelá-la.
 
 ### Comparação pareada (obrigatória)
 

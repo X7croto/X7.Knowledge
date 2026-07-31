@@ -15,7 +15,7 @@ namespace X7.Knowledge;
 /// </summary>
 public static class KnowledgeCompiler
 {
-    public const string ModelVersion = "0.5.0";
+    public const string ModelVersion = "0.6.0";
 
     public static async ValueTask<KnowledgeModel> CompileAsync(
         string solutionPath,
@@ -42,7 +42,8 @@ public static class KnowledgeCompiler
             new ProjectProducer(),
             new ProjectReferenceProducer(),
             new ArchitectureProducer(),
-            new CodeStructureProducer(sources)
+            new CodeStructureProducer(sources),
+            new TypeRelationProducer(sources)
         ]);
 
         await pipeline.ExecuteAsync(context, cancellationToken);
@@ -51,7 +52,7 @@ public static class KnowledgeCompiler
             ModelVersion,
             CompilerVersion(),
             context.AcquisitionLevel,
-            ["C01", "C02", "C03"],
+            ["C01", "C02", "C03", "C04"],
             InputDigest.Compute(solution),
             level == AcquisitionLevel.Semantic ? MsBuildBootstrap.Version : null);
 
@@ -65,7 +66,8 @@ public static class KnowledgeCompiler
             new KnowledgeModelPublisher(),
             new MarkdownPublisher(),
             new ArchitecturePublisher(),
-            new StructurePublisher()
+            new StructurePublisher(),
+            new RelationPublisher()
         ];
 
         // Substituição integral (ADR-031), mas nunca destrutiva antes da hora:

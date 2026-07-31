@@ -28,6 +28,10 @@ public static class ObservationKinds
     public const string TypeDeclared = "type.declared";
     public const string TypeLocation = "type.location";
 
+    // C04
+    public const string TypeInherits = "type.inherits";
+    public const string TypeImplements = "type.implements";
+
     public const string AcquisitionLimitation = "acquisition.limitation";
 
     private static readonly HashSet<string> Catalog = new(StringComparer.Ordinal)
@@ -48,6 +52,8 @@ public static class ObservationKinds
         NamespaceContains,
         TypeDeclared,
         TypeLocation,
+        TypeInherits,
+        TypeImplements,
         AcquisitionLimitation
     };
 

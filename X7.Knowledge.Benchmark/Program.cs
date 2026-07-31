@@ -98,7 +98,7 @@ Console.WriteLine($"Resultado em {Path.GetFullPath(output)}");
 
 if (baseline is not null)
 {
-    var comparison = BaselineComparison.Load(baseline, measurements, solutionDigest);
+    var comparison = BaselineComparison.Load(baseline, measurements);
 
     Console.WriteLine();
 
@@ -108,21 +108,46 @@ if (baseline is not null)
     }
     else if (!comparison.Comparable)
     {
-        Console.WriteLine("Comparação impossível: solução de referência diferente (BM-07).");
-        Console.WriteLine("Refaça a linha de base antes de comparar.");
+        Console.WriteLine("Comparação impossível: nenhuma pergunta comparável entre as medições.");
+
+        if (comparison.ExcludedQuestions.Count > 0)
+        {
+            Console.WriteLine($"  {comparison.ExcludedQuestions.Count} pergunta(s) tiveram T_code alterado: "
+                              + string.Join(", ", comparison.ExcludedQuestions));
+        }
     }
-    else if (comparison.MedianBefore is null || comparison.MedianAfter is null)
+    else if (comparison.MedianBeforePerMille is not { } antes || comparison.MedianAfterPerMille is not { } depois)
     {
-        Console.WriteLine("Comparação impossível: nenhuma pergunta sustentada em ambas as medições.");
+        Console.WriteLine("Comparação impossível: mediana indisponível em uma das medições.");
     }
     else
     {
         Console.WriteLine($"Comparação pareada sobre {comparison.CommonQuestions.Count} pergunta(s):");
-        Console.WriteLine($"  antes  {comparison.MedianBefore.Value * 1000:F0}‰");
-        Console.WriteLine($"  depois {comparison.MedianAfter.Value * 1000:F0}‰");
+
+        if (comparison.ExcludedQuestions.Count > 0)
+        {
+            Console.WriteLine($"  {comparison.ExcludedQuestions.Count} fora do cálculo por T_code alterado: "
+                              + string.Join(", ", comparison.ExcludedQuestions));
+        }
+
+        Console.WriteLine($"  antes  {antes}‰");
+        Console.WriteLine($"  depois {depois}‰");
         Console.WriteLine(comparison.Regressed
-            ? "  REGRESSÃO — MT-02 bloqueia a conclusão da capacidade."
-            : "  sem regressão.");
+            ? "  mediana: REGRESSÃO — MT-02 bloqueia a conclusão."
+            : "  mediana: sem regressão.");
+
+        // Mediana estável não garante que nenhuma resposta piorou.
+        if (comparison.Worsened.Count > 0)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"  {comparison.Worsened.Count} pergunta(s) pioraram individualmente:");
+
+            foreach (var change in comparison.Worsened)
+            {
+                Console.WriteLine(
+                    $"    {change.Id}: {change.BeforePerMille}‰ -> {change.AfterPerMille}‰");
+            }
+        }
 
         if (comparison.Regressed)
             return 5;

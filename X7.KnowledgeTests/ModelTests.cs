@@ -143,13 +143,16 @@ public sealed class ModelTests : IClassFixture<SolutionFixture>
     }
 
     [Fact]
-    public async Task Nivel_de_aquisicao_do_C01_e_sintatico()
+    public async Task Observations_de_C01_sao_sempre_sinteticas()
     {
         var model = await CompileAsync();
 
-        Assert.Equal(AcquisitionLevel.Syntactic, model.Manifest.AcquisitionLevel);
-        Assert.All(model.Observations, o =>
-            Assert.Equal(AcquisitionLevel.Syntactic, o.Provenance.AcquisitionLevel));
+        // O nível do manifesto acompanha a melhor aquisição alcançada e muda
+        // conforme o ambiente. O nível por item, não: C01 lê apenas arquivos
+        // de projeto e nunca depende de semântica.
+        Assert.All(
+            model.Observations.Where(o => o.Provenance.Capability == "C01"),
+            o => Assert.Equal(AcquisitionLevel.Syntactic, o.Provenance.AcquisitionLevel));
     }
 
     [Fact]

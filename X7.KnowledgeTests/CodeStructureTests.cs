@@ -124,9 +124,12 @@ public sealed class CodeStructureTests : IClassFixture<SolutionFixture>
     {
         var model = await CompileAsync();
 
-        // C01 e C02 leem apenas arquivos de projeto: sempre nível X.
+        // C01 e C02 leem apenas .sln e .csproj: nada ali depende de semântica,
+        // mesmo quando ela está disponível. Capacidades que consomem símbolos
+        // declaram S — verificar isso pela lista de capacidades quebraria a
+        // cada capacidade nova.
         Assert.All(
-            model.Observations.Where(o => o.Provenance.Capability != "C03"),
+            model.Observations.Where(o => o.Provenance.Capability is "C01" or "C02"),
             o => Assert.Equal(AcquisitionLevel.Syntactic, o.Provenance.AcquisitionLevel));
     }
 

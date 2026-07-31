@@ -85,6 +85,28 @@ public sealed class SolutionFixture : IDisposable
             public readonly record struct Money;
             """);
 
+        Write("src/Domain/Repository.cs",
+            """
+            using System;
+
+            namespace Reference.Domain;
+
+            public interface IRepository { }
+
+            public abstract class RepositoryBase : IRepository { }
+
+            public sealed class OrderRepository : RepositoryBase, IDisposable
+            {
+                public void Dispose() { }
+            }
+
+            public sealed class DomainError : Exception { }
+
+            public interface IQuery<T> { }
+
+            public sealed class NameQuery : IQuery<System.Collections.Generic.List<string>> { }
+            """);
+
         Write("src/Core/Kernel/Clock.cs",
             """
             namespace Reference.Kernel;

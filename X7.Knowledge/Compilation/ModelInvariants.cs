@@ -65,6 +65,25 @@ public static class ModelInvariants
             }
         }
 
+        // IV-13: referência a tipo dentro do payload precisa existir no
+        // modelo. Sem isso, uma relação apontaria para o vazio e a Base
+        // pareceria completa enquanto não é.
+        var typeIds = model.Observations
+            .Where(o => o.Kind == ObservationKinds.TypeDeclared)
+            .Select(o => o.Subject.Value)
+            .ToHashSet(StringComparer.Ordinal);
+
+        foreach (var observation in model.Observations)
+        {
+            foreach (var key in (string[])["baseTypeId", "interfaceId"])
+            {
+                var reference = observation.Payload[key];
+
+                if (reference is not null && !typeIds.Contains(reference))
+                    violations.Add($"IV-13: {observation.Id} referencia tipo inexistente: {reference}");
+            }
+        }
+
         // IV-05
         var duplicated = model.Observations
             .GroupBy(o => o.Id)

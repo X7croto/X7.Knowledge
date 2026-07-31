@@ -23,9 +23,11 @@ Check "pacote de linguagem C#"      "X7.Knowledge\X7.Knowledge.csproj"          
 Check "using System.Reflection"     "X7.Knowledge\Acquisition\Roslyn\CompilationProvider.cs"  "using System.Reflection"
 Check "saneamento de caminho"       "X7.Knowledge\Acquisition\PathNormalizer.cs"              "Sanitize"
 Check "versao do MSBuild no manifesto" "X7.Knowledge\Model\Manifest.cs"                       "MsBuildVersion"
-Check "modelo 0.5.0"                "X7.Knowledge\KnowledgeCompiler.cs"                       'ModelVersion = "0.5.0"'
+Check "modelo 0.6.0"                "X7.Knowledge\KnowledgeCompiler.cs"                       'ModelVersion = "0.6.0"'
+Check "produtor de relacoes C04"    "X7.Knowledge\Compilation\Producers\TypeRelationProducer.cs" "TypeImplements"
 Check "motivo da queda de nivel"    "X7.Knowledge.Cli\Program.cs"                             "Modelo semantico indisponivel|Modelo sem.ntico indispon.vel"
 Check "supressoes de auditoria"     "Directory.Build.props"                                   "NuGetAuditSuppress"
+Check "publicacao sem mover pasta"  "X7.Knowledge\KnowledgeCompiler.cs"                       "RemoveEmptyDirectories"
 
 Write-Host ""
 if ($ok) {

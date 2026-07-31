@@ -1,7 +1,7 @@
 {
-  "benchmarkVersion": 3,
+  "benchmarkVersion": 5,
   "brokenCount": 0,
-  "coveragePerMille": 467,
+  "coveragePerMille": 533,
   "measurements": [
     {
       "codeTokens": 352,
@@ -28,24 +28,24 @@
       "supported": true
     },
     {
-      "codeTokens": 1905,
-      "contextRatioPerMille": 450,
+      "codeTokens": 1980,
+      "contextRatioPerMille": 433,
       "expectedCapability": "C02",
       "id": "Q04",
       "kbTokens": 858,
       "supported": true
     },
     {
-      "codeTokens": 1905,
-      "contextRatioPerMille": 450,
+      "codeTokens": 1980,
+      "contextRatioPerMille": 433,
       "expectedCapability": "C02",
       "id": "Q05",
       "kbTokens": 858,
       "supported": true
     },
     {
-      "codeTokens": 1905,
-      "contextRatioPerMille": 132,
+      "codeTokens": 1980,
+      "contextRatioPerMille": 127,
       "expectedCapability": "C02",
       "id": "Q06",
       "kbTokens": 251,
@@ -53,18 +53,19 @@
     },
     {
       "codeTokens": 376,
-      "contextRatioPerMille": 5410,
+      "contextRatioPerMille": 5495,
       "expectedCapability": "C03",
       "id": "Q07",
-      "kbTokens": 2034,
+      "kbTokens": 2066,
       "supported": true
     },
     {
       "codeTokens": 1335,
+      "contextRatioPerMille": 663,
       "expectedCapability": "C04",
       "id": "Q08",
-      "kbTokens": 0,
-      "supported": false
+      "kbTokens": 885,
+      "supported": true
     },
     {
       "codeTokens": 712,
@@ -74,14 +75,14 @@
       "supported": false
     },
     {
-      "codeTokens": 6242,
+      "codeTokens": 6406,
       "expectedCapability": "C06",
       "id": "Q10",
       "kbTokens": 0,
       "supported": false
     },
     {
-      "codeTokens": 4738,
+      "codeTokens": 4753,
       "expectedCapability": "C07",
       "id": "Q11",
       "kbTokens": 0,
@@ -95,31 +96,31 @@
       "supported": false
     },
     {
-      "codeTokens": 1283,
+      "codeTokens": 1298,
       "expectedCapability": "C09",
       "id": "Q13",
       "kbTokens": 0,
       "supported": false
     },
     {
-      "codeTokens": 1156,
+      "codeTokens": 1185,
       "expectedCapability": "C10",
       "id": "Q14",
       "kbTokens": 0,
       "supported": false
     },
     {
-      "codeTokens": 2277,
+      "codeTokens": 2441,
       "expectedCapability": "C11",
       "id": "Q15",
       "kbTokens": 0,
       "supported": false
     }
   ],
-  "medianContextRatioPerMille": 450,
+  "medianContextRatioPerMille": 548,
   "projectCount": 13,
   "questionCount": 15,
   "referenceSolution": "X7.ProjectIndexer.slnx",
-  "solutionDigest": "c9b7548b3cb794d30874265213e667dc8298a81ec33722e2436f9c1cc454ac1c",
-  "supportedCount": 7
+  "solutionDigest": "92ad2319e49a227058e8edba157215604fe48e95574bd9686e2aa3f7e11e4ca6",
+  "supportedCount": 8
 }

@@ -1,8 +1,8 @@
 # KNOWLEDGE_MODEL.md
 
 **Projeto:** X7.Knowledge
-**Versão do modelo:** v0.4 (provisório)
-**Esquema:** `0.4.0`
+**Versão do modelo:** v0.6 (provisório)
+**Esquema:** `0.6.0`
 **Status:** Normativo (autoridade 3)
 **Derivado de:** `PROJECT_CONSTITUTION.md` v2.0, `COMPILATION_PLAN.md` v2.0
 
@@ -40,7 +40,7 @@ Todo KnowledgeModel começa por um manifesto. Ele existe para tornar a compilaç
 
 | Campo | Tipo | Descrição |
 |---|---|---|
-| `modelVersion` | string | Versão deste esquema. `0.4.0` |
+| `modelVersion` | string | Versão deste esquema. `0.6.0` |
 | `compilerVersion` | string | Versão do compilador que produziu |
 | `solutionId` | KnowledgeId | Identidade da solução |
 | `acquisitionLevel` | `S` \| `X` | Nível alcançado (Constituição §5.3) |
@@ -256,6 +256,31 @@ fora da solução produz `acquisition.limitation`, nunca aresta inventada.
 Namespace intermediário é declarado mesmo sem tipo direto: `A.B.C` implica
 `A` e `A.B`, para que a hierarquia seja completa.
 
+### 6.1.3 Observation — C04
+
+Exigem nível S. Em nível X o Producer declara `acquisition.limitation` com
+escopo `type-relations` e não produz nada — deduzir herança por nome é o que
+§5.3 proíbe.
+
+| `kind` | `subject` | `payload` |
+|---|---|---|
+| `type.inherits` | Tipo | `{ baseTypeName, baseTypeId? , external? }` |
+| `type.implements` | Tipo | `{ interfaceName, interfaceId?, external? }` |
+
+`baseTypeId` e `interfaceId` só existem quando o alvo pertence à solução, e
+então referenciam identidade existente (IV-13). Alvo de fora traz
+`external: "true"` e apenas o nome — descartar a relação perderia conhecimento
+legítimo, e forjar uma identidade inexistente seria pior.
+
+**Exclusões declaradas.** Bases implícitas pelo próprio tipo do símbolo não são
+observadas: `System.Object`, `System.ValueType`, `System.Enum`,
+`System.Delegate`, `System.MulticastDelegate`. Toda classe deriva de `Object`;
+observar isso produziria uma Observation por tipo da solução sem informar nada.
+
+**Apenas o que é declarado diretamente.** Interface herdada da classe base não
+é observada: é derivável do conjunto, e computá-la aqui seria inferência
+disfarçada de observação (OB-01).
+
 Cada nova capacidade adiciona `kind`s ao catálogo. Nenhuma capacidade altera
 `kind` existente.
 
@@ -371,6 +396,14 @@ e o CR cresce com o tamanho do projeto sem que a Base tenha piorado.
 | `Structure/Solution.md` | Nenhuma — tamanho proporcional a projetos, não a código |
 | `Architecture/*` | Nenhuma — idem |
 | `Structure/Types/*` | **Um arquivo por projeto**, mais `INDEX.md` |
+| `Relations/*` | **Um arquivo por projeto**, mais `INDEX.md` |
+
+Relação de tipo é publicada **separada do inventário**, e não como coluna a
+mais na tabela de tipos. Motivo medido: com as duas juntas, uma pergunta do
+tipo "onde está o tipo X" paga pela informação de herança sem usá-la — o CR
+dessa pergunta subiu de 5410‰ para 6731‰ quando as colunas foram acrescentadas.
+
+A regra geral: **o que não é consultado junto não é publicado junto.**
 
 O índice lista projeto, contagem e link. Nunca nomes de tipo: repetir conteúdo
 no índice anularia o ganho da partição.
@@ -406,6 +439,8 @@ Testáveis por automação; falha bloqueia a conclusão de qualquer capacidade.
 - **IV-10** Toda Evidence é não vazia e referencia apenas Observations existentes.
 - **IV-11** `Observed` tem frequência declarada; `Asserted` não tem frequência.
 - **IV-12** Toda Inference declara sua regra.
+- **IV-13** Referência a tipo dentro de payload (`baseTypeId`, `interfaceId`)
+  aponta para tipo existente no modelo.
 
 ---
 
@@ -417,6 +452,8 @@ Testáveis por automação; falha bloqueia a conclusão de qualquer capacidade.
 | `0.2.0` | `Evidence`, `Inference`, `Confidence`, `Frequency`; catálogos 6.2 e 6.3; IV-09..IV-12 | **Aditiva** (EX-01, EX-04). Nenhum `kind` de v0.1 alterado; Observations de v0.1 permanecem válidas |
 | `0.3.0` | Kinds de Observation de C02 (6.1.1); `project.graph-position` passa a agrupar nós e arestas | **Aditiva**. Nenhum `kind` anterior alterado |
 | `0.4.0` | Kinds de C03 (6.1.2); identidades `ns:` e `type:`; regra de granularidade (9.1) | **Aditiva**. Nenhum `kind` anterior alterado |
+| `0.5.0` | `msBuildVersion` no manifesto, presente apenas em nível S | **Aditiva**. Campo opcional (EX-02) |
+| `0.6.0` | Kinds de C04 (6.1.3); IV-13 | **Aditiva**. Nenhum `kind` anterior alterado |
 
 ---
 
@@ -432,4 +469,4 @@ Este documento passa de `PROVISÓRIO` a `CONGELADO` quando, simultaneamente:
 O congelamento é formalizado por ADR e, a partir dele, vale a regra de extensão da Seção 8.
 
 ---
-*Fim de `KNOWLEDGE_MODEL.md` v0.4.*
+*Fim de `KNOWLEDGE_MODEL.md` v0.6.*
