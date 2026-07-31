@@ -87,7 +87,8 @@ public sealed class KnowledgeModelBuilder
         string compilerVersion,
         AcquisitionLevel level,
         IReadOnlyList<string> capabilities,
-        string inputDigest)
+        string inputDigest,
+        string? msBuildVersion = null)
     {
         // OB-04: ordenação por subject, depois kind, depois id.
         var observations = _observations.Values
@@ -112,6 +113,7 @@ public sealed class KnowledgeModelBuilder
         {
             ModelVersion = modelVersion,
             CompilerVersion = compilerVersion,
+            MsBuildVersion = msBuildVersion,
             SolutionId = entities.Solution.Id,
             AcquisitionLevel = level,
             Capabilities = capabilities,

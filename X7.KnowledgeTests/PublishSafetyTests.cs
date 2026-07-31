@@ -29,7 +29,6 @@ public sealed class PublishSafetyTests : IClassFixture<SolutionFixture>
         Assert.True(File.Exists(Path.Combine(output, "Structure", "Solution.md")));
 
         Assert.False(Directory.Exists(output + ".staging"));
-        Assert.False(Directory.Exists(output + ".previous"));
     }
 
     [Fact]
@@ -81,37 +80,37 @@ public sealed class PublishSafetyTests : IClassFixture<SolutionFixture>
     }
 
     [Fact]
-    public async Task Descarte_travado_nao_impede_publicacao()
+    public async Task Diretorio_de_saida_e_preservado_entre_publicacoes()
     {
         var output = NewOutput();
 
         await KnowledgeCompiler.CompileAsync(_fixture.SolutionPath, output);
 
-        // Ocupa o nome padrão de descarte com um arquivo: não pode ser apagado
-        // nem sobrescrito por Directory.Move.
-        var blocked = output + ".previous";
+        // Identidade do diretório: se ele fosse movido ou recriado, o horário
+        // de criação mudaria. Cliente de sincronização observa a pasta, e
+        // trocá-la por outra é o que vinha falhando no ambiente real.
+        var criadoEm = Directory.GetCreationTimeUtc(output);
 
-        await File.WriteAllTextAsync(blocked, "travado");
+        await KnowledgeCompiler.CompileAsync(_fixture.SolutionPath, output);
 
-        try
-        {
-            var model = await KnowledgeCompiler.CompileAsync(_fixture.SolutionPath, output);
+        Assert.Equal(criadoEm, Directory.GetCreationTimeUtc(output));
+        Assert.True(File.Exists(Path.Combine(output, "model", "knowledge.model.json")));
+    }
 
-            Assert.True(File.Exists(Path.Combine(output, "model", "knowledge.model.json")));
-            Assert.True(model.Manifest.ObservationCount > 0);
-        }
-        finally
-        {
-            if (File.Exists(blocked))
-                File.Delete(blocked);
+    [Fact]
+    public async Task Arquivo_orfao_da_base_anterior_e_removido()
+    {
+        var output = NewOutput();
 
-            foreach (var leftover in Directory.EnumerateDirectories(
-                         Path.GetDirectoryName(output)!,
-                         Path.GetFileName(output) + ".previous*"))
-            {
-                Directory.Delete(leftover, recursive: true);
-            }
-        }
+        await KnowledgeCompiler.CompileAsync(_fixture.SolutionPath, output);
+
+        var orfao = Path.Combine(output, "Structure", "Antigo.md");
+
+        await File.WriteAllTextAsync(orfao, "sobra de uma Base anterior");
+
+        await KnowledgeCompiler.CompileAsync(_fixture.SolutionPath, output);
+
+        Assert.False(File.Exists(orfao), "Base não pode conter resto de compilação anterior.");
     }
 
     [Fact]

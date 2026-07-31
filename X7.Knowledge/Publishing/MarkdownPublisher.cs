@@ -42,6 +42,9 @@ public sealed class MarkdownPublisher : IPublisher
         builder.Append($"| Versão do compilador | `{manifest.CompilerVersion}` |\n");
         builder.Append($"| Solução | `{manifest.SolutionId.Value}` |\n");
         builder.Append($"| Nível de aquisição | `{manifest.AcquisitionLevel.ToToken()}` |\n");
+
+        if (manifest.MsBuildVersion is not null)
+            builder.Append($"| MSBuild | `{manifest.MsBuildVersion}` |\n");
         builder.Append($"| Capacidades | {string.Join(", ", manifest.Capabilities)} |\n");
         builder.Append($"| Digest das entradas | `{manifest.InputDigest}` |\n");
         builder.Append($"| Observations | {manifest.ObservationCount} |\n");

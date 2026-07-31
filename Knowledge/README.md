@@ -6,13 +6,13 @@ Gerada por X7.Knowledge. Conteúdo derivado deterministicamente do código-fonte
 
 | Campo | Valor |
 |---|---|
-| Versão do modelo | `0.3.0` |
-| Versão do compilador | `0.1.0+6c22f6b7f811960eaff60a67d8aec6f824e26805` |
+| Versão do modelo | `0.5.0` |
+| Versão do compilador | `0.4.0+aa8b8a51853e4b79fb9592fb252b0ad4810dd7e7` |
 | Solução | `sln:X7.ProjectIndexer` |
 | Nível de aquisição | `X` |
-| Capacidades | C01, C02 |
-| Digest das entradas | `b4bb7e9114494e8a01095a97d68992b5af7dd71fe3f2aa22b75d65be2ab66d7a` |
-| Observations | 126 |
+| Capacidades | C01, C02, C03 |
+| Digest das entradas | `819241dd3fe1205919dd40577de663dd3939fba84ec1a59363d5363f2d2a292f` |
+| Observations | 1194 |
 | Evidence | 1 |
 | Inferences | 21 |
 
@@ -22,3 +22,7 @@ Gerada por X7.Knowledge. Conteúdo derivado deterministicamente do código-fonte
 
 - [`Structure/Solution.md`](Structure/Solution.md) — solução, projetos, frameworks e árvore lógica
 - `model/knowledge.model.json` — forma canônica do KnowledgeModel
+
+## Limitações declaradas
+
+26 item(ns) que o compilador não conseguiu obter. Ausência silenciosa é proibida: ver `Structure/Solution.md`.

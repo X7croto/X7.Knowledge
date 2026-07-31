@@ -1,8 +1,8 @@
 # KNOWLEDGE_MODEL.md
 
 **Projeto:** X7.Knowledge
-**Versão do modelo:** v0.3 (provisório)
-**Esquema:** `0.3.0`
+**Versão do modelo:** v0.4 (provisório)
+**Esquema:** `0.4.0`
 **Status:** Normativo (autoridade 3)
 **Derivado de:** `PROJECT_CONSTITUTION.md` v2.0, `COMPILATION_PLAN.md` v2.0
 
@@ -40,7 +40,7 @@ Todo KnowledgeModel começa por um manifesto. Ele existe para tornar a compilaç
 
 | Campo | Tipo | Descrição |
 |---|---|---|
-| `modelVersion` | string | Versão deste esquema. `0.3.0` |
+| `modelVersion` | string | Versão deste esquema. `0.4.0` |
 | `compilerVersion` | string | Versão do compilador que produziu |
 | `solutionId` | KnowledgeId | Identidade da solução |
 | `acquisitionLevel` | `S` \| `X` | Nível alcançado (Constituição §5.3) |
@@ -64,6 +64,8 @@ Toda entidade e toda Observation possuem `KnowledgeId`: string estável, legíve
 | Projeto | `proj:{caminhoRelativo}` | `proj:src/Segundio.Domain/Segundio.Domain.csproj` |
 | Pasta de solução | `slnfolder:{caminhoLógico}` | `slnfolder:src/Core` |
 | Diretório físico | `dir:{caminhoRelativo}` | `dir:src/Segundio.Domain` |
+| Namespace | `ns:{nomeCompleto}` | `ns:X7.Knowledge.Model` |
+| Tipo | `type:{nomeQualificado}@{nomeDoProjeto}` | `type:X7.Knowledge.Model.Observation@X7.Knowledge` |
 | Observation | `obs:{sha256(kind + subjectId + payloadCanônico)[0..16]}` | `obs:9f2c41ab77e0d3b5` |
 | Evidence | `ev:{sha256(kind + idsOrdenados)[0..16]}` | `ev:41d0a8c3be92f715` |
 | Inference | `inf:{sha256(kind + subjectId + payload + evidenceId)[0..16]}` | `inf:7b3e05c1da84f296` |
@@ -242,6 +244,18 @@ fora da solução produz `acquisition.limitation`, nunca aresta inventada.
 
 `version` ausente significa não resolvida, com limitação correspondente.
 
+### 6.1.2 Observation — C03
+
+| `kind` | `subject` | `payload` |
+|---|---|---|
+| `namespace.declared` | Namespace | `{ name, parentId? }` |
+| `namespace.contains` | Namespace | `{ typeId }` |
+| `type.declared` | Tipo | `{ name, metadataName, namespace?, projectId }` |
+| `type.location` | Tipo | `{ file }` |
+
+Namespace intermediário é declarado mesmo sem tipo direto: `A.B.C` implica
+`A` e `A.B`, para que a hierarquia seja completa.
+
 Cada nova capacidade adiciona `kind`s ao catálogo. Nenhuma capacidade altera
 `kind` existente.
 
@@ -342,6 +356,27 @@ O JSON é a forma de referência, não o produto (PR-07). Markdown, SQLite ou gr
 
 ---
 
+## 9.1 Granularidade de projeção
+
+**Regra.** Uma projeção cujo conteúdo cresce com o tamanho da solução é
+publicada **particionada pela unidade natural de consulta**, com um índice
+que aponta onde procurar e não repete conteúdo.
+
+**Motivo.** `T_kb` é contado por arquivo inteiro (BENCHMARK §3). Projeção
+monolítica faz qualquer pergunta sobre um subconjunto pagar a solução inteira,
+e o CR cresce com o tamanho do projeto sem que a Base tenha piorado.
+
+| Projeção | Partição |
+|---|---|
+| `Structure/Solution.md` | Nenhuma — tamanho proporcional a projetos, não a código |
+| `Architecture/*` | Nenhuma — idem |
+| `Structure/Types/*` | **Um arquivo por projeto**, mais `INDEX.md` |
+
+O índice lista projeto, contagem e link. Nunca nomes de tipo: repetir conteúdo
+no índice anularia o ganho da partição.
+
+---
+
 ## 10. Estrutura publicada
 
 ```
@@ -381,6 +416,7 @@ Testáveis por automação; falha bloqueia a conclusão de qualquer capacidade.
 | `0.1.0` | Substrato de Observations. Catálogo C01 | — |
 | `0.2.0` | `Evidence`, `Inference`, `Confidence`, `Frequency`; catálogos 6.2 e 6.3; IV-09..IV-12 | **Aditiva** (EX-01, EX-04). Nenhum `kind` de v0.1 alterado; Observations de v0.1 permanecem válidas |
 | `0.3.0` | Kinds de Observation de C02 (6.1.1); `project.graph-position` passa a agrupar nós e arestas | **Aditiva**. Nenhum `kind` anterior alterado |
+| `0.4.0` | Kinds de C03 (6.1.2); identidades `ns:` e `type:`; regra de granularidade (9.1) | **Aditiva**. Nenhum `kind` anterior alterado |
 
 ---
 
@@ -396,4 +432,4 @@ Este documento passa de `PROVISÓRIO` a `CONGELADO` quando, simultaneamente:
 O congelamento é formalizado por ADR e, a partir dele, vale a regra de extensão da Seção 8.
 
 ---
-*Fim de `KNOWLEDGE_MODEL.md` v0.3.*
+*Fim de `KNOWLEDGE_MODEL.md` v0.4.*

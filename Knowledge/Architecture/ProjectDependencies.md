@@ -44,6 +44,9 @@ Identidade e versão apenas; conteúdo não é resolvido.
 | X7.Knowledge.Specifications | coverlet.collector | 6.0.4 |
 | X7.Knowledge.Specifications | xunit | 2.9.3 |
 | X7.Knowledge.Specifications | xunit.runner.visualstudio | 3.1.4 |
+| X7.Knowledge | Microsoft.Build.Locator | 1.9.1 |
+| X7.Knowledge | Microsoft.CodeAnalysis.CSharp | 5.3.0 |
+| X7.Knowledge | Microsoft.CodeAnalysis.Workspaces.MSBuild | 5.3.0 |
 | X7.KnowledgeTests | Microsoft.NET.Test.Sdk | 17.14.1 |
 | X7.KnowledgeTests | xunit | 2.9.3 |
 | X7.KnowledgeTests | xunit.runner.visualstudio | 3.1.0 |

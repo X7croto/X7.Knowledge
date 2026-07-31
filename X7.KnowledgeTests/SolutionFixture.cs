@@ -66,6 +66,32 @@ public sealed class SolutionFixture : IDisposable
             </Project>
             """);
 
+        Write("src/Domain/Order.cs",
+            """
+            namespace Reference.Domain;
+
+            public class Order
+            {
+                public sealed class Line { }
+            }
+
+            public interface IOrderPolicy { }
+            """);
+
+        Write("src/Domain/Money.cs",
+            """
+            namespace Reference.Domain.Values;
+
+            public readonly record struct Money;
+            """);
+
+        Write("src/Core/Kernel/Clock.cs",
+            """
+            namespace Reference.Kernel;
+
+            public static class Clock { }
+            """);
+
         Write("tools/Cli/Cli.csproj",
             """
             <Project Sdk="Microsoft.NET.Sdk">

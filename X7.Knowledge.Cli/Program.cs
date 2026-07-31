@@ -35,6 +35,10 @@ CÓDIGOS DE RETORNO
   3  erro de acesso a disco
 """;
 
+// Precisa acontecer antes de qualquer tipo do MSBuild ser carregado —
+// restrição do MSBuildLocator, não escolha de design.
+X7.Knowledge.Acquisition.Roslyn.MsBuildBootstrap.Ensure();
+
 var options = Options.Parse(args, Console.Error);
 
 if (options is null)
@@ -57,7 +61,10 @@ try
     var manifest = model.Manifest;
 
     Console.WriteLine($"Solução      {model.Entities.Solution.Name}");
-    Console.WriteLine($"Nível        {manifest.AcquisitionLevel.ToToken()} (sintático)");
+    Console.WriteLine($"Nível        {manifest.AcquisitionLevel.ToToken()} "
+                      + (manifest.AcquisitionLevel == AcquisitionLevel.Semantic
+                          ? "(semântico)"
+                          : "(sintático)"));
     Console.WriteLine($"Capacidades  {string.Join(", ", manifest.Capabilities)}");
     Console.WriteLine($"Projetos     {model.Entities.Projects.Count}");
     Console.WriteLine($"Pastas       {model.Entities.Folders.Count}");
@@ -66,35 +73,35 @@ try
     Console.WriteLine($"Inferences   {manifest.InferenceCount}");
 
     var limitations = model.Observations
-        .Count(o => o.Kind == ObservationKinds.AcquisitionLimitation);
+        .Where(o => o.Kind == ObservationKinds.AcquisitionLimitation)
+        .ToArray();
 
-    if (limitations > 0)
-        Console.WriteLine($"Limitações   {limitations} (declaradas em Structure/Solution.md)");
+    if (limitations.Length > 0)
+        Console.WriteLine($"Limitações   {limitations.Length} (declaradas em Structure/Solution.md)");
+
+    // Cair para nível X é decisão do compilador, não do usuário. Esconder o
+    // motivo atrás de um arquivo faz uma Base degradada passar por normal.
+    if (manifest.AcquisitionLevel != AcquisitionLevel.Semantic)
+    {
+        var motivo = limitations
+            .Where(o => o.Payload["affectedScope"] == "semantic-model")
+            .Select(o => o.Payload["reason"]!)
+            .FirstOrDefault();
+
+        Console.WriteLine();
+        Console.WriteLine("Modelo semântico indisponível — conhecimento reduzido.");
+
+        if (motivo is not null)
+            Console.WriteLine($"  {motivo}");
+
+        Console.WriteLine("  Capacidades a partir de C04 exigem nível S.");
+    }
 
     Console.WriteLine($"Digest       {manifest.InputDigest[..16]}…");
     Console.WriteLine();
     Console.WriteLine($"Base publicada em {options.OutputDirectory}");
     Console.WriteLine($"Tempo {stopwatch.ElapsedMilliseconds} ms");
 
-    var parent = Path.GetDirectoryName(options.OutputDirectory);
-    var prefix = Path.GetFileName(options.OutputDirectory) + ".previous";
-
-    var leftovers = parent is null
-        ? []
-        : Directory.EnumerateDirectories(parent, prefix + "*")
-            .Order(StringComparer.Ordinal)
-            .ToArray();
-
-    if (leftovers.Length > 0)
-    {
-        Console.WriteLine();
-        Console.WriteLine($"Aviso: {leftovers.Length} pasta(s) de descarte não puderam ser removidas.");
-
-        foreach (var leftover in leftovers)
-            Console.WriteLine($"  {Path.GetFileName(leftover)}");
-
-        Console.WriteLine("A Base publicada está correta. Apague-as quando puder.");
-    }
 
     return 0;
 }

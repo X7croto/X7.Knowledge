@@ -46,7 +46,9 @@ public sealed class ProjectReferenceProducer : IProducer
             Locator = locator,
             Producer = Name,
             Capability = Capability,
-            AcquisitionLevel = context.AcquisitionLevel
+            // Este Producer lê apenas arquivos de projeto: nada aqui
+            // depende de semântica, mesmo quando ela está disponível.
+            AcquisitionLevel = AcquisitionLevel.Syntactic
         };
 
         foreach (var reference in file.ProjectReferences)

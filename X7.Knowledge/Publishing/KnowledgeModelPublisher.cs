@@ -33,6 +33,9 @@ public sealed class KnowledgeModelPublisher : IPublisher
         => CanonicalJson.Object(
             ("modelVersion", CanonicalJson.Of(manifest.ModelVersion)),
             ("compilerVersion", CanonicalJson.Of(manifest.CompilerVersion)),
+            ("msBuildVersion", manifest.MsBuildVersion is null
+                ? null
+                : CanonicalJson.Of(manifest.MsBuildVersion)),
             ("solutionId", CanonicalJson.Of(manifest.SolutionId.Value)),
             ("acquisitionLevel", CanonicalJson.Of(manifest.AcquisitionLevel.ToToken())),
             ("capabilities", CanonicalJson.Strings(manifest.Capabilities)),

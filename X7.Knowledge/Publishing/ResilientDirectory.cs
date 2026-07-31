@@ -39,6 +39,26 @@ internal static class ResilientDirectory
     public static void Move(string source, string destination)
         => Retry(() => Directory.Move(source, destination), destination);
 
+    /// <summary>Copia com retentativa. Lança se não conseguir.</summary>
+    public static void CopyFile(string source, string destination)
+        => Retry(() => File.Copy(source, destination, overwrite: true), destination);
+
+    /// <summary>Apaga arquivo; devolve falso se não conseguir. Não lança.</summary>
+    public static bool TryDeleteFile(string path)
+    {
+        try
+        {
+            if (File.Exists(path))
+                Retry(() => File.Delete(path), path);
+
+            return true;
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            return false;
+        }
+    }
+
     private static void Retry(Action action, string path)
     {
         for (var attempt = 0; ; attempt++)

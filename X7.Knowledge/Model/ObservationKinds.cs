@@ -22,6 +22,12 @@ public static class ObservationKinds
     public const string ProjectReferencesProject = "project.references-project";
     public const string ProjectPackageReference = "project.package-reference";
 
+    // C03
+    public const string NamespaceDeclared = "namespace.declared";
+    public const string NamespaceContains = "namespace.contains";
+    public const string TypeDeclared = "type.declared";
+    public const string TypeLocation = "type.location";
+
     public const string AcquisitionLimitation = "acquisition.limitation";
 
     private static readonly HashSet<string> Catalog = new(StringComparer.Ordinal)
@@ -38,6 +44,10 @@ public static class ObservationKinds
         ProjectIsTestProject,
         ProjectReferencesProject,
         ProjectPackageReference,
+        NamespaceDeclared,
+        NamespaceContains,
+        TypeDeclared,
+        TypeLocation,
         AcquisitionLimitation
     };
 

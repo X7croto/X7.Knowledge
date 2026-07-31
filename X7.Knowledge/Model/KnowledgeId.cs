@@ -25,6 +25,17 @@ public readonly record struct KnowledgeId : IComparable<KnowledgeId>
     internal static KnowledgeId ForObservation(string digest)
         => new($"obs:{Require(digest)}");
 
+    public static KnowledgeId ForNamespace(string fullName)
+        => new($"ns:{Require(fullName)}");
+
+    /// <summary>
+    /// Tipo é identificado pelo nome qualificado de metadados mais o projeto.
+    /// O mesmo nome em assemblies diferentes são tipos diferentes em .NET;
+    /// omitir o projeto fundiria dois tipos distintos numa identidade só.
+    /// </summary>
+    public static KnowledgeId ForType(string metadataName, string projectName)
+        => new($"type:{Require(metadataName)}@{Require(projectName)}");
+
     internal static KnowledgeId ForEvidence(string digest)
         => new($"ev:{Require(digest)}");
 

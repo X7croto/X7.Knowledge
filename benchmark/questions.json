@@ -1,5 +1,5 @@
 {
-  "benchmarkVersion": 2,
+  "benchmarkVersion": 3,
   "questions": [
     {
       "codeFiles": [
@@ -123,7 +123,10 @@
       ],
       "expectedCapability": "C03",
       "id": "Q07",
-      "kbFiles": [],
+      "kbFiles": [
+        "Structure/Types/INDEX.md",
+        "Structure/Types/X7.Knowledge.md"
+      ],
       "retired": false,
       "text": "Onde está definido o tipo que representa uma unidade de conhecimento?"
     },

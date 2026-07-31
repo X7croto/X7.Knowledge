@@ -14,6 +14,10 @@ dotnet build
 ## Executar
 
 ```
+dotnet build
+dotnet run --project X7.Knowledge.Cli
+```
+```
 dotnet run --project X7.Knowledge.Benchmark -- --questions benchmark\questions.json --knowledge Knowledge --output benchmark\results
 ```
     

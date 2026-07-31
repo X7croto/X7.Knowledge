@@ -58,7 +58,19 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "all",
+          "suppressedAdvisories": {
+            "https://github.com/advisories/GHSA-mmjf-rqrv-855v": null,
+            "https://github.com/advisories/GHSA-cvvh-rhrc-wg4q": null,
+            "https://github.com/advisories/GHSA-6588-8gv4-xfgh": null,
+            "https://github.com/advisories/GHSA-8q5v-6pqq-x66h": null,
+            "https://github.com/advisories/GHSA-h4j7-5rxr-p4wc": null,
+            "https://github.com/advisories/GHSA-37gx-xxp4-5rgx": null,
+            "https://github.com/advisories/GHSA-w3x6-4m5h-cxqf": null,
+            "https://github.com/advisories/GHSA-w3q9-fxm7-j8fq": null,
+            "https://github.com/advisories/GHSA-23rf-6693-g89p": null,
+            "https://github.com/advisories/GHSA-g8r8-53c2-pm3f": null
+          }
         },
         "SdkAnalysisLevel": "10.0.300"
       },
@@ -405,7 +417,19 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "all",
+          "suppressedAdvisories": {
+            "https://github.com/advisories/GHSA-mmjf-rqrv-855v": null,
+            "https://github.com/advisories/GHSA-cvvh-rhrc-wg4q": null,
+            "https://github.com/advisories/GHSA-6588-8gv4-xfgh": null,
+            "https://github.com/advisories/GHSA-8q5v-6pqq-x66h": null,
+            "https://github.com/advisories/GHSA-h4j7-5rxr-p4wc": null,
+            "https://github.com/advisories/GHSA-37gx-xxp4-5rgx": null,
+            "https://github.com/advisories/GHSA-w3x6-4m5h-cxqf": null,
+            "https://github.com/advisories/GHSA-w3q9-fxm7-j8fq": null,
+            "https://github.com/advisories/GHSA-23rf-6693-g89p": null,
+            "https://github.com/advisories/GHSA-g8r8-53c2-pm3f": null
+          }
         },
         "SdkAnalysisLevel": "10.0.300"
       },
@@ -752,7 +776,19 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "all",
+          "suppressedAdvisories": {
+            "https://github.com/advisories/GHSA-mmjf-rqrv-855v": null,
+            "https://github.com/advisories/GHSA-cvvh-rhrc-wg4q": null,
+            "https://github.com/advisories/GHSA-6588-8gv4-xfgh": null,
+            "https://github.com/advisories/GHSA-8q5v-6pqq-x66h": null,
+            "https://github.com/advisories/GHSA-h4j7-5rxr-p4wc": null,
+            "https://github.com/advisories/GHSA-37gx-xxp4-5rgx": null,
+            "https://github.com/advisories/GHSA-w3x6-4m5h-cxqf": null,
+            "https://github.com/advisories/GHSA-w3q9-fxm7-j8fq": null,
+            "https://github.com/advisories/GHSA-23rf-6693-g89p": null,
+            "https://github.com/advisories/GHSA-g8r8-53c2-pm3f": null
+          }
         },
         "SdkAnalysisLevel": "10.0.300"
       },
@@ -1103,7 +1139,19 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "all",
+          "suppressedAdvisories": {
+            "https://github.com/advisories/GHSA-mmjf-rqrv-855v": null,
+            "https://github.com/advisories/GHSA-cvvh-rhrc-wg4q": null,
+            "https://github.com/advisories/GHSA-6588-8gv4-xfgh": null,
+            "https://github.com/advisories/GHSA-8q5v-6pqq-x66h": null,
+            "https://github.com/advisories/GHSA-h4j7-5rxr-p4wc": null,
+            "https://github.com/advisories/GHSA-37gx-xxp4-5rgx": null,
+            "https://github.com/advisories/GHSA-w3x6-4m5h-cxqf": null,
+            "https://github.com/advisories/GHSA-w3q9-fxm7-j8fq": null,
+            "https://github.com/advisories/GHSA-23rf-6693-g89p": null,
+            "https://github.com/advisories/GHSA-g8r8-53c2-pm3f": null
+          }
         },
         "SdkAnalysisLevel": "10.0.300"
       },
@@ -1444,7 +1492,19 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "all",
+          "suppressedAdvisories": {
+            "https://github.com/advisories/GHSA-mmjf-rqrv-855v": null,
+            "https://github.com/advisories/GHSA-cvvh-rhrc-wg4q": null,
+            "https://github.com/advisories/GHSA-6588-8gv4-xfgh": null,
+            "https://github.com/advisories/GHSA-8q5v-6pqq-x66h": null,
+            "https://github.com/advisories/GHSA-h4j7-5rxr-p4wc": null,
+            "https://github.com/advisories/GHSA-37gx-xxp4-5rgx": null,
+            "https://github.com/advisories/GHSA-w3x6-4m5h-cxqf": null,
+            "https://github.com/advisories/GHSA-w3q9-fxm7-j8fq": null,
+            "https://github.com/advisories/GHSA-23rf-6693-g89p": null,
+            "https://github.com/advisories/GHSA-g8r8-53c2-pm3f": null
+          }
         },
         "SdkAnalysisLevel": "10.0.300"
       },
@@ -1785,7 +1845,19 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "all",
+          "suppressedAdvisories": {
+            "https://github.com/advisories/GHSA-mmjf-rqrv-855v": null,
+            "https://github.com/advisories/GHSA-cvvh-rhrc-wg4q": null,
+            "https://github.com/advisories/GHSA-6588-8gv4-xfgh": null,
+            "https://github.com/advisories/GHSA-8q5v-6pqq-x66h": null,
+            "https://github.com/advisories/GHSA-h4j7-5rxr-p4wc": null,
+            "https://github.com/advisories/GHSA-37gx-xxp4-5rgx": null,
+            "https://github.com/advisories/GHSA-w3x6-4m5h-cxqf": null,
+            "https://github.com/advisories/GHSA-w3q9-fxm7-j8fq": null,
+            "https://github.com/advisories/GHSA-23rf-6693-g89p": null,
+            "https://github.com/advisories/GHSA-g8r8-53c2-pm3f": null
+          }
         },
         "SdkAnalysisLevel": "10.0.300"
       },
@@ -2132,7 +2204,19 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "all",
+          "suppressedAdvisories": {
+            "https://github.com/advisories/GHSA-mmjf-rqrv-855v": null,
+            "https://github.com/advisories/GHSA-cvvh-rhrc-wg4q": null,
+            "https://github.com/advisories/GHSA-6588-8gv4-xfgh": null,
+            "https://github.com/advisories/GHSA-8q5v-6pqq-x66h": null,
+            "https://github.com/advisories/GHSA-h4j7-5rxr-p4wc": null,
+            "https://github.com/advisories/GHSA-37gx-xxp4-5rgx": null,
+            "https://github.com/advisories/GHSA-w3x6-4m5h-cxqf": null,
+            "https://github.com/advisories/GHSA-w3q9-fxm7-j8fq": null,
+            "https://github.com/advisories/GHSA-23rf-6693-g89p": null,
+            "https://github.com/advisories/GHSA-g8r8-53c2-pm3f": null
+          }
         },
         "SdkAnalysisLevel": "10.0.300"
       },

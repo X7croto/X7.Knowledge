@@ -1,0 +1,34 @@
+<Project>
+
+  <!--
+    Supressões de auditoria do NuGet, com justificativa.
+
+    Ver SECURITY-NOTES.md, na raiz da solução, para a análise completa e para
+    as condições que obrigam a revisar esta decisão.
+
+    Resumo: toda a lista abaixo vem da árvore de dependências do MSBuild,
+    trazida pelo Microsoft.CodeAnalysis.Workspaces.MSBuild. Em tempo de
+    execução, o MSBuildLocator carrega o MSBuild do SDK instalado — estes
+    assemblies não são os que executam. A correção oficial destes avisos é
+    atualizar o SDK, não o pacote.
+
+    Escopo mínimo: cada aviso listado individualmente. A auditoria segue ativa
+    para todo o resto e TreatWarningsAsErrors permanece ligado.
+  -->
+  <ItemGroup>
+    <!-- Microsoft.Build, Build.Tasks.Core, Build.Utilities.Core -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-w3q9-fxm7-j8fq" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-h4j7-5rxr-p4wc" />
+
+    <!-- System.Security.Cryptography.Xml, transitivo do Microsoft.Build -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-23rf-6693-g89p" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-37gx-xxp4-5rgx" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-6588-8gv4-xfgh" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-8q5v-6pqq-x66h" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-cvvh-rhrc-wg4q" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-g8r8-53c2-pm3f" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-mmjf-rqrv-855v" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-w3x6-4m5h-cxqf" />
+  </ItemGroup>
+
+</Project>

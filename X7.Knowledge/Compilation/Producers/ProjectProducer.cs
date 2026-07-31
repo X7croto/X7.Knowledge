@@ -38,7 +38,9 @@ public sealed class ProjectProducer : IProducer
             Locator = locator,
             Producer = Name,
             Capability = Capability,
-            AcquisitionLevel = context.AcquisitionLevel
+            // Este Producer lê apenas arquivos de projeto: nada aqui
+            // depende de semântica, mesmo quando ela está disponível.
+            AcquisitionLevel = AcquisitionLevel.Syntactic
         };
 
         context.Knowledge.Add(
@@ -54,7 +56,9 @@ public sealed class ProjectProducer : IProducer
                 Locator = entry.RelativePath,
                 Producer = Name,
                 Capability = Capability,
-                AcquisitionLevel = context.AcquisitionLevel
+                // Este Producer lê apenas arquivos de projeto: nada aqui
+            // depende de semântica, mesmo quando ela está disponível.
+            AcquisitionLevel = AcquisitionLevel.Syntactic
             });
 
         foreach (var framework in file.TargetFrameworks)
@@ -118,7 +122,9 @@ public sealed class ProjectProducer : IProducer
                     Locator = limitation.Locator,
                     Producer = Name,
                     Capability = Capability,
-                    AcquisitionLevel = context.AcquisitionLevel
+                    // Este Producer lê apenas arquivos de projeto: nada aqui
+            // depende de semântica, mesmo quando ela está disponível.
+            AcquisitionLevel = AcquisitionLevel.Syntactic
                 });
         }
     }

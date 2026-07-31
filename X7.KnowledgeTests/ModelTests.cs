@@ -33,9 +33,9 @@ public sealed class ModelTests : IClassFixture<SolutionFixture>
         {
             Assert.False(string.IsNullOrWhiteSpace(o.Provenance.Source));
             Assert.False(string.IsNullOrWhiteSpace(o.Provenance.Producer));
-            // C02 acrescentou Observations. O teste verifica proveniência
-            // completa, não a capacidade específica.
-            Assert.Contains(o.Provenance.Capability, (string[])["C01", "C02"]);
+            // Agnóstico à capacidade de propósito: o modelo é aditivo (EX-01)
+            // e fixar a lista faria este teste quebrar a cada capacidade nova.
+            Assert.Matches("^C[0-9]{2}$", o.Provenance.Capability);
         });
     }
 
@@ -131,9 +131,12 @@ public sealed class ModelTests : IClassFixture<SolutionFixture>
 
         var kernel = model.Entities.Projects.Single(p => p.Name == "Kernel");
 
+        // Um projeto pode acumular limitações de várias capacidades.
+        // O teste é sobre a de propriedade não resolvida, especificamente.
         var limitation = model.Observations.Single(o =>
             o.Kind == ObservationKinds.AcquisitionLimitation
-            && o.Subject.Equals(kernel.Id));
+            && o.Subject.Equals(kernel.Id)
+            && o.Payload["affectedScope"] == "project-property");
 
         Assert.Equal("project-property", limitation.Payload["affectedScope"]);
         Assert.Contains("AssemblyName", limitation.Payload["reason"]!, StringComparison.Ordinal);
@@ -150,11 +153,17 @@ public sealed class ModelTests : IClassFixture<SolutionFixture>
     }
 
     [Fact]
+    public void Sentinela_de_kind_invalido_nunca_entra_no_catalogo()
+        => Assert.False(ObservationKinds.IsKnown("kind.que.nunca.existira"));
+
+    [Fact]
     public void Kind_fora_do_catalogo_falha_a_compilacao()
     {
         Assert.Throws<UnknownObservationKindException>(() =>
             Observation.Create(
-                "type.declared",
+                // Sentinela que nunca entrará no catálogo. Usar um kind
+                // plausível fez este teste quebrar quando C03 o tornou válido.
+                "kind.que.nunca.existira",
                 KnowledgeId.ForSolution("X"),
                 ObservationPayload.Empty,
                 new Provenance
