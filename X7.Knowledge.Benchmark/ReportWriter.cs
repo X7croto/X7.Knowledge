@@ -11,6 +11,7 @@ public static class ReportWriter
 
         var median = BenchmarkRunner.Median(measurements);
         var supported = measurements.Count(m => m.Supported);
+        var broken = measurements.Count(m => m.Broken);
 
         builder.Append("# Context Ratio — resultado\n\n");
         builder.Append($"Conjunto v{set.BenchmarkVersion} · referência `{set.ReferenceSolution}`\n\n");
@@ -21,6 +22,15 @@ public static class ReportWriter
         builder.Append($"| Cobertura | {Percent(measurements.Count == 0 ? 0 : (double)supported / measurements.Count)} |\n");
         builder.Append($"| **Mediana de CR** | **{(median is null ? "—" : Ratio(median.Value))}** |\n\n");
 
+        if (broken > 0)
+        {
+            builder.Append("> **Medição inválida.** ").Append(broken);
+            builder.Append(" pergunta(s) declaram arquivos da Base que não existem. ");
+            builder.Append("A mediana acima desconsidera essas perguntas, mas o resultado ");
+            builder.Append("não deve ser comparado nem registrado como linha de base ");
+            builder.Append("enquanto a Base não for republicada.\n\n");
+        }
+
         builder.Append("## Por pergunta\n\n");
         builder.Append("| ID | Capacidade | Sustentada | T_code | T_kb | CR |\n");
         builder.Append("|---|---|---|---|---|---|\n");
@@ -29,7 +39,7 @@ public static class ReportWriter
         {
             builder.Append($"| {m.Question.Id} ")
                    .Append($"| {m.Question.ExpectedCapability} ")
-                   .Append($"| {(m.Supported ? "sim" : "**não**")} ")
+                   .Append($"| {(m.Broken ? "**inválida**" : m.Supported ? "sim" : "**não**")} ")
                    .Append($"| {m.CodeTokens} ")
                    .Append($"| {(m.Supported ? m.KbTokens.ToString(CultureInfo.InvariantCulture) : "—")} ")
                    .Append($"| {(m.ContextRatio is null ? "—" : Ratio(m.ContextRatio.Value))} |\n");
@@ -45,6 +55,21 @@ public static class ReportWriter
 
             foreach (var m in unsupported)
                 builder.Append($"- **{m.Question.Id}** ({m.Question.ExpectedCapability}) — {m.Question.Text}\n");
+        }
+
+        var brokenItems = measurements.Where(m => m.Broken).ToArray();
+
+        if (brokenItems.Length > 0)
+        {
+            builder.Append("\n## Arquivos da Base ausentes\n\n");
+            builder.Append("Declarados em `kbFiles` e inexistentes. ");
+            builder.Append("Provável causa: a Base não foi republicada após a última capacidade.\n\n");
+
+            foreach (var m in brokenItems)
+            {
+                foreach (var file in m.MissingKbFiles)
+                    builder.Append($"- {m.Question.Id}: `{file}`\n");
+            }
         }
 
         var withMissing = measurements.Where(m => m.MissingCodeFiles.Count > 0).ToArray();

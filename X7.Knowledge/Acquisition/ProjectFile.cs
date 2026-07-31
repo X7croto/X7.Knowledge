@@ -14,9 +14,22 @@ public sealed record ProjectFile
     /// <summary>Propriedades escalares declaradas diretamente no arquivo.</summary>
     public required IReadOnlyDictionary<string, string> Properties { get; init; }
 
+    /// <summary>Caminhos de .csproj referenciados, relativos à raiz da solução.</summary>
+    public required IReadOnlyList<string> ProjectReferences { get; init; }
+
+    /// <summary>Pacotes declarados: nome e versão, sem resolver conteúdo.</summary>
+    public required IReadOnlyList<PackageReference> PackageReferences { get; init; }
+
     public bool IsTestProject { get; init; }
 
     public string? TestEvidence { get; init; }
 
     public required IReadOnlyList<AcquisitionLimitation> Limitations { get; init; }
+}
+
+public sealed record PackageReference
+{
+    public required string Name { get; init; }
+
+    public string? Version { get; init; }
 }

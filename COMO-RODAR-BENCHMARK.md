@@ -14,12 +14,9 @@ dotnet build
 ## Executar
 
 ```
-dotnet run --project X7.Knowledge.Benchmark -- ^
-    --questions benchmark\questions.json ^
-    --knowledge Knowledge ^
-    --output benchmark\results
+dotnet run --project X7.Knowledge.Benchmark -- --questions benchmark\questions.json --knowledge Knowledge --output benchmark\results
 ```
-
+    
 Em PowerShell troque `^` por `` ` `` ou escreva em uma linha só.
 
 ## Saída esperada (linha de base C01)

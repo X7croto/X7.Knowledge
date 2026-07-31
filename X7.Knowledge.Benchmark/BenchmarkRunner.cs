@@ -30,16 +30,31 @@ public sealed class BenchmarkRunner
                 codeTokens += TokenCounter.CountFile(path);
             }
 
-            var kbTokens = question.KbFiles.Sum(relative =>
-                TokenCounter.CountFile(
-                    Path.Combine(knowledgeRoot, relative.Replace('/', Path.DirectorySeparatorChar))));
+            var missingKb = new List<string>();
+            var kbTokens = 0;
+
+            foreach (var relative in question.KbFiles)
+            {
+                var path = Path.Combine(
+                    knowledgeRoot,
+                    relative.Replace('/', Path.DirectorySeparatorChar));
+
+                if (!File.Exists(path))
+                {
+                    missingKb.Add(relative);
+                    continue;
+                }
+
+                kbTokens += TokenCounter.CountFile(path);
+            }
 
             results.Add(new Measurement
             {
                 Question = question,
                 CodeTokens = codeTokens,
                 KbTokens = kbTokens,
-                MissingCodeFiles = missing
+                MissingCodeFiles = missing,
+                MissingKbFiles = missingKb
             });
         }
 
@@ -73,16 +88,23 @@ public sealed class BenchmarkRunner
 
     public static CanonicalJson ToJson(
         QuestionSet set,
-        IReadOnlyList<Measurement> measurements)
+        IReadOnlyList<Measurement> measurements,
+        string? solutionDigest,
+        int projectCount)
     {
         var median = Median(measurements);
         var supported = measurements.Count(m => m.Supported);
+        var broken = measurements.Count(m => m.Broken);
 
         return CanonicalJson.Object(
             ("benchmarkVersion", CanonicalJson.Of(set.BenchmarkVersion)),
             ("referenceSolution", CanonicalJson.Of(set.ReferenceSolution)),
+            // BM-07: sem isso, duas medições incomparáveis parecem comparáveis.
+            ("solutionDigest", solutionDigest is null ? null : CanonicalJson.Of(solutionDigest)),
+            ("projectCount", CanonicalJson.Of(projectCount)),
             ("questionCount", CanonicalJson.Of(measurements.Count)),
             ("supportedCount", CanonicalJson.Of(supported)),
+            ("brokenCount", CanonicalJson.Of(broken)),
             ("coveragePerMille", CanonicalJson.Of(
                 measurements.Count == 0 ? 0 : PerMille((double)supported / measurements.Count))),
             ("medianContextRatioPerMille", median is null
@@ -93,6 +115,10 @@ public sealed class BenchmarkRunner
                     ("id", CanonicalJson.Of(m.Question.Id)),
                     ("expectedCapability", CanonicalJson.Of(m.Question.ExpectedCapability)),
                     ("supported", CanonicalJson.Of(m.Supported)),
+                    ("broken", m.Broken ? CanonicalJson.Of(true) : null),
+                    ("missingKbFiles", m.MissingKbFiles.Count == 0
+                        ? null
+                        : CanonicalJson.Strings(m.MissingKbFiles)),
                     ("codeTokens", CanonicalJson.Of(m.CodeTokens)),
                     ("kbTokens", CanonicalJson.Of(m.KbTokens)),
                     ("contextRatioPerMille", m.ContextRatio is null

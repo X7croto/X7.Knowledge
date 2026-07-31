@@ -45,6 +45,8 @@ public static class ProjectFileReader
                 RelativePath = relativePath,
                 TargetFrameworks = [],
                 Properties = new Dictionary<string, string>(StringComparer.Ordinal),
+                ProjectReferences = [],
+                PackageReferences = [],
                 Limitations =
                 [
                     new AcquisitionLimitation
@@ -133,13 +135,67 @@ public static class ProjectFileReader
             });
         }
 
-        var packageReferences = root
+        var packageElements = root
             .Elements(ns + "ItemGroup")
             .SelectMany(g => g.Elements(ns + "PackageReference"))
-            .Select(p => p.Attribute("Include")?.Value)
-            .Where(v => !string.IsNullOrWhiteSpace(v))
-            .Select(v => v!)
+            .Where(e => !string.IsNullOrWhiteSpace(e.Attribute("Include")?.Value))
             .ToArray();
+
+        var packageReferences = packageElements
+            .Select(e => e.Attribute("Include")!.Value)
+            .ToArray();
+
+        var packages = packageElements
+            .Select(e => new PackageReference
+            {
+                Name = e.Attribute("Include")!.Value.Trim(),
+                Version = Unresolved(e.Attribute("Version")?.Value)
+                    ? null
+                    : e.Attribute("Version")?.Value.Trim()
+            })
+            .DistinctBy(x => x.Name, StringComparer.Ordinal)
+            .OrderBy(x => x.Name, StringComparer.Ordinal)
+            .ToArray();
+
+        foreach (var package in packageElements
+                     .Where(e => Unresolved(e.Attribute("Version")?.Value))
+                     .OrderBy(e => e.Attribute("Include")!.Value, StringComparer.Ordinal))
+        {
+            limitations.Add(new AcquisitionLimitation
+            {
+                Reason = $"Versão não resolvida do pacote '{package.Attribute("Include")!.Value}'",
+                AffectedScope = "project-package-reference",
+                Source = relativePath,
+                Locator = package.Attribute("Include")!.Value
+            });
+        }
+
+        var projectDirectory = PathNormalizer.DirectoryOf(relativePath);
+
+        var projectReferences = new List<string>();
+
+        foreach (var reference in root
+                     .Elements(ns + "ItemGroup")
+                     .SelectMany(g => g.Elements(ns + "ProjectReference"))
+                     .Select(e => e.Attribute("Include")?.Value)
+                     .Where(v => !string.IsNullOrWhiteSpace(v))
+                     .Select(v => v!.Trim()))
+        {
+            if (reference.Contains("$(", StringComparison.Ordinal))
+            {
+                limitations.Add(new AcquisitionLimitation
+                {
+                    Reason = $"Referência de projeto não resolvida: '{reference}'",
+                    AffectedScope = "project-reference",
+                    Source = relativePath,
+                    Locator = reference
+                });
+
+                continue;
+            }
+
+            projectReferences.Add(Combine(projectDirectory, reference));
+        }
 
         var (isTest, evidence) = DetectTestProject(properties, packageReferences);
 
@@ -152,6 +208,11 @@ public static class ProjectFileReader
             Properties = properties
                 .Where(p => ScalarProperties.Contains(p.Key, StringComparer.Ordinal))
                 .ToDictionary(p => p.Key, p => p.Value, StringComparer.Ordinal),
+            ProjectReferences = projectReferences
+                .Distinct(StringComparer.Ordinal)
+                .OrderBy(r => r, StringComparer.Ordinal)
+                .ToArray(),
+            PackageReferences = packages,
             IsTestProject = isTest,
             TestEvidence = evidence,
             Limitations = limitations
@@ -230,5 +291,41 @@ public static class ProjectFileReader
 
             directory = PathNormalizer.DirectoryOf(directory);
         }
+    }
+
+    private static bool Unresolved(string? value)
+        => value is not null && value.Contains("$(", StringComparison.Ordinal);
+
+    /// <summary>
+    /// Resolve um caminho relativo ao diretório do .csproj, produzindo
+    /// caminho relativo à raiz da solução com separador '/' (D-02).
+    /// </summary>
+    private static string Combine(string projectDirectory, string reference)
+    {
+        var segments = new List<string>();
+
+        if (projectDirectory != ".")
+            segments.AddRange(projectDirectory.Split('/', StringSplitOptions.RemoveEmptyEntries));
+
+        foreach (var segment in reference.Replace('\\', '/')
+                                         .Split('/', StringSplitOptions.RemoveEmptyEntries))
+        {
+            switch (segment)
+            {
+                case ".":
+                    continue;
+
+                case "..":
+                    if (segments.Count > 0)
+                        segments.RemoveAt(segments.Count - 1);
+                    continue;
+
+                default:
+                    segments.Add(segment);
+                    continue;
+            }
+        }
+
+        return string.Join('/', segments);
     }
 }

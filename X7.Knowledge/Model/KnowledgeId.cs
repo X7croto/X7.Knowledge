@@ -25,6 +25,12 @@ public readonly record struct KnowledgeId : IComparable<KnowledgeId>
     internal static KnowledgeId ForObservation(string digest)
         => new($"obs:{Require(digest)}");
 
+    internal static KnowledgeId ForEvidence(string digest)
+        => new($"ev:{Require(digest)}");
+
+    internal static KnowledgeId ForInference(string digest)
+        => new($"inf:{Require(digest)}");
+
     /// <summary>Reidratação a partir da forma serializada.</summary>
     public static KnowledgeId Parse(string value) => new(Require(value));
 

@@ -45,10 +45,19 @@ public sealed record Measurement
 
     public required IReadOnlyList<string> MissingCodeFiles { get; init; }
 
+    /// <summary>
+    /// Arquivos da Base declarados em `kbFiles` que não existem no disco.
+    /// Nunca contam como zero token: Base ausente não é Base eficiente.
+    /// </summary>
+    public required IReadOnlyList<string> MissingKbFiles { get; init; }
+
     /// <summary>BM-04: sem kbFiles, a Base não sustenta a resposta.</summary>
     public bool Supported => Question.KbFiles.Count > 0;
 
-    public double? ContextRatio => Supported && CodeTokens > 0
+    /// <summary>Medição inválida: declarou sustentar e o arquivo não existe.</summary>
+    public bool Broken => Supported && MissingKbFiles.Count > 0;
+
+    public double? ContextRatio => Supported && !Broken && CodeTokens > 0
         ? (double)KbTokens / CodeTokens
         : null;
 }

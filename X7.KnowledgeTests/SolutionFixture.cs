@@ -47,6 +47,9 @@ public sealed class SolutionFixture : IDisposable
                 <TargetFramework>net10.0</TargetFramework>
                 <AssemblyName>$(MSBuildProjectName).Core</AssemblyName>
               </PropertyGroup>
+              <ItemGroup>
+                <ProjectReference Include="..\..\Domain\Domain.csproj" />
+              </ItemGroup>
             </Project>
             """);
 
@@ -58,6 +61,7 @@ public sealed class SolutionFixture : IDisposable
               </PropertyGroup>
               <ItemGroup>
                 <PackageReference Include="xunit" Version="2.9.3" />
+                <ProjectReference Include="..\..\src\Domain\Domain.csproj" />
               </ItemGroup>
             </Project>
             """);
@@ -69,6 +73,9 @@ public sealed class SolutionFixture : IDisposable
                 <TargetFramework>net10.0</TargetFramework>
                 <OutputType>Exe</OutputType>
               </PropertyGroup>
+              <ItemGroup>
+                <ProjectReference Include="..\..\src\Core\Kernel\Kernel.csproj" />
+              </ItemGroup>
             </Project>
             """);
     }

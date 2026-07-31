@@ -23,6 +23,10 @@ public sealed class KnowledgeModelPublisher : IPublisher
             ("manifest", SerializeManifest(model.Manifest)),
             ("observations", CanonicalJson.Array(
                 model.Observations.Select(SerializeObservation))),
+            ("evidence", CanonicalJson.Array(
+                model.Evidence.Select(SerializeEvidence))),
+            ("inferences", CanonicalJson.Array(
+                model.Inferences.Select(SerializeInference))),
             ("entities", SerializeEntities(model)));
 
     private static CanonicalJson SerializeManifest(Manifest manifest)
@@ -33,7 +37,9 @@ public sealed class KnowledgeModelPublisher : IPublisher
             ("acquisitionLevel", CanonicalJson.Of(manifest.AcquisitionLevel.ToToken())),
             ("capabilities", CanonicalJson.Strings(manifest.Capabilities)),
             ("inputDigest", CanonicalJson.Of(manifest.InputDigest)),
-            ("observationCount", CanonicalJson.Of(manifest.ObservationCount)));
+            ("observationCount", CanonicalJson.Of(manifest.ObservationCount)),
+            ("evidenceCount", CanonicalJson.Of(manifest.EvidenceCount)),
+            ("inferenceCount", CanonicalJson.Of(manifest.InferenceCount)));
 
     private static CanonicalJson SerializeObservation(Observation observation)
         => CanonicalJson.Object(
@@ -81,4 +87,37 @@ public sealed class KnowledgeModelPublisher : IPublisher
                     ("parent", f.Parent is null ? null : CanonicalJson.Of(f.Parent.Value.Value)),
                     ("children", CanonicalJson.Strings(f.Children.Select(c => c.Value))))))));
     }
+
+    private static CanonicalJson SerializeEvidence(Evidence evidence)
+        => CanonicalJson.Object(
+            ("id", CanonicalJson.Of(evidence.Id.Value)),
+            ("kind", CanonicalJson.Of(evidence.Kind)),
+            ("observations", CanonicalJson.Strings(
+                evidence.Observations.Select(o => o.Value))),
+            ("producer", CanonicalJson.Of(evidence.Producer)),
+            ("capability", CanonicalJson.Of(evidence.Capability)));
+
+    private static CanonicalJson SerializeInference(Inference inference)
+        => CanonicalJson.Object(
+            ("id", CanonicalJson.Of(inference.Id.Value)),
+            ("kind", CanonicalJson.Of(inference.Kind)),
+            ("subject", CanonicalJson.Of(inference.Subject.Value)),
+            ("payload", CanonicalJson.Object(
+                inference.Payload.Values
+                    .Select(p => (p.Key, (CanonicalJson?)CanonicalJson.Of(p.Value)))
+                    .ToArray())),
+            ("evidence", CanonicalJson.Of(inference.Evidence.Value)),
+            ("confidence", CanonicalJson.Of(inference.Confidence.ToToken())),
+            ("frequency", inference.Frequency is null
+                ? null
+                : CanonicalJson.Object(
+                    ("matching", CanonicalJson.Of(inference.Frequency.Matching)),
+                    ("total", CanonicalJson.Of(inference.Frequency.Total)),
+                    ("ratePerMille", CanonicalJson.Of(inference.Frequency.RatePerMille)))),
+            ("provenance", CanonicalJson.Object(
+                ("rule", CanonicalJson.Of(inference.Provenance.Rule)),
+                ("producer", CanonicalJson.Of(inference.Provenance.Producer)),
+                ("capability", CanonicalJson.Of(inference.Provenance.Capability)),
+                ("acquisitionLevel", CanonicalJson.Of(
+                    inference.Provenance.AcquisitionLevel.ToToken())))));
 }

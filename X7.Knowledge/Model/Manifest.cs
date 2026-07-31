@@ -21,4 +21,8 @@ public sealed record Manifest
     public required string InputDigest { get; init; }
 
     public required int ObservationCount { get; init; }
+
+    public required int EvidenceCount { get; init; }
+
+    public required int InferenceCount { get; init; }
 }

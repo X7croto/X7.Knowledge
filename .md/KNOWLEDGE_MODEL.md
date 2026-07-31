@@ -1,7 +1,8 @@
 # KNOWLEDGE_MODEL.md
 
 **Projeto:** X7.Knowledge
-**Versão do modelo:** v0 (provisório, deliberadamente mínimo)
+**Versão do modelo:** v0.3 (provisório)
+**Esquema:** `0.3.0`
 **Status:** Normativo (autoridade 3)
 **Derivado de:** `PROJECT_CONSTITUTION.md` v2.0, `COMPILATION_PLAN.md` v2.0
 
@@ -13,7 +14,8 @@ A Constituição v1 exigia definir o modelo canônico completo antes de qualquer
 
 Portanto:
 
-- **v0 cobre exclusivamente C01.** Nada além disso é modelado.
+- **v0.1 cobria exclusivamente C01.** v0.2 adiciona o mecanismo de derivação
+  (`Evidence`, `Inference`, `Confidence`) exigido por C02.
 - **v0 é explicitamente provisório.** Alterações não exigem ADR enquanto o status for `PROVISÓRIO`.
 - **v0 congela após C03 concluída**, quando três Producers reais já exerceram o modelo. A partir do congelamento, toda alteração exige ADR e obedece à regra de extensão da Seção 7.
 
@@ -38,13 +40,15 @@ Todo KnowledgeModel começa por um manifesto. Ele existe para tornar a compilaç
 
 | Campo | Tipo | Descrição |
 |---|---|---|
-| `modelVersion` | string | Versão deste esquema. `0.1.0` |
+| `modelVersion` | string | Versão deste esquema. `0.3.0` |
 | `compilerVersion` | string | Versão do compilador que produziu |
 | `solutionId` | KnowledgeId | Identidade da solução |
 | `acquisitionLevel` | `S` \| `X` | Nível alcançado (Constituição §5.3) |
 | `capabilities` | string[] | Capacidades executadas. Ex.: `["C01"]` |
 | `inputDigest` | string | Hash canônico das entradas consideradas |
 | `observationCount` | int | Total de Observations |
+| `evidenceCount` | int | Total de Evidence |
+| `inferenceCount` | int | Total de Inferences |
 
 O manifesto **não contém** timestamp, máquina, usuário ou caminho absoluto (D-03).
 
@@ -61,6 +65,8 @@ Toda entidade e toda Observation possuem `KnowledgeId`: string estável, legíve
 | Pasta de solução | `slnfolder:{caminhoLógico}` | `slnfolder:src/Core` |
 | Diretório físico | `dir:{caminhoRelativo}` | `dir:src/Segundio.Domain` |
 | Observation | `obs:{sha256(kind + subjectId + payloadCanônico)[0..16]}` | `obs:9f2c41ab77e0d3b5` |
+| Evidence | `ev:{sha256(kind + idsOrdenados)[0..16]}` | `ev:41d0a8c3be92f715` |
+| Inference | `inf:{sha256(kind + subjectId + payload + evidenceId)[0..16]}` | `inf:7b3e05c1da84f296` |
 
 Regras:
 
@@ -90,6 +96,99 @@ Regras:
 - **OB-02** Um `kind` desconhecido do catálogo é erro de compilação, não item ignorado.
 - **OB-03** O `payload` de um mesmo `kind` tem sempre a mesma forma.
 - **OB-04** Observations são ordenadas por `subject`, depois `kind`, depois `id`.
+  Evidence é ordenada por `id`. Inferences seguem a mesma regra das Observations.
+
+---
+
+## 4.1 Evidence
+
+Agrupamento nomeado e consistente de Observations que sustenta uma conclusão.
+
+| Campo | Tipo | Obrigatório | Descrição |
+|---|---|---|---|
+| `id` | KnowledgeId | sim | Derivado de kind + ids ordenados |
+| `kind` | string | sim | Do catálogo da Seção 6.2 |
+| `observations` | KnowledgeId[] | sim | Ordenado, sem repetição, **nunca vazio** |
+| `producer` | string | sim | Quem montou o agrupamento |
+| `capability` | string | sim | Em que capacidade |
+
+Regras:
+
+- **EV-01** Evidence sem Observations é inválida. Conclusão sem sustentação
+  não existe.
+- **EV-02** As Observations referenciadas já devem existir no modelo no
+  momento do registro.
+- **EV-03** Evidence com o mesmo conjunto de Observations tem o mesmo `id`,
+  independentemente da ordem de entrada, e deduplica.
+
+**Por que Evidence não tem `source` nem `locator`.** Sua origem física é
+estrutural: ela aponta para Observations que já declaram, cada uma, sua
+proveniência completa. Sintetizar um `source` para a Evidence seria fabricar
+dado — o oposto do que PR-04 pede. A rastreabilidade até o arquivo permanece,
+por um salto a mais.
+
+---
+
+## 4.2 Inference
+
+Conhecimento derivado exclusivamente de Evidence, por regra determinística e
+declarada.
+
+| Campo | Tipo | Obrigatório | Descrição |
+|---|---|---|---|
+| `id` | KnowledgeId | sim | Derivado de conteúdo |
+| `kind` | string | sim | Do catálogo da Seção 6.3 |
+| `subject` | KnowledgeId | sim | A quem a conclusão se refere |
+| `payload` | objeto | sim | Formato definido pelo `kind` |
+| `evidence` | KnowledgeId | sim | A Evidence que sustenta |
+| `confidence` | `Asserted` \| `Observed` | sim | Ver 4.3 |
+| `frequency` | objeto | condicional | Obrigatório se `Observed`, proibido se `Asserted` |
+| `provenance` | InferenceProvenance | sim | Ver 4.4 |
+
+Regras:
+
+- **IN-01** Toda Inference aponta para uma Evidence existente.
+- **IN-02** Toda Inference declara `confidence`.
+- **IN-03** Uma Inference nunca deriva de outra Inference. A cadeia é
+  `Observation → Evidence → Inference`, e não se encadeia sobre si mesma em v0.2.
+- **IN-04** Inference não substitui Observation. Se o fato é observável
+  diretamente, é Observation (OB-01).
+
+---
+
+## 4.3 Confidence e Frequency
+
+| Valor | Significado | Frequência |
+|---|---|---|
+| `Asserted` | Regra exata, sem exceções | **Proibida** |
+| `Observed` | Regularidade estatística | **Obrigatória** |
+
+`frequency` tem `matching`, `total` e `ratePerMille`.
+
+- `total` maior que zero; `matching` no intervalo `[0, total]`.
+- `ratePerMille` é inteiro, derivado. **Nunca ponto flutuante na saída
+  canônica:** formatação de `double` é porta de entrada clássica para não
+  determinismo (D-06).
+
+`Asserted` com frequência é contradição: se há exceções, a regra não é exata,
+e a Confidence correta é `Observed`. A compilação falha nesse caso.
+
+---
+
+## 4.4 InferenceProvenance
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `rule` | string | Identificador estável da regra aplicada. Ex.: `layer-by-graph-depth` |
+| `producer` | string | Producer responsável |
+| `capability` | string | Capacidade que a produziu |
+| `acquisitionLevel` | `S` \| `X` | Nível deste item |
+
+Difere de `Provenance` por um motivo estrutural: **uma Observation vem de um
+arquivo, uma Inference vem de uma regra.** A Seção 3.1 da Constituição exige
+que a regra seja "determinística e declarada" — `rule` é essa declaração.
+Não há `source` porque uma conclusão não tem origem física; a origem física
+continua alcançável através da Evidence.
 
 ---
 
@@ -109,7 +208,9 @@ Obrigatória em toda Observation e toda Inference. Sem ela, a compilação falha
 
 ---
 
-## 6. Catálogo de `kind` — v0 (C01)
+## 6. Catálogos
+
+### 6.1 Observation — C01
 
 Este é o conteúdo completo do conhecimento em v0.
 
@@ -129,11 +230,51 @@ Este é o conteúdo completo do conhecimento em v0.
 
 `acquisition.limitation` é obrigatória sempre que o compilador não conseguiu obter algo que normalmente obteria. **Ausência silenciosa é proibida**: o que não foi obtido é declarado.
 
-Cada nova capacidade adiciona `kind`s ao catálogo. Nenhuma capacidade altera `kind` existente.
+### 6.1.1 Observation — C02
+
+| `kind` | `subject` | `payload` |
+|---|---|---|
+| `project.references-project` | Projeto | `{ targetId }` |
+| `project.package-reference` | Projeto | `{ name, version? }` |
+
+`targetId` sempre referencia projeto declarado na solução. Referência para
+fora da solução produz `acquisition.limitation`, nunca aresta inventada.
+
+`version` ausente significa não resolvida, com limitação correspondente.
+
+Cada nova capacidade adiciona `kind`s ao catálogo. Nenhuma capacidade altera
+`kind` existente.
+
+### 6.2 Evidence — reservados para C02
+
+Declarados no catálogo; ainda não produzidos por nenhum Producer.
+
+| `kind` | Agrupa |
+|---|---|
+| `project.graph-position` | O grafo inteiro: `project.declared` e `project.references-project` |
+| `project.cycle-path` | Referências que fecham um ciclo |
+
+### 6.3 Inference — reservados para C02
+
+| `kind` | `subject` | `payload` | Confidence | Regra |
+|---|---|---|---|---|
+| `project.layer` | Projeto | `{ depth }` | `Asserted` | `layer-by-graph-depth` |
+| `project.is-root` | Projeto | `{}` | `Asserted` | `root-by-absence-of-dependents` |
+| `project.is-leaf` | Projeto | `{}` | `Asserted` | `leaf-by-absence-of-references` |
+| `project.participates-in-cycle` | Projeto | `{ cycleId }` | `Asserted` | `cycle-by-strongly-connected-component` |
+
+Todas `Asserted`: posição no grafo é exata dada a estrutura, não regularidade
+estatística. `Observed` aparecerá em C08, onde convenção é frequência.
+
+`depth` é a maior distância até um projeto que não referencia nenhum outro da
+solução, calculada sobre a condensação em componentes fortemente conexos —
+assim a presença de ciclo não torna a profundidade indefinida.
+
+Kind fora de qualquer um dos três catálogos é erro de compilação (IV-04).
 
 ---
 
-## 7. Entidades tipadas — v0
+## 7. Entidades tipadas
 
 Índice sobre as Observations. Nenhum campo aqui existe sem Observation correspondente.
 
@@ -189,6 +330,8 @@ O KnowledgeModel é persistido em `Knowledge/model/knowledge.model.json`.
 - Terminador de linha `LF`.
 - Chaves de objeto ordenadas ordinalmente.
 - Arrays ordenados pela regra da entidade correspondente.
+- `observations`, `evidence`, `inferences` e `entities` são coleções de
+  primeiro nível do documento.
 - Números com formatação invariante; sem notação científica.
 - Campos nulos omitidos, nunca escritos como `null`.
 - Sem timestamp, caminho absoluto ou dado de ambiente.
@@ -199,7 +342,7 @@ O JSON é a forma de referência, não o produto (PR-07). Markdown, SQLite ou gr
 
 ---
 
-## 10. Estrutura publicada — v0
+## 10. Estrutura publicada
 
 ```
 Knowledge/
@@ -224,6 +367,20 @@ Testáveis por automação; falha bloqueia a conclusão de qualquer capacidade.
 - **IV-06** Compilações repetidas produzem saída byte-idêntica.
 - **IV-07** Nenhuma projeção contém informação ausente do KnowledgeModel.
 - **IV-08** Nenhuma saída contém caminho absoluto, timestamp ou dado de ambiente.
+- **IV-09** Toda Inference referencia uma Evidence existente no modelo.
+- **IV-10** Toda Evidence é não vazia e referencia apenas Observations existentes.
+- **IV-11** `Observed` tem frequência declarada; `Asserted` não tem frequência.
+- **IV-12** Toda Inference declara sua regra.
+
+---
+
+## 11.1 Histórico de esquema
+
+| Versão | Mudança | Compatibilidade |
+|---|---|---|
+| `0.1.0` | Substrato de Observations. Catálogo C01 | — |
+| `0.2.0` | `Evidence`, `Inference`, `Confidence`, `Frequency`; catálogos 6.2 e 6.3; IV-09..IV-12 | **Aditiva** (EX-01, EX-04). Nenhum `kind` de v0.1 alterado; Observations de v0.1 permanecem válidas |
+| `0.3.0` | Kinds de Observation de C02 (6.1.1); `project.graph-position` passa a agrupar nós e arestas | **Aditiva**. Nenhum `kind` anterior alterado |
 
 ---
 
@@ -239,4 +396,4 @@ Este documento passa de `PROVISÓRIO` a `CONGELADO` quando, simultaneamente:
 O congelamento é formalizado por ADR e, a partir dele, vale a regra de extensão da Seção 8.
 
 ---
-*Fim de `KNOWLEDGE_MODEL.md` v0.*
+*Fim de `KNOWLEDGE_MODEL.md` v0.3.*

@@ -71,8 +71,9 @@ internal sealed record Options
             return candidates[0];
 
         error.WriteLine(candidates.Length == 0
-            ? "Erro: nenhuma solução (.sln/.slnx) encontrada no diretório atual."
-            : "Erro: mais de uma solução encontrada. Informe qual usar.");
+            ? $"Erro: nenhuma solução (.sln/.slnx) em '{directory}'."
+            : "Erro: mais de uma solução encontrada. Informe qual usar: "
+              + string.Join(", ", candidates.Select(Path.GetFileName)));
 
         return null;
     }

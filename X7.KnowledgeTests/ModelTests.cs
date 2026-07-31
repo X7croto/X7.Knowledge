@@ -33,7 +33,9 @@ public sealed class ModelTests : IClassFixture<SolutionFixture>
         {
             Assert.False(string.IsNullOrWhiteSpace(o.Provenance.Source));
             Assert.False(string.IsNullOrWhiteSpace(o.Provenance.Producer));
-            Assert.Equal("C01", o.Provenance.Capability);
+            // C02 acrescentou Observations. O teste verifica proveniência
+            // completa, não a capacidade específica.
+            Assert.Contains(o.Provenance.Capability, (string[])["C01", "C02"]);
         });
     }
 

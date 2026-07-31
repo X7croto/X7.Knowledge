@@ -44,7 +44,15 @@ public sealed class MarkdownPublisher : IPublisher
         builder.Append($"| Nível de aquisição | `{manifest.AcquisitionLevel.ToToken()}` |\n");
         builder.Append($"| Capacidades | {string.Join(", ", manifest.Capabilities)} |\n");
         builder.Append($"| Digest das entradas | `{manifest.InputDigest}` |\n");
-        builder.Append($"| Observations | {manifest.ObservationCount} |\n\n");
+        builder.Append($"| Observations | {manifest.ObservationCount} |\n");
+
+        if (manifest.EvidenceCount > 0 || manifest.InferenceCount > 0)
+        {
+            builder.Append($"| Evidence | {manifest.EvidenceCount} |\n");
+            builder.Append($"| Inferences | {manifest.InferenceCount} |\n");
+        }
+
+        builder.Append('\n');
 
         if (manifest.AcquisitionLevel == AcquisitionLevel.Syntactic)
         {

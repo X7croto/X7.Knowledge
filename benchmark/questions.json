@@ -1,5 +1,5 @@
 {
-  "benchmarkVersion": 1,
+  "benchmarkVersion": 2,
   "questions": [
     {
       "codeFiles": [
@@ -44,37 +44,76 @@
     },
     {
       "codeFiles": [
+        "X7.Knowledge.Benchmark/X7.Knowledge.Benchmark.csproj",
+        "X7.Knowledge.Cli/X7.Knowledge.Cli.csproj",
+        "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj",
+        "X7.Knowledge/X7.Knowledge.csproj",
+        "X7.KnowledgeTests/X7.KnowledgeTests.csproj",
         "X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj",
+        "X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj",
+        "X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj",
         "X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj",
         "X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj",
-        "X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj"
+        "X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj",
+        "X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj",
+        "X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
       ],
+      "codeFilesNote": "Corrigido na v2: a lista anterior continha apenas os projetos que de fato participam da resposta, o que pressupõe a resposta. Sem a Base é necessário abrir todos os .csproj da solução.",
       "expectedCapability": "C02",
       "id": "Q04",
-      "kbFiles": [],
+      "kbFiles": [
+        "Architecture/ProjectDependencies.md"
+      ],
       "retired": false,
       "text": "Quais projetos dependem de X7.ProjectIndexer.Core?"
     },
     {
       "codeFiles": [
+        "X7.Knowledge.Benchmark/X7.Knowledge.Benchmark.csproj",
         "X7.Knowledge.Cli/X7.Knowledge.Cli.csproj",
-        "X7.KnowledgeTests/X7.KnowledgeTests.csproj"
+        "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj",
+        "X7.Knowledge/X7.Knowledge.csproj",
+        "X7.KnowledgeTests/X7.KnowledgeTests.csproj",
+        "X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj",
+        "X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj",
+        "X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj",
+        "X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj",
+        "X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj",
+        "X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj",
+        "X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj",
+        "X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
       ],
+      "codeFilesNote": "Corrigido na v2: a lista anterior continha apenas os projetos que de fato participam da resposta, o que pressupõe a resposta. Sem a Base é necessário abrir todos os .csproj da solução.",
       "expectedCapability": "C02",
       "id": "Q05",
-      "kbFiles": [],
+      "kbFiles": [
+        "Architecture/ProjectDependencies.md"
+      ],
       "retired": false,
       "text": "Se eu mudar X7.Knowledge, que projetos são impactados?"
     },
     {
       "codeFiles": [
+        "X7.Knowledge.Benchmark/X7.Knowledge.Benchmark.csproj",
+        "X7.Knowledge.Cli/X7.Knowledge.Cli.csproj",
+        "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj",
+        "X7.Knowledge/X7.Knowledge.csproj",
+        "X7.KnowledgeTests/X7.KnowledgeTests.csproj",
+        "X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj",
+        "X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj",
         "X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj",
+        "X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj",
         "X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj",
-        "X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj"
+        "X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj",
+        "X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj",
+        "X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
       ],
+      "codeFilesNote": "Corrigido na v2: a lista anterior continha apenas os projetos que de fato participam da resposta, o que pressupõe a resposta. Sem a Base é necessário abrir todos os .csproj da solução.",
       "expectedCapability": "C02",
       "id": "Q06",
-      "kbFiles": [],
+      "kbFiles": [
+        "Architecture/Architecture.md"
+      ],
       "retired": false,
       "text": "Existe ciclo de dependência entre projetos?"
     },

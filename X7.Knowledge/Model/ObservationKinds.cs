@@ -18,6 +18,10 @@ public static class ObservationKinds
     public const string ProjectProperty = "project.property";
     public const string ProjectIsTestProject = "project.is-test-project";
 
+    // C02
+    public const string ProjectReferencesProject = "project.references-project";
+    public const string ProjectPackageReference = "project.package-reference";
+
     public const string AcquisitionLimitation = "acquisition.limitation";
 
     private static readonly HashSet<string> Catalog = new(StringComparer.Ordinal)
@@ -32,6 +36,8 @@ public static class ObservationKinds
         ProjectLanguageVersion,
         ProjectProperty,
         ProjectIsTestProject,
+        ProjectReferencesProject,
+        ProjectPackageReference,
         AcquisitionLimitation
     };
 
