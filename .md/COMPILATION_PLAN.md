@@ -3,7 +3,7 @@
 **Projeto:** X7.Knowledge
 **Versão:** 2.2
 **Status:** Normativo (autoridade 2)
-**Derivado de:** `PROJECT_CONSTITUTION.md` v2.2
+**Derivado de:** `PROJECT_CONSTITUTION.md` v2.3
 **Substitui:** `COMPILATION_PLAN.md` v1.0 e `ROADMAP.md` v1.0 (ambos revogados — ver ADR-032)
 
 ---
@@ -26,7 +26,7 @@ Este documento não descreve implementação, arquitetura interna, tecnologia ne
 - **PL-04 — Entrega publicada.** Toda capacidade termina com projeção publicada e utilizável. Não existe capacidade cujo resultado seja apenas código interno.
 - **PL-05 — Conclusão verificável.** Todo critério de conclusão é objetivo e automatizável. Julgamento subjetivo não conclui capacidade.
 - **PL-06 — Não regressão.** Nenhuma capacidade degrada conhecimento ou projeção anterior.
-- **PL-07 — Medição obrigatória.** Toda capacidade mede o Context Ratio (Constituição §7) antes e depois. Aumento da mediana do conjunto pareado (ADR-034) bloqueia a conclusão.
+- **PL-07 — Medição obrigatória.** Toda capacidade mede o Context Ratio (Constituição §7) antes e depois. O "antes" é produzido por corte na capacidade anterior sobre o snapshot atual (ADR-038), nunca recuperado de medição passada. Aumento da mediana do conjunto pareado (ADR-034) bloqueia a conclusão.
 - **PL-08 — Nível declarado.** Toda capacidade declara o nível de aquisição exigido (S ou X). Capacidade de nível S não produz saída degradada em nível X; produz ausência declarada.
 
 ---

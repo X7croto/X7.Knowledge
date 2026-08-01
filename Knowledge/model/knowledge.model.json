@@ -315,11 +315,11 @@
       "C03",
       "C04"
     ],
-    "compilerVersion": "0.4.0+89fbd4d68e10f9bdf76ef3a4350dd7a90b5b0ef5",
+    "compilerVersion": "0.4.0+1996de227101a4aeac996271931109b3009ec10b",
     "evidenceCount": 3,
     "inferenceCount": 12,
     "inputDigest": "a0e430d38833d497c02c96211812f74bc6aa27a3b40b4dfe08ffd2a25037b8fb",
-    "modelVersion": "0.7.0",
+    "modelVersion": "1.0.0",
     "msBuildVersion": "10.0.302",
     "observationCount": 830,
     "solutionId": "sln:X7.Knowledge"

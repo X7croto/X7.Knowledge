@@ -15,7 +15,7 @@ namespace X7.Knowledge;
 /// </summary>
 public static class KnowledgeCompiler
 {
-    public const string ModelVersion = "0.7.0";
+    public const string ModelVersion = "1.0.0";
 
     /// <summary>
     /// Capacidades que este compilador possui, em ordem. Fonte única: o CLI

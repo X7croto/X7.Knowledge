@@ -6,8 +6,8 @@ Gerada por X7.Knowledge. Conteúdo derivado deterministicamente do código-fonte
 
 | Campo | Valor |
 |---|---|
-| Versão do modelo | `0.7.0` |
-| Versão do compilador | `0.4.0+89fbd4d68e10f9bdf76ef3a4350dd7a90b5b0ef5` |
+| Versão do modelo | `1.0.0` |
+| Versão do compilador | `0.4.0+1996de227101a4aeac996271931109b3009ec10b` |
 | Solução | `sln:X7.Knowledge` |
 | Nível de aquisição | `S` |
 | MSBuild | `10.0.302` |

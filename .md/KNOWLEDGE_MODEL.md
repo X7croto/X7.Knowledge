@@ -1,27 +1,38 @@
 # KNOWLEDGE_MODEL.md
 
 **Projeto:** X7.Knowledge
-**Versão do modelo:** v0.7 (provisório)
-**Esquema:** `0.7.0`
-**Status:** Normativo (autoridade 3)
-**Derivado de:** `PROJECT_CONSTITUTION.md` v2.2, `COMPILATION_PLAN.md` v2.2
+**Versão do modelo:** v1.0
+**Esquema:** `1.0.0`
+**Status:** Normativo (autoridade 3) — **CONGELADO** (ADR-037)
+**Derivado de:** `PROJECT_CONSTITUTION.md` v2.3, `COMPILATION_PLAN.md` v2.2
 
 ---
 
-## 0. Por que v0 é provisório
+## 0. Como este documento chegou aqui
 
-A Constituição v1 exigia definir o modelo canônico completo antes de qualquer implementação. Isso contraria AC-07 e AC-15: um modelo desenhado sem nenhum Producer real é um modelo desenhado contra suposições, e PL-01 impediria corrigi-lo depois.
+A Constituição v1 exigia definir o modelo canônico completo antes de qualquer
+implementação. Isso contraria AC-07 e AC-15: um modelo desenhado sem nenhum
+Producer real é um modelo desenhado contra suposições, e PL-01 impediria
+corrigi-lo depois.
 
-Portanto:
+Por isso o modelo nasceu **provisório**, cobrindo uma capacidade de cada vez,
+e cresceu contra código real. Sete versões, todas aditivas, nenhum `kind`
+alterado ou removido.
 
-- **v0.1 cobria exclusivamente C01.** v0.2 adiciona o mecanismo de derivação
-  (`Evidence`, `Inference`, `Confidence`) exigido por C02.
-- **v0 é explicitamente provisório.** Alterações não exigem ADR enquanto o status for `PROVISÓRIO`.
-- **v0 congela após C03 concluída**, quando três Producers reais já exerceram o modelo. A partir do congelamento, toda alteração exige ADR e obedece à regra de extensão da Seção 7.
+**Está congelado desde a ADR-037.** As quatro condições do §12 foram
+satisfeitas: C01 a C04 concluídas, IV-01 a IV-08 passando dentro da
+compilação, nenhuma alteração incompatível, e linha de base medida.
 
-O congelamento é registrado por ADR e altera o status deste documento para `CONGELADO`.
+Consequências, em vigor:
 
----
+- A **regra de extensão da Seção 8 vale integralmente**, e não como
+  recomendação.
+- **Toda alteração deste documento exige ADR**, inclusive as aditivas. A
+  dispensa valia apenas enquanto o status era `PROVISÓRIO`.
+- Remover ou renomear `kind` ou campo exige incremento de versão maior.
+
+O C05 é o primeiro teste real dessa regra: é a maior adição de `kind`s prevista
+no plano, e entra sob o contrato já fechado.
 
 ## 1. Princípio estruturante
 
@@ -40,7 +51,7 @@ Todo KnowledgeModel começa por um manifesto. Ele existe para tornar a compilaç
 
 | Campo | Tipo | Descrição |
 |---|---|---|
-| `modelVersion` | string | Versão deste esquema. `0.7.0` |
+| `modelVersion` | string | Versão deste esquema. `1.0.0` |
 | `compilerVersion` | string | Versão do compilador que produziu |
 | `solutionId` | KnowledgeId | Identidade da solução |
 | `acquisitionLevel` | `S` \| `X` | Nível alcançado (Constituição §5.3) |
@@ -626,19 +637,24 @@ mesma entrada.
 | `0.5.0` | `msBuildVersion` no manifesto, presente apenas em nível S | **Aditiva**. Campo opcional (EX-02) |
 | `0.6.0` | Kinds de C04 (6.1.3); IV-13 | **Aditiva**. Nenhum `kind` anterior alterado |
 | `0.7.0` | Estrutura do tipo em C04 (6.1.3.b): `type.kind`, `type.accessibility`, `type.modifier`, `type.generic-parameter`, `type.nested-in`; Evidence `type.declaration-sites`; Inference `type.is-partial`; IV-14..IV-17; §10 atualizada | **Aditiva** (EX-01, EX-04). Nenhum `kind` anterior alterado; `IV-13` teve escopo ampliado para `containerId`, sem alterar payload existente |
+| `1.0.0` | Congelamento (ADR-037). Nenhum `kind`, campo ou invariante alterado | **Idêntica a `0.7.0` em conteúdo.** A mudança de versão maior declara o fim do estado provisório, não uma quebra de compatibilidade |
 
 ---
 
-## 12. Critério de congelamento
+## 12. Congelamento — registro
 
-Este documento passa de `PROVISÓRIO` a `CONGELADO` quando, simultaneamente:
+Este documento passou de `PROVISÓRIO` a `CONGELADO` pela ADR-037, com as
+quatro condições verificadas:
 
-1. C01, C02 e C03 estiverem concluídas conforme seus critérios;
-2. os invariantes IV-01 a IV-08 passarem em execução automatizada;
-3. nenhuma das três capacidades tiver exigido alteração incompatível do modelo nas últimas duas iterações;
-4. o Context Ratio de linha de base estiver medido e registrado.
+| Condição | Estado |
+|---|---|
+| C01, C02 e C03 concluídas conforme seus critérios | Satisfeita — C04 também |
+| IV-01 a IV-08 passando em execução automatizada | Satisfeita — rodam dentro da compilação, não só em teste |
+| Nenhuma alteração incompatível nas últimas duas iterações | Satisfeita — sete versões, todas aditivas |
+| Context Ratio de linha de base medido e registrado | Satisfeita — `benchmark/results-c04` |
 
-O congelamento é formalizado por ADR e, a partir dele, vale a regra de extensão da Seção 8.
+A partir daqui vale a regra de extensão da Seção 8, e toda alteração exige
+ADR.
 
 ---
-*Fim de `KNOWLEDGE_MODEL.md` v0.7.*
+*Fim de `KNOWLEDGE_MODEL.md` v1.0 — CONGELADO.*

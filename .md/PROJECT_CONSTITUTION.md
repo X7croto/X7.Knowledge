@@ -1,7 +1,7 @@
 # PROJECT_CONSTITUTION.md
 
 **Projeto:** X7.Knowledge
-**Versão:** 2.2
+**Versão:** 2.3
 **Status:** Normativo — fonte única de verdade
 **Substitui:** `PROJECT_CONSTITUTION.md` v1.0 e `ObjetivoX7.docx` (ambos revogados)
 
@@ -254,7 +254,7 @@ A métrica do projeto é a **mediana de CR** sobre o conjunto de perguntas.
 
 ## 8. ADRs
 
-ADRs de v1 permanecem válidas salvo revogação explícita. As ADRs 027–033 abaixo resolvem os conflitos identificados na consolidação. As ADRs 034 a 036 são posteriores e decorrem de medição.
+ADRs de v1 permanecem válidas salvo revogação explícita. As ADRs 027–033 abaixo resolvem os conflitos identificados na consolidação. As ADRs 034 a 038 são posteriores e decorrem de medição ou de amadurecimento do modelo.
 
 ### ADR-001 a ADR-026 — Mantidas
 
@@ -394,6 +394,32 @@ Consolidadas e incorporadas às Seções 1–5 deste documento. Exceções:
 ---
 
 
+### ADR-037 — Congelamento do KnowledgeModel
+
+**Status:** APROVADA
+
+**Contexto:** o `KNOWLEDGE_MODEL.md` nasceu provisório por AC-15: modelo desenhado sem Producer real é modelo desenhado contra suposições. O §12 lista quatro condições para o congelamento, e todas estão satisfeitas — C01 a C04 concluídas, IV-01 a IV-08 passando dentro da compilação, sete versões todas aditivas sem alterar nenhum `kind`, e linha de base medida e registrada em `benchmark/results-c04`.
+
+**Decisão:** o documento passa a **CONGELADO** e o esquema a **`1.0.0`**. A regra de extensão da §8 do modelo passa a vigorar integralmente. Toda alteração do modelo passa a exigir ADR, inclusive as aditivas — a dispensa do §0 valia apenas enquanto o status fosse `PROVISÓRIO`.
+
+**Por que antes do C05:** o C05 é a maior adição de `kind`s prevista no plano. Congelado antes, ele é o primeiro teste real da regra de extensão; congelado depois, ele seria a justificativa do congelamento, decidido sob a pressão de fechar a capacidade (AC-01, AC-02).
+
+**Consequências:** o custo de mudar o modelo sobe de propósito — a DR-012 rejeitou infraestrutura antes de modelo estável exatamente para chegar aqui. Consumidores externos ganham um contrato estável. A troca de `type.is-partial` por observação direta, prevista como nota na §6.3.2 do modelo, passa a exigir versão maior e ADR.
+
+---
+
+### ADR-038 — Linha de base por corte de capacidade
+
+**Status:** APROVADA
+
+**Contexto:** a ADR-034 declarou o que invalida a comparação pareada, mas não resolveu a causa. A solução de referência é o próprio compilador: toda capacidade acrescenta código a ela e `T_code` muda por construção. Em C03→C04, três de sete perguntas caíram fora; após a remoção do legado v1, nenhuma pareava. Recuperar o compilador antigo do histórico mede duas mudanças ao mesmo tempo — a capacidade e a evolução do compilador.
+
+**Decisão:** a linha de base de MT-02 é produzida por **corte de capacidade sobre o snapshot atual** (`--until C0n`), e não recuperada de medição anterior. Capacidades são aditivas, então o prefixo da lista de Producers é exatamente a Base daquela capacidade: mesmo binário, mesma entrada, mesmo snapshot. `T_code` fica idêntico dos dois lados por construção. Pergunta cuja capacidade exigida não foi executada conta como não sustentada (MT-03), nunca como medição inválida.
+
+**Consequências:** a medição isola o efeito da capacidade do crescimento do compilador. `benchmark/results-*` deixa de ser insumo da comparação e passa a ser registro histórico. O corte é recurso de medição, não modo de operação: o manifesto declara o prefixo, e invariantes de capacidades não executadas não se aplicam. A migração da solução de referência antes do C08 continua necessária — esta ADR resolve incomparabilidade, não o viés de auto-medição.
+
+---
+
 ## 9. Decisões rejeitadas
 
 Não reabrir sem nova ADR.
@@ -469,4 +495,4 @@ A missão permanece:
 > Compilar, de forma determinística e rastreável, o conhecimento existente em uma solução de software, reduzindo drasticamente a quantidade de código que uma LLM precisa ler para compreendê-la e evoluí-la.
 
 ---
-*Fim de `PROJECT_CONSTITUTION.md` v2.2.*
+*Fim de `PROJECT_CONSTITUTION.md` v2.3.*

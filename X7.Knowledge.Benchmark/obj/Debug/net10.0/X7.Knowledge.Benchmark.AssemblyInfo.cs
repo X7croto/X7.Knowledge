@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("x7k-bench")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+89fbd4d68e10f9bdf76ef3a4350dd7a90b5b0ef5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1996de227101a4aeac996271931109b3009ec10b")]
 [assembly: System.Reflection.AssemblyProductAttribute("x7k-bench")]
 [assembly: System.Reflection.AssemblyTitleAttribute("x7k-bench")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
