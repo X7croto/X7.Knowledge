@@ -229,6 +229,10 @@ public sealed class TypeRelationProducer : IProducer
         if (path is null)
             return null;
 
-        return source.Files.FirstOrDefault(f => f.Tree.FilePath == path)?.RelativePath ?? path;
+        // Arquivo fora do conjunto observado significa fora da fronteira
+        // (ADR-041): tipo emitido por gerador, ou injetado por pacote.
+        // Devolver o caminho bruto como último recurso era o que publicava
+        // `C:/Users/...` na Base.
+        return source.Files.FirstOrDefault(f => f.Tree.FilePath == path)?.RelativePath;
     }
 }

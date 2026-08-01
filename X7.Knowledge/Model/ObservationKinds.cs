@@ -39,6 +39,16 @@ public static class ObservationKinds
     public const string TypeGenericParameter = "type.generic-parameter";
     public const string TypeNestedIn = "type.nested-in";
 
+    // C05 — superfície declarada dos tipos (nível S)
+    public const string TypeDeclaresMember = "type.declares-member";
+    public const string MemberDeclared = "member.declared";
+    public const string MemberAccessibility = "member.accessibility";
+    public const string MemberModifier = "member.modifier";
+    public const string MemberType = "member.type";
+    public const string MemberParameter = "member.parameter";
+    public const string MemberGenericParameter = "member.generic-parameter";
+    public const string MemberAccessor = "member.accessor";
+
     public const string AcquisitionLimitation = "acquisition.limitation";
 
     private static readonly HashSet<string> Catalog = new(StringComparer.Ordinal)
@@ -66,6 +76,14 @@ public static class ObservationKinds
         TypeModifier,
         TypeGenericParameter,
         TypeNestedIn,
+        TypeDeclaresMember,
+        MemberDeclared,
+        MemberAccessibility,
+        MemberModifier,
+        MemberType,
+        MemberParameter,
+        MemberGenericParameter,
+        MemberAccessor,
         AcquisitionLimitation
     };
 

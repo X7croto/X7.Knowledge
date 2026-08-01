@@ -27,6 +27,7 @@ public static class ModelInvariants
 
         ValidateObservations(model, subjects, violations);
         ValidateTypeStructure(model, violations);
+        ValidateMemberSurface(model, violations);
         ValidateEvidence(model, observationIds, violations);
         ValidateInferences(model, subjects, evidenceIds, violations);
 
@@ -76,7 +77,7 @@ public static class ModelInvariants
 
         foreach (var observation in model.Observations)
         {
-            foreach (var key in (string[])["baseTypeId", "interfaceId", "containerId"])
+            foreach (var key in (string[])["baseTypeId", "interfaceId", "containerId", "typeId"])
             {
                 var reference = observation.Payload[key];
 
@@ -144,6 +145,165 @@ public static class ModelInvariants
 
         ValidateNesting(model, violations);
         ValidateGenericParameters(model, violations);
+    }
+
+    /// <summary>
+    /// IV-18 a IV-21 — consistência da superfície declarada (C05).
+    /// </summary>
+    /// <remarks>
+    /// Sem guarda de manifesto, ao contrário da IV-14, e por um motivo que
+    /// vale registrar: estes são invariantes de **consistência**, não de
+    /// cobertura. A IV-14 pôde exigir que todo tipo tenha classificação
+    /// porque todo tipo tem uma; não existe equivalente para membro, porque
+    /// tipo sem membro é legítimo e o modelo não sabe o que ficou de fora.
+    /// Numa Base sem C05 eles são vacuamente verdadeiros.
+    ///
+    /// A consequência está declarada na ADR-039: o critério 1 do C05 não fica
+    /// testável aqui e passa a depender do critério 2, a conferência de
+    /// assinatura contra o compilador de referência.
+    /// </remarks>
+    private static void ValidateMemberSurface(KnowledgeModel model, List<string> violations)
+    {
+        var declared = model.Observations
+            .Where(o => o.Kind == ObservationKinds.MemberDeclared)
+            .ToArray();
+
+        var kindOf = new Dictionary<KnowledgeId, string>();
+
+        foreach (var group in declared.GroupBy(o => o.Subject).OrderBy(g => g.Key))
+        {
+            if (group.Count() != 1)
+            {
+                violations.Add(
+                    $"IV-18: {group.Key} tem {group.Count()} member.declared; esperado exatamente 1");
+            }
+
+            var kind = group.First().Payload["kind"];
+
+            if (kind is null || !MemberVocabulary.IsKnownKind(kind))
+            {
+                violations.Add($"IV-04: espécie de membro fora do vocabulário em {group.Key}: {kind}");
+                continue;
+            }
+
+            kindOf[group.Key] = kind;
+        }
+
+        var accessibilities = Count(model, ObservationKinds.MemberAccessibility);
+        var types = Count(model, ObservationKinds.MemberType);
+
+        var containers = model.Observations
+            .Where(o => o.Kind == ObservationKinds.TypeDeclaresMember)
+            .GroupBy(o => KnowledgeId.Parse(o.Payload["memberId"]!))
+            .ToDictionary(g => g.Key, g => g.Count());
+
+        foreach (var (member, kind) in kindOf.OrderBy(p => p.Key))
+        {
+            // IV-18
+            if (accessibilities.GetValueOrDefault(member) != 1)
+            {
+                violations.Add(
+                    $"IV-18: {member} tem {accessibilities.GetValueOrDefault(member)} "
+                    + "member.accessibility; esperado exatamente 1");
+            }
+
+            if (containers.GetValueOrDefault(member) != 1)
+            {
+                violations.Add(
+                    $"IV-18: {member} é alvo de {containers.GetValueOrDefault(member)} "
+                    + "type.declares-member; esperado exatamente 1");
+            }
+
+            // IV-19
+            var esperado = kind == MemberVocabulary.Constructor ? 0 : 1;
+
+            if (types.GetValueOrDefault(member) != esperado)
+            {
+                violations.Add(
+                    $"IV-19: {member} tem {types.GetValueOrDefault(member)} member.type; "
+                    + $"esperado {esperado} para espécie '{kind}'");
+            }
+        }
+
+        // Uma contenção que aponta para membro inexistente esconde ausência:
+        // o tipo pareceria declarar algo que a Base não tem.
+        foreach (var member in containers.Keys.Where(m => !kindOf.ContainsKey(m)).OrderBy(m => m))
+            violations.Add($"IV-18: type.declares-member referencia membro inexistente: {member}");
+
+        ValidateMemberOrdinals(model, ObservationKinds.MemberParameter, "IV-20", violations);
+        ValidateMemberOrdinals(model, ObservationKinds.MemberGenericParameter, "IV-20", violations);
+        ValidateAccessors(model, kindOf, violations);
+    }
+
+    /// <summary>IV-20: os ordinais formam 0..n-1, sem repetição e sem lacuna.</summary>
+    private static void ValidateMemberOrdinals(
+        KnowledgeModel model,
+        string kind,
+        string invariant,
+        List<string> violations)
+    {
+        foreach (var group in model.Observations
+                     .Where(o => o.Kind == kind)
+                     .GroupBy(o => o.Subject)
+                     .OrderBy(g => g.Key))
+        {
+            var ordinals = new List<int>();
+
+            foreach (var observation in group)
+            {
+                if (int.TryParse(
+                        observation.Payload["ordinal"],
+                        System.Globalization.NumberStyles.Integer,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out var ordinal))
+                {
+                    ordinals.Add(ordinal);
+                    continue;
+                }
+
+                violations.Add($"{invariant}: ordinal não numérico em {observation.Id}");
+            }
+
+            ordinals.Sort();
+
+            if (!ordinals.SequenceEqual(Enumerable.Range(0, ordinals.Count)))
+            {
+                violations.Add(
+                    $"{invariant}: {group.Key} tem ordinais [{string.Join(", ", ordinals)}] "
+                    + $"em {kind}; esperado 0..{ordinals.Count - 1}");
+            }
+        }
+    }
+
+    /// <summary>IV-21: acessor só existe em propriedade, um por espécie.</summary>
+    private static void ValidateAccessors(
+        KnowledgeModel model,
+        IReadOnlyDictionary<KnowledgeId, string> kindOf,
+        List<string> violations)
+    {
+        foreach (var group in model.Observations
+                     .Where(o => o.Kind == ObservationKinds.MemberAccessor)
+                     .GroupBy(o => o.Subject)
+                     .OrderBy(g => g.Key))
+        {
+            if (kindOf.GetValueOrDefault(group.Key) != MemberVocabulary.Property)
+            {
+                violations.Add(
+                    $"IV-21: {group.Key} tem member.accessor sem ser propriedade");
+            }
+
+            foreach (var byKind in group.GroupBy(o => o.Payload["kind"]))
+            {
+                if (byKind.Key is null || !MemberVocabulary.IsKnownAccessor(byKind.Key))
+                {
+                    violations.Add($"IV-04: acessor fora do vocabulário em {group.Key}: {byKind.Key}");
+                    continue;
+                }
+
+                if (byKind.Count() > 1)
+                    violations.Add($"IV-21: {group.Key} declara '{byKind.Key}' mais de uma vez");
+            }
+        }
     }
 
     /// <summary>IV-15: contenção é árvore, não grafo qualquer.</summary>
@@ -316,10 +476,25 @@ public static class ModelInvariants
         }
     }
 
+    /// <summary>
+    /// IV-08. Depois da normalização exigida por D-02 o caminho perde a
+    /// barra invertida, e `C:/Users/...` passava pelos três testes originais
+    /// — foi assim que o nome de um usuário chegou à Base publicada
+    /// (ADR-041). O texto do invariante nunca mudou; a implementação é que
+    /// estava incompleta.
+    /// </summary>
     private static bool LooksAbsolute(string value)
         => value.StartsWith('/')
+           || value.StartsWith("../", StringComparison.Ordinal)
            || value.Contains(":\\", StringComparison.Ordinal)
-           || value.StartsWith("\\\\", StringComparison.Ordinal);
+           || value.StartsWith("\\\\", StringComparison.Ordinal)
+           || IsDriveRooted(value);
+
+    private static bool IsDriveRooted(string value)
+        => value.Length >= 3
+           && char.IsAsciiLetter(value[0])
+           && value[1] == ':'
+           && value[2] is '/' or '\\';
 }
 
 public sealed class InvariantViolationException(IReadOnlyList<string> violations)

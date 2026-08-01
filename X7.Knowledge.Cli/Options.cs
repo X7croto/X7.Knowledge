@@ -1,4 +1,5 @@
 using X7.Knowledge;
+using X7.Knowledge.Publishing;
 
 namespace X7.Knowledge.Cli;
 
@@ -11,11 +12,18 @@ internal sealed record Options
     /// <summary>Compilar apenas até esta capacidade, inclusive. Nulo = todas.</summary>
     public string? Until { get; init; }
 
+    /// <summary>
+    /// Eixo de partição de `Behavior/`. Padrão é por tipo, que é a Base
+    /// publicada; por projeto existe só para a medição da ADR-040.
+    /// </summary>
+    public BehaviorLayout BehaviorLayout { get; init; }
+
     public static Options? Parse(string[] args, TextWriter error)
     {
         string? solution = null;
         string? output = null;
         string? until = null;
+        var layout = BehaviorLayout.PerType;
 
         for (var i = 0; i < args.Length; i++)
         {
@@ -51,6 +59,27 @@ internal sealed record Options
 
                     break;
 
+                case "--behavior-layout":
+                    if (++i >= args.Length)
+                    {
+                        error.WriteLine("Erro: '--behavior-layout' exige 'type' ou 'project'.");
+                        return null;
+                    }
+
+                    switch (args[i].ToLowerInvariant())
+                    {
+                        case "type": layout = BehaviorLayout.PerType; break;
+                        case "project": layout = BehaviorLayout.PerProject; break;
+
+                        default:
+                            error.WriteLine(
+                                $"Erro: layout desconhecido '{args[i]}'. Use 'type' ou 'project'.");
+
+                            return null;
+                    }
+
+                    break;
+
                 case "-h" or "--help":
                     return null;
 
@@ -81,7 +110,8 @@ internal sealed record Options
         {
             SolutionPath = Path.GetFullPath(solution),
             OutputDirectory = Path.GetFullPath(output ?? "Knowledge"),
-            Until = until
+            Until = until,
+            BehaviorLayout = layout
         };
     }
 

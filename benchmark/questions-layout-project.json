@@ -1,0 +1,243 @@
+{
+  "benchmarkVersion": 6,
+  "questions": [
+    {
+      "codeFiles": [
+        "X7.Knowledge.slnx"
+      ],
+      "expectedCapability": "C01",
+      "id": "Q01",
+      "kbFiles": [
+        "Structure/Solution.md"
+      ],
+      "retired": false,
+      "text": "Quais projetos compõem a solução e como estão organizados?"
+    },
+    {
+      "codeFiles": [
+        "X7.Knowledge/Acquisition/ProjectFileReader.cs",
+        "X7.Knowledge/Acquisition/SlnReader.cs",
+        "X7.Knowledge/Acquisition/SlnxReader.cs",
+        "X7.Knowledge/Acquisition/SolutionReader.cs"
+      ],
+      "expectedCapability": "C01",
+      "id": "Q02",
+      "kbFiles": [
+        "Structure/Solution.md"
+      ],
+      "retired": false,
+      "text": "Onde fica o código que lê a solução e os arquivos de projeto?"
+    },
+    {
+      "codeFiles": [
+        "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj",
+        "X7.KnowledgeTests/X7.KnowledgeTests.csproj",
+        "X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+      ],
+      "expectedCapability": "C01",
+      "id": "Q03",
+      "kbFiles": [
+        "Structure/Solution.md"
+      ],
+      "retired": false,
+      "text": "Quais projetos são de teste e o que os identifica?"
+    },
+    {
+      "codeFiles": [
+        "X7.Knowledge.Benchmark/X7.Knowledge.Benchmark.csproj",
+        "X7.Knowledge.Cli/X7.Knowledge.Cli.csproj",
+        "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj",
+        "X7.Knowledge/X7.Knowledge.csproj",
+        "X7.KnowledgeTests/X7.KnowledgeTests.csproj",
+        "X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj",
+        "X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj",
+        "X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj",
+        "X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj",
+        "X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj",
+        "X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj",
+        "X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj",
+        "X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+      ],
+      "codeFilesNote": "Corrigido na v2: a lista anterior continha apenas os projetos que de fato participam da resposta, o que pressupõe a resposta. Sem a Base é necessário abrir todos os .csproj da solução.",
+      "expectedCapability": "C02",
+      "id": "Q04",
+      "kbFiles": [
+        "Architecture/ProjectDependencies.md"
+      ],
+      "retired": false,
+      "text": "Quais projetos dependem de X7.ProjectIndexer.Core?"
+    },
+    {
+      "codeFiles": [
+        "X7.Knowledge.Benchmark/X7.Knowledge.Benchmark.csproj",
+        "X7.Knowledge.Cli/X7.Knowledge.Cli.csproj",
+        "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj",
+        "X7.Knowledge/X7.Knowledge.csproj",
+        "X7.KnowledgeTests/X7.KnowledgeTests.csproj",
+        "X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj",
+        "X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj",
+        "X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj",
+        "X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj",
+        "X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj",
+        "X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj",
+        "X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj",
+        "X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+      ],
+      "codeFilesNote": "Corrigido na v2: a lista anterior continha apenas os projetos que de fato participam da resposta, o que pressupõe a resposta. Sem a Base é necessário abrir todos os .csproj da solução.",
+      "expectedCapability": "C02",
+      "id": "Q05",
+      "kbFiles": [
+        "Architecture/ProjectDependencies.md"
+      ],
+      "retired": false,
+      "text": "Se eu mudar X7.Knowledge, que projetos são impactados?"
+    },
+    {
+      "codeFiles": [
+        "X7.Knowledge.Benchmark/X7.Knowledge.Benchmark.csproj",
+        "X7.Knowledge.Cli/X7.Knowledge.Cli.csproj",
+        "X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj",
+        "X7.Knowledge/X7.Knowledge.csproj",
+        "X7.KnowledgeTests/X7.KnowledgeTests.csproj",
+        "X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj",
+        "X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj",
+        "X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj",
+        "X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj",
+        "X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj",
+        "X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj",
+        "X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj",
+        "X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj"
+      ],
+      "codeFilesNote": "Corrigido na v2: a lista anterior continha apenas os projetos que de fato participam da resposta, o que pressupõe a resposta. Sem a Base é necessário abrir todos os .csproj da solução.",
+      "expectedCapability": "C02",
+      "id": "Q06",
+      "kbFiles": [
+        "Architecture/Architecture.md"
+      ],
+      "retired": false,
+      "text": "Existe ciclo de dependência entre projetos?"
+    },
+    {
+      "codeFiles": [
+        "X7.Knowledge/Model/Observation.cs"
+      ],
+      "expectedCapability": "C03",
+      "id": "Q07",
+      "kbFiles": [
+        "Structure/Types/INDEX.md",
+        "Structure/Types/X7.Knowledge.md"
+      ],
+      "retired": false,
+      "text": "Onde está definido o tipo que representa uma unidade de conhecimento?"
+    },
+    {
+      "codeFiles": [
+        "X7.Knowledge/Compilation/IProducer.cs",
+        "X7.Knowledge/Compilation/Producers/ProjectProducer.cs",
+        "X7.Knowledge/Compilation/Producers/SolutionProducer.cs"
+      ],
+      "expectedCapability": "C04",
+      "id": "Q08",
+      "kbFiles": [
+        "Relations/INDEX.md",
+        "Relations/X7.Knowledge.md"
+      ],
+      "retired": false,
+      "text": "Que tipos implementam IProducer e onde estão?"
+    },
+    {
+      "codeFiles": [
+        "X7.Knowledge/Model/KnowledgeModelBuilder.cs"
+      ],
+      "expectedCapability": "C05",
+      "id": "Q09",
+      "kbFiles": [
+        "Behavior/INDEX.md",
+        "Behavior/X7.Knowledge.md"
+      ],
+      "retired": false,
+      "text": "Qual é a superfície pública de KnowledgeModelBuilder?"
+    },
+    {
+      "codeFiles": [
+        "X7.Knowledge/Compilation/ModelInvariants.cs",
+        "X7.Knowledge/Model/EntityIndexProjector.cs",
+        "X7.Knowledge/Model/KnowledgeModelBuilder.cs",
+        "X7.Knowledge/Model/Observation.cs",
+        "X7.Knowledge/Publishing/KnowledgeModelPublisher.cs",
+        "X7.Knowledge/Publishing/MarkdownPublisher.cs"
+      ],
+      "expectedCapability": "C06",
+      "id": "Q10",
+      "kbFiles": [],
+      "retired": false,
+      "text": "Quem consome Observation e de que forma?"
+    },
+    {
+      "codeFiles": [
+        "X7.Knowledge/Compilation/CompilationContext.cs",
+        "X7.Knowledge/Compilation/KnowledgePipeline.cs",
+        "X7.Knowledge/Compilation/Producers/ProjectProducer.cs",
+        "X7.Knowledge/Compilation/Producers/SolutionProducer.cs",
+        "X7.Knowledge/KnowledgeCompiler.cs",
+        "X7.Knowledge/Model/KnowledgeModelBuilder.cs",
+        "X7.Knowledge/Publishing/KnowledgeModelPublisher.cs"
+      ],
+      "expectedCapability": "C07",
+      "id": "Q11",
+      "kbFiles": [],
+      "retired": false,
+      "text": "O que acontece, do começo ao fim, quando uma compilação é executada?"
+    },
+    {
+      "codeFiles": [
+        "X7.Knowledge/Compilation/IProducer.cs",
+        "X7.Knowledge/Compilation/KnowledgePipeline.cs",
+        "X7.Knowledge/Compilation/Producers/ProjectProducer.cs",
+        "X7.Knowledge/Compilation/Producers/SolutionProducer.cs"
+      ],
+      "expectedCapability": "C08",
+      "id": "Q12",
+      "kbFiles": [],
+      "retired": false,
+      "text": "Que convenção devo seguir para criar um novo Producer?"
+    },
+    {
+      "codeFiles": [
+        "X7.Knowledge/Compilation/IProducer.cs",
+        "X7.Knowledge/KnowledgeCompiler.cs",
+        "X7.Knowledge/Publishing/IPublisher.cs"
+      ],
+      "expectedCapability": "C09",
+      "id": "Q13",
+      "kbFiles": [],
+      "retired": false,
+      "text": "Que padrão a solução usa para separar produção de publicação?"
+    },
+    {
+      "codeFiles": [
+        "X7.Knowledge/Model/Observation.cs",
+        "X7.Knowledge/Model/ObservationKinds.cs",
+        "X7.Knowledge/Model/ObservationPayload.cs"
+      ],
+      "expectedCapability": "C10",
+      "id": "Q14",
+      "kbFiles": [],
+      "retired": false,
+      "text": "O que significa 'Observation' no vocabulário deste projeto?"
+    },
+    {
+      "codeFiles": [
+        "X7.Knowledge/Compilation/ModelInvariants.cs",
+        "X7.Knowledge/Model/KnowledgeModelBuilder.cs",
+        "X7.Knowledge/Model/Observation.cs"
+      ],
+      "expectedCapability": "C11",
+      "id": "Q15",
+      "kbFiles": [],
+      "retired": false,
+      "text": "Que regras impedem a publicação de um modelo inválido?"
+    }
+  ],
+  "referenceSolution": "X7.Knowledge.slnx"
+}

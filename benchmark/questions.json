@@ -1,5 +1,5 @@
 {
-  "benchmarkVersion": 5,
+  "benchmarkVersion": 6,
   "questions": [
     {
       "codeFiles": [
@@ -151,7 +151,10 @@
       ],
       "expectedCapability": "C05",
       "id": "Q09",
-      "kbFiles": [],
+      "kbFiles": [
+        "Behavior/INDEX.md",
+        "Behavior/X7.Knowledge/X7.Knowledge.Model.KnowledgeModelBuilder.md"
+      ],
       "retired": false,
       "text": "Qual é a superfície pública de KnowledgeModelBuilder?"
     },

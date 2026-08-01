@@ -1,16 +1,18 @@
 # BENCHMARK.md
 
 **Projeto:** X7.Knowledge
-**Versão do conjunto:** 2
+**Versão do conjunto:** 6
 **Status:** Normativo por referência — implementa `PROJECT_CONSTITUTION.md` §7
-**Solução de referência:** `X7.ProjectIndexer.slnx` (12 projetos, nível X)
+**Solução de referência:** `X7.Knowledge.slnx` (5 projetos, nível S)
 
 ---
 
 ## 1. Por que esta solução de referência
 
 Escolhida por disponibilidade e conhecimento: está versionada, é C#, tem
-hierarquia de pastas, multi-projeto, projetos de teste e código legado real.
+hierarquia de pastas, multi-projeto e projetos de teste. Desde a remoção do
+legado v1 ela restaura e compila, e as medições passaram a ser feitas em
+nível S.
 
 **Viés declarado.** Medir o compilador contra a própria solução que o hospeda
 favorece o compilador: as convenções que ele vai inferir são as convenções de
@@ -58,6 +60,18 @@ substituí-las.
   degradar sem deslocar o centro. A ferramenta reporta nominalmente toda
   pergunta cujo CR piorou, e uma piora individual relevante exige justificativa
   no fechamento da capacidade, mesmo com a mediana estável.
+- **BM-13** **Medição sobre entrada contaminada não compara.** As linhas de
+  base `results-c01` a `results-c04` foram produzidas quando o nível S
+  observava a saída de build (ADR-041). Permanecem como registro histórico do
+  que se mediu no dia, e não como termo de comparação — o mesmo tratamento que
+  a ADR-038 já lhes dera por outra razão. Medido: no corte C04 sobre o mesmo
+  snapshot, a mediana caiu de 441‰ para 414‰ só pela retirada.
+- **BM-12** **Localização por nome de arquivo é suposição declarada.** Quando
+  o caminho de uma projeção é derivado da identidade — `Behavior/` desde a
+  ADR-040 —, encontrar o arquivo não custa token, porque listar diretório não
+  é ler arquivo e `T_kb` conta arquivo lido. É legítimo e é o que um consumidor
+  real faz, mas fica registrado: suposição de medição não declarada é o começo
+  de fraude de métrica.
 - **BM-10** `codeFiles` que pressupõe a resposta é defeito, não escolha.
   Listar só os projetos que participam da resposta a uma pergunta do tipo
   "quem depende de X" exige já saber a resposta. A correção desse tipo de erro
@@ -104,15 +118,21 @@ sobre o mesmo conjunto de perguntas**, nunca entre projetos diferentes.
 
 ---
 
-## 4. Conjunto de perguntas — versão 1
+## 4. Conjunto de perguntas — versão 6
 
-Estado esperado em C01: quase tudo `unsupported`. É o zero honesto contra o
-qual C02–C12 provam ganho.
+Em C01 quase tudo era `unsupported`. É o zero honesto contra o qual C02–C12
+provam ganho.
+
+Histórico do conjunto: **v2** corrigiu `codeFiles` que pressupunham a resposta
+em Q04, Q05 e Q06 (BM-10); **v5** acompanhou a renomeação e a remoção do
+legado v1; **v6** preencheu o `kbFiles` da Q09 com a projeção do C05. Preencher
+`kbFiles` de pergunta antes não sustentada é o efeito esperado de uma
+capacidade, não ajuste de medição — o que BM-06 veda é mexer em `codeFiles`.
 
 | ID | Pergunta-tarefa | Capacidade que deve sustentar |
 |---|---|---|
 | Q01 | Quais projetos compõem a solução e como estão organizados? | C01 |
-| Q02 | Onde fica o projeto que contém a lógica de aquisição de solução? | C01 |
+| Q02 | Onde fica o código que lê a solução e os arquivos de projeto? | C01 |
 | Q03 | Quais projetos são de teste e o que os identifica? | C01 |
 | Q04 | Quais projetos dependem de `X7.ProjectIndexer.Core`? | C02 |
 | Q05 | Se eu mudar `X7.Knowledge`, que projetos são impactados? | C02 |
@@ -135,12 +155,14 @@ O arquivo `questions.json` contém a forma executável, com `codeFiles` e
 ## 5. Procedimento
 
 ```
-dotnet run --project X7.Knowledge.Benchmark -- \
-    --solution X7.ProjectIndexer.slnx \
-    --questions benchmark/questions.json \
-    --knowledge Knowledge \
+dotnet run --project X7.Knowledge.Benchmark -- ^
+    --questions benchmark/questions.json ^
+    --knowledge Knowledge ^
     --output benchmark/results
 ```
+
+`--root` aponta a raiz da solução quando ela não é o diretório corrente.
+`--baseline` recebe o `results.json` da medição de comparação.
 
 Produz:
 
@@ -160,7 +182,12 @@ repositório e comparado entre capacidades.
 
 Antes de concluir qualquer capacidade:
 
-1. Rodar o benchmark com `--baseline` apontando para a medição anterior.
+0. Produzir a linha de base por **corte de capacidade sobre o snapshot atual**
+   (`--until C0(n-1)`), nunca recuperando medição anterior (ADR-038). Mesmo
+   binário, mesma entrada, mesmo snapshot: `T_code` fica idêntico dos dois
+   lados por construção. Pergunta cuja capacidade não foi executada na Base
+   medida conta como não sustentada (MT-03), nunca como medição inválida.
+1. Rodar o benchmark com `--baseline` apontando para essa medição.
 2. A ferramenta seleciona as perguntas comparáveis (BM-07) e calcula a mediana
    pareada sobre elas.
 3. **Bloqueia a conclusão** se a mediana pareada aumentar (MT-02).
@@ -197,10 +224,25 @@ cobertura, não regressão — e a comparação pareada é o que separa os dois 
 cresce proporcionalmente ao tamanho da solução, mesmo sem nenhuma piora da
 Base.
 
-Isso não é ruído de medição: é sinal de design. Ou a publicação ganha
-granularidade, ou o consumidor precisa de um mecanismo de seleção — que está
-fora do escopo do compilador (ADR-030). A decisão pertence a C12; registrada
-aqui para não ser confundida com regressão.
+Isso não é ruído de medição: é sinal de design. O caminho escolhido foi dar
+granularidade à publicação: a §9.1 do `KNOWLEDGE_MODEL.md` obriga toda projeção
+que cresce com a solução a ser particionada pela unidade de consulta, e o
+corolário da ADR-036 obriga a seccionar pelo campo mais caro de repetir. A
+alternativa — mecanismo de seleção no consumidor — permanece fora do escopo do
+compilador (ADR-030).
+
+O efeito colateral está em BM-12: quando a partição chega ao nível do tipo, o
+nome do arquivo passa a fazer o trabalho do índice.
+
+Medido na fatia A do C05, com a Q09 e variando apenas o eixo da projeção:
+
+```
+Behavior/ por tipo      T_kb   304   CR   427‰
+Behavior/ por projeto   T_kb  7179   CR 10083‰
+```
+
+Vinte e três vezes. É o maior efeito de granularidade já medido no projeto, e
+o terceiro caso em que a decisão só se resolveu contra número.
 
 ---
-*Fim de `BENCHMARK.md` v1.*
+*Fim de `BENCHMARK.md` — conjunto v6.*

@@ -15,13 +15,13 @@ namespace X7.Knowledge;
 /// </summary>
 public static class KnowledgeCompiler
 {
-    public const string ModelVersion = "1.0.0";
+    public const string ModelVersion = "1.1.0";
 
     /// <summary>
     /// Capacidades que este compilador possui, em ordem. Fonte única: o CLI
     /// valida contra ela e o manifesto a declara.
     /// </summary>
-    public static IReadOnlyList<string> Capabilities { get; } = ["C01", "C02", "C03", "C04"];
+    public static IReadOnlyList<string> Capabilities { get; } = ["C01", "C02", "C03", "C04", "C05"];
 
     /// <param name="until">
     /// Compila apenas até esta capacidade, inclusive. Serve à medição pareada
@@ -34,10 +34,17 @@ public static class KnowledgeCompiler
     /// truncar a lista de Producers é exatamente a Base da capacidade
     /// anterior. Publishers se desligam sozinhos por ausência de conteúdo.
     /// </param>
+    /// <param name="behaviorLayout">
+    /// Eixo de partição de `Behavior/`. A Base publicada é sempre por tipo
+    /// (ADR-040); o modo por projeto existe só para a medição comparativa que
+    /// a própria ADR exige, e é recurso de medição pelo mesmo motivo que
+    /// <paramref name="until"/> é.
+    /// </param>
     public static async ValueTask<KnowledgeModel> CompileAsync(
         string solutionPath,
         string outputDirectory,
         string? until = null,
+        BehaviorLayout behaviorLayout = BehaviorLayout.PerType,
         CancellationToken cancellationToken = default)
     {
         var capabilities = Truncate(until);
@@ -65,7 +72,8 @@ public static class KnowledgeCompiler
             new CodeStructureProducer(sources),
             new TypeStructureProducer(sources),
             new TypeRelationProducer(sources),
-            new PartialTypeProducer()
+            new PartialTypeProducer(),
+            new MemberSurfaceProducer(sources)
         ];
 
         var pipeline = new KnowledgePipeline(
@@ -94,7 +102,8 @@ public static class KnowledgeCompiler
             new MarkdownPublisher(),
             new ArchitecturePublisher(),
             new StructurePublisher(),
-            new RelationPublisher()
+            new RelationPublisher(),
+            new BehaviorPublisher(behaviorLayout)
         ];
 
         // Substituição integral (ADR-031), mas nunca destrutiva antes da hora:

@@ -36,6 +36,15 @@ public readonly record struct KnowledgeId : IComparable<KnowledgeId>
     public static KnowledgeId ForType(string metadataName, string projectName)
         => new($"type:{Require(metadataName)}@{Require(projectName)}");
 
+    /// <summary>
+    /// Membro é identificado pela assinatura qualificada mais o projeto
+    /// (KNOWLEDGE_MODEL §3.1). Sobrecargas diferem pelos tipos de parâmetro;
+    /// propriedade não tem parênteses, e é isso que a distingue de um método
+    /// sem parâmetros de mesmo nome.
+    /// </summary>
+    public static KnowledgeId ForMember(string signature, string projectName)
+        => new($"member:{Require(signature)}@{Require(projectName)}");
+
     internal static KnowledgeId ForEvidence(string digest)
         => new($"ev:{Require(digest)}");
 

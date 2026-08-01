@@ -1,10 +1,10 @@
 # KNOWLEDGE_MODEL.md
 
 **Projeto:** X7.Knowledge
-**Versão do modelo:** v1.0
-**Esquema:** `1.0.0`
+**Versão do modelo:** v1.1
+**Esquema:** `1.1.0`
 **Status:** Normativo (autoridade 3) — **CONGELADO** (ADR-037)
-**Derivado de:** `PROJECT_CONSTITUTION.md` v2.3, `COMPILATION_PLAN.md` v2.2
+**Derivado de:** `PROJECT_CONSTITUTION.md` v2.5, `COMPILATION_PLAN.md` v2.3
 
 ---
 
@@ -34,6 +34,10 @@ Consequências, em vigor:
 O C05 é o primeiro teste real dessa regra: é a maior adição de `kind`s prevista
 no plano, e entra sob o contrato já fechado.
 
+A primeira fatia do C05 entrou pelas ADR-039 e ADR-040 — oito `kind`s novos,
+nenhum existente alterado, esquema `1.1.0`. A regra de extensão foi exercida
+contra a maior adição do plano e não precisou ser quebrada.
+
 ## 1. Princípio estruturante
 
 O KnowledgeModel tem **um substrato e uma indexação**.
@@ -51,7 +55,7 @@ Todo KnowledgeModel começa por um manifesto. Ele existe para tornar a compilaç
 
 | Campo | Tipo | Descrição |
 |---|---|---|
-| `modelVersion` | string | Versão deste esquema. `1.0.0` |
+| `modelVersion` | string | Versão deste esquema. `1.1.0` |
 | `compilerVersion` | string | Versão do compilador que produziu |
 | `solutionId` | KnowledgeId | Identidade da solução |
 | `acquisitionLevel` | `S` \| `X` | Nível alcançado (Constituição §5.3) |
@@ -77,6 +81,7 @@ Toda entidade e toda Observation possuem `KnowledgeId`: string estável, legíve
 | Diretório físico | `dir:{caminhoRelativo}` | `dir:src/Segundio.Domain` |
 | Namespace | `ns:{nomeCompleto}` | `ns:X7.Knowledge.Model` |
 | Tipo | `type:{nomeQualificado}@{nomeDoProjeto}` | `type:X7.Knowledge.Model.Observation@X7.Knowledge` |
+| Membro | `member:{tipoQualificado}.{nome}({parâmetros})@{projeto}` | `member:X7.Knowledge.Model.KnowledgeModelBuilder.Add(X7.Knowledge.Model.Observation)@X7.Knowledge` |
 | Observation | `obs:{sha256(kind + subjectId + payloadCanônico)[0..16]}` | `obs:9f2c41ab77e0d3b5` |
 | Evidence | `ev:{sha256(kind + idsOrdenados)[0..16]}` | `ev:41d0a8c3be92f715` |
 | Inference | `inf:{sha256(kind + subjectId + payload + evidenceId)[0..16]}` | `inf:7b3e05c1da84f296` |
@@ -87,7 +92,38 @@ Regras:
 - Comparação e ordenação são ordinais e invariantes de cultura (D-01).
 - Duas Observations idênticas produzem o mesmo id e são deduplicadas naturalmente.
 
-Identidades de tipos e membros serão definidas em C03/C04, com base em símbolo semântico e não em caminho de arquivo.
+### 3.1 Identidade de membro (ADR-039)
+
+```
+member:{tipoQualificado}.{nome}({tiposDosParâmetros})@{projeto}
+```
+
+| Caso | Forma |
+|---|---|
+| Método | `...KnowledgeModelBuilder.Add(X7.Knowledge.Model.Observation)@X7.Knowledge` |
+| Método genérico | aridade de metadados no nome: ``Map`1(System.String)`` |
+| Construtor | nome `.ctor`, sempre com parênteses |
+| Propriedade | sem parênteses: `...KnowledgeModelBuilder.Observations@X7.Knowledge` |
+
+Regras:
+
+- Tipos de parâmetro entram totalmente qualificados, separados por vírgula sem
+  espaço, na ordem de declaração.
+- Tipos de parâmetro entram na **forma construída**: `List<System.String>` e
+  `List<System.Int32>` são sobrecargas distintas e precisam de identidades
+  distintas.
+- Isso **não** vale para `typeId` dentro de payload, que aponta sempre a
+  definição original (IV-13). A identidade do tipo é a declaração; a
+  assinatura do membro é o uso.
+- Parâmetro genérico do próprio membro ou do tipo aparece pelo nome (`T`), que
+  é o que está escrito na declaração.
+
+Ausência de parênteses distingue propriedade de método sem parâmetros:
+`Value` e `Value()` são declarações diferentes e permanecem identidades
+diferentes.
+
+Identidades de tipo e de membro derivam de símbolo semântico, nunca de caminho
+de arquivo.
 
 ---
 
@@ -243,6 +279,22 @@ Este é o conteúdo completo do conhecimento em v0.
 
 `acquisition.limitation` é obrigatória sempre que o compilador não conseguiu obter algo que normalmente obteria. **Ausência silenciosa é proibida**: o que não foi obtido é declarado.
 
+**Fronteira do que é observado (ADR-041).** Um arquivo é observado quando está
+sob a raiz da solução e fora de `bin/` e de `obj/`. O critério vale nos dois
+níveis de aquisição: o nível declara a profundidade da resolução, nunca o
+conjunto de arquivos.
+
+Código emitido por gerador e arquivo injetado por pacote ficam fora, e **não**
+produzem `acquisition.limitation`. A regra acima obriga a declarar o que o
+compilador não conseguiu obter; este não é o caso. É conhecimento que não
+pertence à solução — ninguém o escreveu e ninguém o evolui —, e M-02 define a
+missão como reduzir o código que se precisa ler para *evoluir* a solução. O
+precedente é o das bases implícitas do C04, na §6.1.3.a: exclusão declarada no
+catálogo, sem Observation.
+
+O critério é a localização, e não o nome: `*.g.cs` é convenção, `dentro de
+obj/` é fato.
+
 ### 6.1.1 Observation — C02
 
 | `kind` | `subject` | `payload` |
@@ -375,6 +427,76 @@ tipo e deixa de ser árvore.
 
 Cada nova capacidade adiciona `kind`s ao catálogo. Nenhuma capacidade altera
 `kind` existente.
+
+### 6.1.4 Observation — C05 (ADR-039)
+
+Superfície declarada dos tipos. **Exige nível S**: em nível X o Producer
+declara `acquisition.limitation` de escopo `type-members` e não produz nada.
+Não há caminho sintático paralelo aqui — assinatura resolvida por sintaxe
+seria dedução por nome, que a §5.3 da Constituição proíbe.
+
+| `kind` | `subject` | `payload` |
+|---|---|---|
+| `type.declares-member` | Tipo | `{ memberId }` |
+| `member.declared` | Membro | `{ name, kind }` |
+| `member.accessibility` | Membro | `{ value }` |
+| `member.modifier` | Membro | `{ name }` |
+| `member.type` | Membro | `{ typeName, typeId?, external? }` |
+| `member.parameter` | Membro | `{ name, ordinal, typeName, typeId?, external?, modifier?, optional? }` |
+| `member.generic-parameter` | Membro | `{ name, ordinal }` |
+| `member.accessor` | Membro | `{ kind, accessibility? }` |
+
+`type.declares-member` segue o precedente de `namespace.contains`: contenção é
+observada só na direção contentor → contido, e a inversa é derivável do
+conjunto.
+
+**`member.type`, e não `member.returns`.** É o tipo escrito na posição de tipo
+da declaração: retorno para método, tipo para propriedade e, na fatia
+seguinte, tipo do campo e do evento. Um `kind` cobre os quatro casos sem que
+nenhum precise ser renomeado depois — e renomear, agora, custaria versão
+maior. Construtor não recebe `member.type`: a declaração não escreve tipo
+nenhum ali, e escrever `void` seria fabricar.
+
+**Não existe `kind` de assinatura pronta.** Assinatura renderizada é
+formatação de vários fatos, não um fato. Produzi-la no Producer seria
+interpretar (OB-01). O precedente é `type.generic-parameter`: o C04 decompôs e
+deixou a composição de `Cache<TKey, TValue>` para a projeção.
+
+**Vocabulários fechados.** Valor fora do vocabulário é erro de compilação
+(IV-04).
+
+```
+member.declared / kind        method  constructor  property
+member.accessibility / value  o mesmo vocabulário de type.accessibility
+member.modifier / name        static  abstract  virtual  override  sealed
+                              readonly  required  extern
+member.accessor / kind        get  set  init
+member.parameter / modifier   ref  out  in  params  ref-readonly
+```
+
+Ficam declaradamente de fora: `async`, detalhe de implementação e não
+superfície; `new`, que descreve ocultação e não é exposto pelo símbolo;
+`partial`, pelo motivo já registrado em `type.modifier`.
+
+**Exclusões declaradas.** Não são observados os membros que o compilador gera
+e ninguém escreve: construtor padrão implícito, `Equals`, `GetHashCode`,
+`ToString`, `Deconstruct` e `<Clone>$` sintetizados de `record`, e os métodos
+`get_X`/`set_X` da propriedade — estes representados por `member.accessor`, e
+não como membros próprios. É o argumento das bases implícitas do C04: membro
+implícito é derivável da regra da linguagem, e publicá-lo encheria a Base de
+conteúdo que o leitor já sabe.
+
+**Todos os membros declarados são observados.** O modelo registra membro de
+qualquer acessibilidade; a projeção do C05 é que filtra a superfície pública
+(§9.1). Observar só o público tornaria a ausência ambígua — *não existe* e
+*existe e é privado* ficariam indistinguíveis — e o C06 depende de membro não
+público. Ampliar depois o alcance de um `kind` existente é alterá-lo, que
+EX-01 proíbe.
+
+**Fatia declarada.** Esta é a primeira fatia do C05: métodos, construtores e
+propriedades. Campos, eventos, operadores, indexadores e restrições genéricas
+entram na fatia seguinte, e até lá toda compilação registra
+`acquisition.limitation` de escopo `type-members-partial`.
 
 ### 6.2 Evidence
 
@@ -526,6 +648,7 @@ e o CR cresce com o tamanho do projeto sem que a Base tenha piorado.
 | `Architecture/*` | Nenhuma — idem |
 | `Structure/Types/*` | **Um arquivo por projeto**, mais `INDEX.md` |
 | `Relations/*` | **Um arquivo por projeto**, mais `INDEX.md` |
+| `Behavior/*` | **Um arquivo por tipo**, em pasta do projeto, mais `INDEX.md` |
 
 Relação de tipo é publicada **separada do inventário**, e não como coluna a
 mais na tabela de tipos. Motivo medido: com as duas juntas, uma pergunta do
@@ -549,14 +672,37 @@ superfície pública, que é onde são consultados. IV-07 proíbe projeção com
 informação **ausente** do modelo; não exige que todo fato seja projetado em
 toda parte.
 
+**Segunda regra — a unidade de partição é a unidade de consulta, e ela muda
+por projeção, não por capacidade (ADR-040).** `Structure/Types/` é
+particionado por projeto porque responde *onde está o tipo X*, e quem pergunta
+ainda não sabe qual é o tipo: precisa varrer um inventário. `Behavior/` é
+particionado por tipo porque responde *o que o tipo X expõe*, e quem pergunta
+já sabe o tipo. Não é inconsistência de layout; são perguntas de granularidade
+diferente, e a regra manda seguir a pergunta.
+
+Estimado sobre a solução de referência, para a Q09 (`T_code` de 712 tokens):
+`Behavior/` por projeto custaria de 4.000 a 6.000 tokens, por namespace cerca
+de 1.200, e por tipo cerca de 120. Os dois primeiros publicam Base mais cara
+que o código que ela substitui.
+
 O índice lista projeto, contagem e link. Nunca nomes de tipo: repetir conteúdo
 no índice anularia o ganho da partição.
+
+Em `Behavior/` o nome do arquivo é derivado da identidade do tipo — nome
+qualificado com `` ` `` de aridade trocado por `-` e aninhamento por `+`,
+nenhum dos dois válido em identificador C#, logo injetivo por construção.
+Quem sabe o nome do tipo chega ao arquivo sem ler índice. **Suposição de
+medição, declarada:** isso desloca o custo de localização para fora do `T_kb`,
+que conta arquivo lido. É legítimo — listar diretório não custa token — mas
+fica registrado aqui e no `BENCHMARK.md`, porque suposição de medição não
+declarada é o começo de fraude de métrica.
 
 ---
 
 ## 10. Estrutura publicada
 
-Estado após C04. Cada capacidade acrescenta; nenhuma remove.
+Estado após a primeira fatia do C05. Cada capacidade acrescenta; nenhuma
+remove.
 
 ```
 Knowledge/
@@ -573,12 +719,28 @@ Knowledge/
   Relations/
     INDEX.md
     {projeto}.md                herança e implementação
+  Behavior/
+    INDEX.md                    projeto, contagem, convenção de nome
+    {projeto}/
+      {nomeQualificado}.md      superfície pública de um tipo
   model/
     knowledge.model.json        forma canônica
 ```
 
 A separação entre `Structure/Types/` e `Relations/` é exigida pela §9.1 e
-registrada em ADR-035.
+registrada em ADR-035. A partição de `Behavior/` por tipo é a segunda regra da
+§9.1, registrada em ADR-040.
+
+O arquivo de tipo abre com a declaração do próprio tipo — classificação,
+acessibilidade, modificadores, parâmetros genéricos, namespace, projeto e
+arquivo — e é onde acessibilidade e modificadores finalmente aparecem
+publicados, quitando o prazo declarado na ADR-036. Dentro de um arquivo de um
+tipo só, a espécie do membro pode ser eixo de seção sem contrariar o corolário
+da §9.1: o campo caro não aparece em linha nenhuma, porque é o próprio
+arquivo.
+
+A projeção publica `public`, `protected` e `protected internal`. Tipo sem
+membro publicável não gera arquivo e conta zero no índice.
 
 ---
 
@@ -599,7 +761,7 @@ Testáveis por automação; falha bloqueia a conclusão de qualquer capacidade.
 - **IV-11** `Observed` tem frequência declarada; `Asserted` não tem frequência.
 - **IV-12** Toda Inference declara sua regra.
 - **IV-13** Referência a tipo dentro de payload (`baseTypeId`, `interfaceId`,
-  `containerId`) aponta para tipo existente no modelo.
+  `containerId`, `typeId`) aponta para tipo existente no modelo.
 - **IV-14** Quando o manifesto declara C04, todo tipo presente no modelo
   possui exatamente uma `type.kind` e exatamente uma `type.accessibility`.
   A condição é lida do manifesto, e não da presença de `type.kind`: só assim
@@ -611,10 +773,29 @@ Testáveis por automação; falha bloqueia a conclusão de qualquer capacidade.
   a sequência `0..n-1`, sem repetição e sem lacuna.
 - **IV-17** Evidence de kind `type.declaration-sites` referencia ao menos duas
   Observations.
+- **IV-18** Todo membro possui exatamente um `member.declared`, exatamente uma
+  `member.accessibility`, e é alvo de exatamente um `type.declares-member`
+  cujo `subject` existe no modelo.
+- **IV-19** Membro de `kind` `method` ou `property` possui exatamente um
+  `member.type`; membro de `kind` `constructor` não possui nenhum.
+- **IV-20** Os `ordinal` de `member.parameter` de um mesmo membro formam a
+  sequência `0..n-1`, sem repetição e sem lacuna. O mesmo vale para
+  `member.generic-parameter`.
+- **IV-21** `member.accessor` ocorre apenas em membro de `kind` `property`, no
+  máximo um por valor de `kind`.
 
 IV-14 é o que torna testável o critério 1 do C04 — *todo tipo possui
 representação própria e completa*. Sem ela, "completa" seria julgamento
 subjetivo, e PL-05 não admite julgamento subjetivo como conclusão.
+
+**IV-18 a IV-21 são invariantes de consistência, não de cobertura, e a
+diferença importa.** A IV-14 pôde exigir que *todo tipo* tenha `type.kind`
+porque todo tipo tem classificação. Não há equivalente para membro: tipo sem
+membro é legítimo, e o modelo não sabe o que ficou de fora. O critério 1 do
+C05 não fica verificável por invariante e passa a depender do critério 2 — a
+conferência de assinatura contra o compilador de referência, que é teste.
+Registrado porque fingir simetria com o C04 esconderia que a verificação mudou
+de lugar (ADR-039).
 
 **Compilação truncada.** O compilador aceita produzir a Base de uma capacidade
 anterior sobre a entrada atual (`--until`). Isso não é uma Base degradada nem
@@ -628,6 +809,10 @@ mesma entrada.
 
 ## 11.1 Histórico de esquema
 
+Registra alterações do **esquema**. Alteração deste documento que não toque em
+`kind`, campo, payload, vocabulário ou texto de invariante está na §11.2.
+
+
 | Versão | Mudança | Compatibilidade |
 |---|---|---|
 | `0.1.0` | Substrato de Observations. Catálogo C01 | — |
@@ -638,6 +823,20 @@ mesma entrada.
 | `0.6.0` | Kinds de C04 (6.1.3); IV-13 | **Aditiva**. Nenhum `kind` anterior alterado |
 | `0.7.0` | Estrutura do tipo em C04 (6.1.3.b): `type.kind`, `type.accessibility`, `type.modifier`, `type.generic-parameter`, `type.nested-in`; Evidence `type.declaration-sites`; Inference `type.is-partial`; IV-14..IV-17; §10 atualizada | **Aditiva** (EX-01, EX-04). Nenhum `kind` anterior alterado; `IV-13` teve escopo ampliado para `containerId`, sem alterar payload existente |
 | `1.0.0` | Congelamento (ADR-037). Nenhum `kind`, campo ou invariante alterado | **Idêntica a `0.7.0` em conteúdo.** A mudança de versão maior declara o fim do estado provisório, não uma quebra de compatibilidade |
+| `1.1.0` | Primeira fatia do C05 (ADR-039, ADR-040): identidade `member:` (§3.1); oito `kind`s em 6.1.4; IV-18..IV-21; IV-13 ampliado para `typeId`; segunda regra da §9.1; §10 atualizada | **Aditiva** (EX-01, EX-04). Nenhum `kind` anterior alterado. Primeira alteração sob o modelo congelado, e por ADR, como a ADR-037 exige |
+
+---
+
+## 11.2 Alterações sem efeito de esquema
+
+Toda alteração deste documento exige ADR desde o congelamento (ADR-037),
+inclusive as que não mexem no esquema. Estas ficam registradas aqui, e não na
+tabela acima, porque incrementar a versão do esquema sem que o esquema tenha
+mudado tornaria a própria versão um dado sem significado.
+
+| ADR | Alteração | Efeito no esquema |
+|---|---|---|
+| ADR-041 | Fronteira do que é observado, declarada na §6.1 | Nenhum. Nenhum `kind`, campo, payload, vocabulário ou texto de invariante foi tocado. A implementação da IV-08 foi corrigida; o texto da IV-08 é o mesmo desde `0.1.0` |
 
 ---
 
@@ -657,4 +856,5 @@ A partir daqui vale a regra de extensão da Seção 8, e toda alteração exige
 ADR.
 
 ---
-*Fim de `KNOWLEDGE_MODEL.md` v1.0 — CONGELADO.*
+*Fim de `KNOWLEDGE_MODEL.md` v1.1 — CONGELADO.*
+*Alterado por ADR-039 e ADR-040. Fronteira de observação por ADR-041 (§11.2).*

@@ -139,6 +139,7 @@ public sealed class CompilationProvider : IDisposable
                         RelativePath = PathNormalizer.ToRelative(solution.RootDirectory, t.FilePath),
                         Tree = t
                     })
+                    .Where(f => IsObservable(f.RelativePath))
                     .OrderBy(f => f.RelativePath, StringComparer.Ordinal)
                     .ToArray();
 
@@ -233,8 +234,7 @@ public sealed class CompilationProvider : IDisposable
             var paths = Directory
                 .EnumerateFiles(directory, "*.cs", SearchOption.AllDirectories)
                 .Select(p => PathNormalizer.ToRelative(solution.RootDirectory, p))
-                .Where(p => !p.Contains("/bin/", StringComparison.Ordinal)
-                            && !p.Contains("/obj/", StringComparison.Ordinal))
+                .Where(IsObservable)
                 .OrderBy(p => p, StringComparer.Ordinal);
 
             foreach (var relative in paths)
@@ -270,6 +270,30 @@ public sealed class CompilationProvider : IDisposable
             ]
         };
     }
+
+    /// <summary>
+    /// Fronteira do que é observado (ADR-041). Vale nos dois níveis: o nível
+    /// de aquisição muda a profundidade da resolução, nunca o conjunto de
+    /// arquivos.
+    /// </summary>
+    /// <remarks>
+    /// O caminho semântico via MSBuildWorkspace traz toda árvore da
+    /// compilação, inclusive a saída dos geradores de código e os arquivos
+    /// que pacotes injetam por `Compile Include`. Nada disso é conhecimento
+    /// da solução: ninguém escreveu e ninguém evolui. Sem esta guarda, S e X
+    /// produziam conjuntos de tipos diferentes para a mesma solução.
+    ///
+    /// O critério é a localização, e não o nome do arquivo: `*.g.cs` é
+    /// convenção, `dentro de obj/` é fato.
+    /// </remarks>
+    internal static bool IsObservable(string relativePath)
+        => !Path.IsPathRooted(relativePath)
+           && !relativePath.StartsWith("../", StringComparison.Ordinal)
+           && relativePath != ".."
+           && !relativePath.Contains("/bin/", StringComparison.Ordinal)
+           && !relativePath.Contains("/obj/", StringComparison.Ordinal)
+           && !relativePath.StartsWith("bin/", StringComparison.Ordinal)
+           && !relativePath.StartsWith("obj/", StringComparison.Ordinal);
 
     public void Dispose() => _workspace?.Dispose();
 }

@@ -203,8 +203,13 @@ public sealed class CodeStructureProducer : IProducer
                             .Where(l => l.IsInSource)
                             .Select(l => l.SourceTree?.FilePath)
                             .OfType<string>()
+                            // Arquivo fora do conjunto observado é fora da
+                            // fronteira (ADR-041). O `?? path` que havia aqui
+                            // publicava o caminho absoluto da máquina, e a
+                            // IV-08 não o reconhecia depois de normalizado.
                             .Select(path => source.Files
-                                .FirstOrDefault(f => f.Tree.FilePath == path)?.RelativePath ?? path)
+                                .FirstOrDefault(f => f.Tree.FilePath == path)?.RelativePath)
+                            .OfType<string>()
                             .Distinct(StringComparer.Ordinal)
                             .OrderBy(f => f, StringComparer.Ordinal)
                             .ToArray();

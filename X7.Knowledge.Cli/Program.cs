@@ -3,6 +3,7 @@ using X7.Knowledge;
 using X7.Knowledge.Cli;
 using X7.Knowledge.Compilation;
 using X7.Knowledge.Model;
+using X7.Knowledge.Publishing;
 
 const string Usage = """
 x7k — compilador de conhecimento X7.Knowledge
@@ -19,6 +20,9 @@ OPÇÕES
   -u, --until        Compila apenas até esta capacidade, inclusive.
                      Ex.: --until C03. Serve à comparação pareada de MT-02:
                      produz a Base anterior sobre a entrada de hoje.
+      --behavior-layout  Eixo de partição de Behavior/: type (padrão) ou
+                     project. O modo project existe apenas para a medição
+                     comparativa da ADR-040; a Base publicada é por tipo.
   -h, --help         Esta ajuda.
 
 EXEMPLOS
@@ -59,7 +63,8 @@ try
     var model = await KnowledgeCompiler.CompileAsync(
         options.SolutionPath,
         options.OutputDirectory,
-        options.Until);
+        options.Until,
+        options.BehaviorLayout);
 
     stopwatch.Stop();
 

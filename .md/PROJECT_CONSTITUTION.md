@@ -1,7 +1,7 @@
 # PROJECT_CONSTITUTION.md
 
 **Projeto:** X7.Knowledge
-**Versão:** 2.3
+**Versão:** 2.5
 **Status:** Normativo — fonte única de verdade
 **Substitui:** `PROJECT_CONSTITUTION.md` v1.0 e `ObjetivoX7.docx` (ambos revogados)
 
@@ -199,6 +199,7 @@ Nem toda solução oferece as mesmas garantias. O compilador declara explicitame
 
 Regras:
 
+- **O nível declara a profundidade da resolução, nunca o conjunto de arquivos observados** (ADR-041). A fronteira do que é observado é única e vale nos dois níveis: sob a raiz da solução, fora de `bin/` e de `obj/`. Um tipo que exista em S e não exista em X não seria diferença de resolução, e sim de entrada.
 - O nível é registrado no manifesto e **em cada Observation**.
 - Uma capacidade que exige nível S declara isso e não produz saída degradada silenciosamente.
 - O compilador nunca infere relação semântica a partir de nome quando está em nível X.
@@ -254,7 +255,7 @@ A métrica do projeto é a **mediana de CR** sobre o conjunto de perguntas.
 
 ## 8. ADRs
 
-ADRs de v1 permanecem válidas salvo revogação explícita. As ADRs 027–033 abaixo resolvem os conflitos identificados na consolidação. As ADRs 034 a 038 são posteriores e decorrem de medição ou de amadurecimento do modelo.
+ADRs de v1 permanecem válidas salvo revogação explícita. As ADRs 027–033 abaixo resolvem os conflitos identificados na consolidação. As ADRs 034 a 041 são posteriores e decorrem de medição, de amadurecimento do modelo, da entrada do C05 sob o modelo congelado ou de defeito descoberto em produção.
 
 ### ADR-001 a ADR-026 — Mantidas
 
@@ -420,6 +421,48 @@ Consolidadas e incorporadas às Seções 1–5 deste documento. Exceções:
 
 ---
 
+### ADR-039 — Identidade de membro e `kind`s da superfície pública
+
+**Status:** APROVADA
+
+**Contexto:** o C05 é a primeira capacidade sob o modelo congelado, e pela ADR-037 nenhum `kind` entra sem ADR. Havia ainda uma promessa em aberto: a §3 do modelo encerrava dizendo que identidades de tipos e membros seriam definidas em C03/C04, e a de membro nunca foi definida — sem ela nenhuma Observation do C05 tem `subject`.
+
+**Decisão:** identidade `member:{tipoQualificado}.{nome}({tiposDosParâmetros})@{projeto}`, com tipos de parâmetro na forma construída para distinguir sobrecargas — e não na definição original, que continua sendo a forma de `typeId` dentro de payload (IV-13). Oito `kind`s novos para a primeira fatia (métodos, construtores e propriedades), vocabulários fechados, e nenhum `kind` de assinatura pronta: assinatura é renderização de vários fatos e produzi-la no Producer seria interpretar (OB-01). Membro gerado pelo compilador não é observado, pelo argumento das bases implícitas do C04. Todos os membros declarados são observados; a projeção é que filtra a superfície pública. Esquema `1.1.0`, aditivo.
+
+**Consequências:** a §3 deixa de ter promessa em aberto. IV-18 a IV-21 são invariantes de **consistência**, não de cobertura: não existe equivalente da IV-14 para membro, porque tipo sem membro é legítimo e o modelo não sabe o que ficou de fora. O critério 1 do C05 deixa de ser verificável dentro da compilação e passa a depender do critério 2, a conferência de assinatura contra o compilador de referência. A regra de extensão foi exercida contra a maior adição do plano e não precisou ser quebrada.
+
+---
+
+### ADR-040 — Projeção do C05 particionada por tipo
+
+**Status:** APROVADA
+
+**Contexto:** o plano ainda pedia `Behavior/PublicSurface.md`, `Methods.md` e `Properties.md` — monolítico, que a §9.1 proíbe, e seccionado pela espécie do membro, que tem três valores, obrigando o tipo qualificado a ser repetido linha a linha, que o corolário da ADR-036 proíbe. A ADR-035 já registrara que as projeções de C05 e C06 seriam redigidas sob a §9.1.
+
+**Decisão:** `Behavior/{projeto}/{nomeQualificado}.md`, um arquivo por tipo, mais `INDEX.md` sem nomes de tipo. O caminho é derivado da identidade, com mapeamento injetivo por construção. O cabeçalho do arquivo publica classificação, acessibilidade e modificadores do tipo, quitando o prazo declarado na ADR-036. A projeção publica `public`, `protected` e `protected internal`.
+
+**Motivo:** a unidade de partição é a unidade de consulta, e ela muda por projeção, não por capacidade. `Structure/Types/` responde *onde está o tipo X* — varredura, logo por projeto. `Behavior/` responde *o que o tipo X expõe* — quem pergunta já sabe o tipo. Estimado para a Q09 (`T_code` 712): por projeto, 4.000 a 6.000 tokens; por namespace, ~1.200; por tipo, ~120. Os dois primeiros publicam Base mais cara que o código que ela substitui (AC-11, M-03).
+
+**Consequências:** a §9.1 ganha uma segunda regra. A Base passa a centenas de arquivos, o que pesa em navegação — objeto do C12 — e não na métrica. Fica declarada a suposição de medição: o nome do arquivo serve de índice, deslocando o custo de localização para fora do `T_kb`. Por ser decisão de granularidade tomada sobre estimativa, a ADR-036 obriga a medir os dois layouts antes de concluir o C05, e esta ADR é reaberta se o número contrariar a estimativa.
+
+---
+
+### ADR-041 — Fronteira do que é observado
+
+**Status:** APROVADA e VERIFICADA
+
+**Contexto:** a publicação do C05 falhou com um nome de arquivo inválido no Windows — um tipo emitido pelo gerador do `[GeneratedRegex]`, com `<` e `>` no nome. O crash era o sintoma. O defeito estava publicado desde o C03: o `CompilationProvider` filtrava `bin/` e `obj/` no caminho sintático e tomava `compilation.SyntaxTrees` inteiro no semântico, de modo que a mesma solução produzia conjuntos de tipos diferentes conforme o nível. O `Structure/Types/X7.Knowledge.md` — arquivo da Q07, otimizado por duas ADRs seguidas — vinha inflado com a saída de build, e um arquivo injetado por pacote publicava `C:/Users/{usuário}/…` contra D-03. A IV-08 não pegou: depois da normalização de D-02 o caminho perde a barra invertida e `C:/…` passava pelos três testes da implementação.
+
+**Decisão:** fronteira única, válida nos dois níveis — sob a raiz da solução, fora de `bin/` e de `obj/`. Sem `acquisition.limitation`: código gerado não é ausência de conhecimento, é conhecimento que não pertence à solução, e o precedente é o das bases implícitas do C04. A implementação da IV-08 passa a reconhecer `X:/` e `../`, sem que o texto do invariante mude. O `BehaviorPublisher` recusa nome inválido em caminho e interrompe a compilação, em vez de deixar o disco recusar.
+
+**Medido:** no corte C04 sobre o mesmo snapshot, 893 Observations antes e 817 depois; mediana de CR de 441‰ para 414‰, sem que nenhuma projeção fosse otimizada.
+
+**Consequências:** as medições de `results-c01` a `results-c04` foram feitas sobre entrada contaminada e permanecem como registro histórico, não como termo de comparação — mesmo tratamento que a ADR-038 já lhes deu. Uma Evidence e duas Inferences desapareceram porque a segunda declaração dos tipos `partial` hospedeiros morava em `obj/`; a limitação `type-partial-single-site` cobre o caso, e a regra ficou estritamente mais fraca, reforçando a pendência de ler `partial` da declaração.
+
+**Nota de implementação:** filtrar a lista de arquivos não bastava. Três Producers repetiam `?.RelativePath ?? path`, e o `?? path` devolvia o caminho absoluto justamente quando o arquivo estava fora da fronteira. Não eram implementações divergentes: era o mesmo cálculo copiado três vezes, com o mesmo defeito nas três.
+
+---
+
 ## 9. Decisões rejeitadas
 
 Não reabrir sem nova ADR.
@@ -495,4 +538,4 @@ A missão permanece:
 > Compilar, de forma determinística e rastreável, o conhecimento existente em uma solução de software, reduzindo drasticamente a quantidade de código que uma LLM precisa ler para compreendê-la e evoluí-la.
 
 ---
-*Fim de `PROJECT_CONSTITUTION.md` v2.3.*
+*Fim de `PROJECT_CONSTITUTION.md` v2.5.*

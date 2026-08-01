@@ -3,7 +3,8 @@
 Documento de passagem. Serve para retomar o trabalho em outra conversa sem
 reconstruir o contexto.
 
-Atualizado no fechamento do C04.
+Atualizado no fechamento da **fatia A do C05**. A capacidade continua aberta:
+falta a fatia B.
 
 ---
 
@@ -11,18 +12,25 @@ Atualizado no fechamento do C04.
 
 | Documento | Versão | Status |
 |---|---|---|
-| `PROJECT_CONSTITUTION.md` | **2.3** | Normativo, autoridade 1 |
-| `COMPILATION_PLAN.md` | **2.2** | Normativo, autoridade 2 |
-| `KNOWLEDGE_MODEL.md` | **1.0** | Normativo, autoridade 3 — **CONGELADO** |
-| `BENCHMARK.md` | conjunto v5 | `benchmark/` |
+| `PROJECT_CONSTITUTION.md` | **2.5** | Normativo, autoridade 1 |
+| `COMPILATION_PLAN.md` | **2.3** | Normativo, autoridade 2 |
+| `KNOWLEDGE_MODEL.md` | **1.1** | Normativo, autoridade 3 — **CONGELADO** |
+| `BENCHMARK.md` | conjunto v6 | `benchmark/` |
 | `SECURITY-NOTES.md` | — | informativo |
 | `MIGRATION_v1_to_v2.md` | — | histórico |
 
-ADRs 027 a 038 registradas na Constituição §8. As de 034 em diante decorrem de
-medição ou de amadurecimento do modelo, e têm texto completo em `.md/`.
+ADRs 027 a 041 registradas na Constituição §8. As de 034 em diante decorrem de
+medição, de amadurecimento do modelo, da entrada do C05 ou de defeito
+descoberto em produção, e têm texto completo em `.md/`.
+
+A ADR-041 alterou este documento sem alterar o esquema; o registro está na
+§11.2 do modelo, e não na tabela de versões. Incrementar a versão do esquema
+sem que o esquema mude tornaria a versão um dado sem significado.
 
 **O modelo está congelado (ADR-037).** Toda alteração dele exige ADR, inclusive
-as aditivas. Acrescentar um `kind` no C05 exige ADR própria.
+as aditivas. A primeira alteração sob o congelamento foi a ADR-039: esquema
+`1.1.0`, oito `kind`s novos, nenhum existente alterado. A regra de extensão foi
+exercida contra a maior adição do plano e não precisou ser quebrada.
 
 ---
 
@@ -34,13 +42,21 @@ as aditivas. Acrescentar um `kind` no C05 exige ADR própria.
 | C02 Arquitetural | concluída |
 | C03 Estrutura do Código | concluída |
 | C04 Modelo Estrutural | **concluída** |
-| C05 Modelo Comportamental | próxima |
+| C05 Modelo Comportamental | **em andamento — fatia A concluída e medida** |
 | C06 em diante | não iniciadas |
 
 C04 entregue em duas fatias: relações (`type.inherits`, `type.implements`) e
 estrutura do tipo (`type.kind`, `type.accessibility`, `type.modifier`,
 `type.generic-parameter`, `type.nested-in`), mais a Inference
 `type.is-partial`.
+
+C05 fatia A entregue com oito `kind`s (`type.declares-member`,
+`member.declared`, `member.accessibility`, `member.modifier`, `member.type`,
+`member.parameter`, `member.generic-parameter`, `member.accessor`), identidade
+`member:`, IV-18 a IV-21 e a projeção `Behavior/` por tipo. Fatia B — campos,
+eventos, operadores, indexadores, construtores estáticos, implementações
+explícitas de interface e restrições genéricas — está declarada em
+`acquisition.limitation` de escopo `type-members-partial`.
 
 Critério de conclusão verificado nos três itens. O item 1 — *representação
 própria e completa* — é verificado por **IV-14** dentro da compilação, e não
@@ -53,30 +69,53 @@ por julgamento.
 Solução de referência: o próprio compilador, 5 projetos, nível S.
 
 ```
-Observations 830
-Evidence     3
-Inferences   12
-Limitações   6
+Observations 4747
+Evidence     1
+Inferences   10
+Limitações   7
 Digest       a0e430d38833d497…
 ```
 
-**Benchmark, linha de base `benchmark/results-c04`:**
+Corte em C04 sobre o mesmo snapshot: 817 Observations.
+
+**Benchmark, `benchmark/results-c05`:**
 
 ```
 Perguntas    15
-Sustentadas  8   (era 7 no C03)
-Cobertura    53% (era 47%)
-Mediana CR   429‰
+Sustentadas  9   (era 8 no C04)
+Cobertura    60% (era 53%)
+Mediana CR   427‰  global, população nova
 ```
 
-Comparação pareada C03→C04, **sete de sete perguntas, nenhuma exclusão**:
-mediana 196‰ → 196‰, sem regressão. Primeira comparação estruturalmente
-válida do projeto.
+Comparação pareada C04→C05, **oito de oito perguntas, nenhuma exclusão**:
+mediana **414‰ → 414‰**, sem regressão.
 
-Quatro perguntas pioraram individualmente, todas com a mesma causa registrada:
-a Base cortada em C03 não emite a limitação `type-partial-single-site`, e
-Q01/Q02/Q03 pagam uma linha a mais em `Structure/Solution.md`. Q07 subiu 5‰ —
-o C04 custou dois tokens no arquivo de tipos.
+A mediana global (427‰) e a pareada (414‰) não se comparam: são populações
+diferentes. A Q09 entrou cara no conjunto, e isso é ganho de cobertura, não
+regressão — é o caso que a ADR-034 existe para separar. Quem governa MT-02 é a
+pareada.
+
+Três perguntas pioraram individualmente, com a mesma causa registrada: a
+sétima limitação em `Structure/Solution.md`, que Q01, Q02 e Q03 leem.
+
+```
+Q01  2538‰ -> 2760‰
+Q03   713‰ ->  775‰
+Q02   106‰ ->  115‰
+```
+
+**Q09, e o número que fecha a ADR-040:**
+
+```
+Behavior/ por tipo      T_code 712   T_kb   304   CR   427‰
+Behavior/ por projeto   T_code 712   T_kb  7179   CR 10083‰
+```
+
+**Efeito da ADR-041, medido no corte C04 sobre o mesmo snapshot:** 893
+Observations antes, 817 depois; mediana 441‰ → 414‰. Nenhuma projeção foi
+otimizada — é a saída de build deixando de ser descrita. As linhas de base
+`results-c01` a `results-c04` foram medidas antes disso e não comparam com o
+que vem depois (BM-13).
 
 ---
 
@@ -136,19 +175,34 @@ real ainda não foi reassumida (`takeown`).
 
 ## 6. Pendências abertas
 
-1. **C05 — Modelo Comportamental.** Ver §8.
+1. **C05 fatia B.** Campos, eventos, operadores, indexadores, construtores
+   estáticos, implementações explícitas de interface e restrições genéricas.
+   Reaproveita `member.type`, `member.parameter` e `member.accessor`; o que
+   entra de novo são valores no vocabulário de `member.declared`, e isso exige
+   ADR — o modelo está congelado.
 2. **Migrar a solução de referência** para um sistema de produção antes do
    C08. A ADR-038 resolveu a incomparabilidade entre medições; não resolve o
    viés de medir o compilador contra o próprio código, que a partir de
    "Convenções" distorce por outra razão.
 3. **Q10 e Q11 seguem sem sustentação.** Custam 7.472 e 5.148 tokens de
    código-fonte e são as que decidem se a tese do projeto se sustenta.
-4. **`partial` é Inference por decisão, não por necessidade.** O Producer já lê
+4. **O `INDEX.md` é metade do custo da Q09** — 152 dos 304 tokens. Pela BM-12
+   ele nem precisaria estar no `kbFiles`, e retirá-lo levaria a Q09 de 427‰
+   para cerca de 213‰. Não foi retirado: a pergunta é se um consumidor real
+   abre aquele índice, e responder que não sem evidência seria melhorar a
+   métrica mexendo no que se declara ler (BM-06). Decidir contra observação de
+   uso.
+5. **`partial` ficou mais fraco depois da ADR-041.** A segunda declaração dos
+   tipos hospedeiros de `[GeneratedRegex]` morava em `obj/`, então a Evidence
+   `type.declaration-sites` deixou de agrupar dois locais para eles — de 3
+   Evidence para 1. A limitação cobre, e a saída continua sendo ler `partial`
+   dos modificadores da declaração.
+6. **`partial` é Inference por decisão, não por necessidade.** O Producer já lê
    os modificadores da declaração; incluir `partial` no vocabulário eliminaria
    a limitação declarada. Com o modelo congelado, a troca custa versão maior e
    ADR (EX-03). Nota em `KNOWLEDGE_MODEL.md` §6.3.2.
-5. **`takeown` na pasta do repositório**, com Drive pausado e VS fechado.
-6. **`ARQUIVAR-LEGADO.ps1` tem acentos** e vai quebrar se for usado. Opcional:
+7. **`takeown` na pasta do repositório**, com Drive pausado e VS fechado.
+8. **`ARQUIVAR-LEGADO.ps1` tem acentos** e vai quebrar se for usado. Opcional:
    as 8 pastas do v1 revogado seguem no disco, fora da solução e portanto fora
    da Base.
 
@@ -187,28 +241,60 @@ identidade divergem em silêncio.
 **Fatias estreitas.** C04-b entrou com cinco kinds, dois Producers e doze
 testes, e compilou na primeira rodada.
 
+**O mesmo cálculo copiado tem o mesmo defeito em todas as cópias.** Três
+Producers repetiam `?.RelativePath ?? path`, e o `?? path` publicava caminho
+absoluto justamente quando o arquivo estava fora da fronteira. Não eram
+implementações divergindo — copiar não faz divergir, faz o defeito se
+multiplicar sem que nenhuma cópia pareça errada.
+
+**Teste que fixa um caractere proibido erra como teste de lista fechada.**
+Proibir `<` em nome de tipo reprovou `IQuery<T>`. O que distingue nome emitido
+pelo compilador não é o caractere, é a posição — `<` no início ou depois de
+ponto. Verificar propriedade, nunca superfície.
+
+**Verificação que fixa uma versão quebra na versão seguinte.** O
+`VERIFICAR-ESTADO.ps1` procurava `0.7.0` e reprovava desde o congelamento.
+Agora compara `ModelVersion` com o `**Esquema:**` do `KNOWLEDGE_MODEL.md`:
+testa que código e documento concordam.
+
+**Nem todo critério vira invariante.** A IV-14 funcionou porque todo tipo tem
+classificação. Não existe equivalente para membro: tipo sem membro é legítimo,
+e o modelo não sabe o que ficou de fora. Quando a cobertura não é verificável
+de dentro do modelo, a verificação muda de lugar — vai para teste contra o
+compilador de referência — e isso se declara, em vez de se alegar simetria com
+a capacidade anterior.
+
 ---
 
-## 8. Próximo passo — C05
+## 8. Próximo passo — C05, fatia B
 
-O plano define C05 como métodos, construtores, propriedades, campos, eventos,
-operadores, assinaturas, parâmetros, tipos de retorno, modificadores e
-restrições genéricas. É grande demais para uma fatia.
+A fatia A entregou método, construtor e propriedade. Falta o resto da
+superfície: **campos, eventos, operadores, indexadores, construtores
+estáticos, implementações explícitas de interface e restrições genéricas.**
 
-**Primeira fatia sugerida: superfície pública — métodos e propriedades, com
-assinatura.** É o que a Q09 pede (*"Qual é a superfície pública de
-KnowledgeModelBuilder?"*) e a menor fatia que sustenta uma pergunta nova.
-Campos, eventos, operadores e restrições genéricas vêm depois.
+O critério 1 do C05 — *o comportamento público é compreensível sem abrir
+código* — só se verifica com a superfície inteira, e não é verificável por
+invariante: não existe equivalente da IV-14 para membro, porque tipo sem
+membro é legítimo. Quem o torna objetivo é o critério 2, a conferência de
+assinatura contra o compilador de referência (ADR-039 §6). **Esse teste ainda
+não existe** e é o que falta para PL-05 ser satisfeito.
 
 Ordem de trabalho:
 
-1. **ADR dos `kind`s novos** — agora obrigatória, o modelo está congelado.
-2. Definir a projeção sob a §9.1 e seu corolário: `Behavior/` particionado por
-   projeto, seccionado pelo campo mais caro de repetir. É onde acessibilidade
-   e modificadores de tipo finalmente aparecem publicados (ADR-036).
-3. Producer, com teste de reprodutibilidade byte-a-byte (D-08).
-4. Invariantes novos, verificáveis dentro da compilação.
-5. Medição por corte: `--until C04` sobre a árvore do dia.
+1. **ADR dos valores novos de `member.declared`** — `field`, `event`,
+   `operator`, `indexer`, `static-constructor`. Vocabulário fechado é parte do
+   esquema, e o modelo está congelado.
+2. Estender o `MemberSurfaceProducer`. `member.type`, `member.parameter` e
+   `member.accessor` são reaproveitados sem alteração — foi para isso que
+   `member.type` nasceu com esse nome.
+3. Restrições genéricas: decidir se são `kind` próprio ou payload de
+   `member.generic-parameter`. Campo novo em entidade existente é sempre
+   opcional (EX-02), então as duas portas estão abertas; a escolha é de custo
+   de projeção e sai medida.
+4. Retirar a limitação `type-members-partial` quando a superfície fechar.
+5. Conferência de assinatura contra o Roslyn — o critério 2.
+6. Medição por corte: `--until C04` sobre a árvore do dia.
 
-É a capacidade em que a compressão deve finalmente aparecer, porque o
-equivalente em código-fonte passa a ser corpo de método.
+Depois do C05, o C06 herda a segunda regra da §9.1: `Relations/` hoje é por
+projeto porque responde *quem implementa X*, uma varredura. As projeções novas
+justificam a própria unidade contra a pergunta que sustentam.

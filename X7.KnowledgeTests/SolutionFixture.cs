@@ -66,16 +66,47 @@ public sealed class SolutionFixture : IDisposable
             </Project>
             """);
 
+        // Membros de propósito variado: sobrecarga, parâmetro opcional,
+        // `out`, método genérico, propriedade `init`, membro não público e
+        // tipo aninhado com superfície. É o que o C05 precisa exercitar.
         Write("src/Domain/Order.cs",
             """
             namespace Reference.Domain;
 
             public class Order
             {
-                public sealed class Line { }
+                public Order(string number) => Number = number;
+
+                public string Number { get; init; }
+
+                protected virtual int Total { get; set; }
+
+                private string Secret { get; set; } = "";
+
+                public void Add(string sku) { }
+
+                public void Add(string sku, int quantity = 1) { }
+
+                public T Map<T>(string sku) => default!;
+
+                public bool TryFind(string sku, out string found)
+                {
+                    found = sku;
+                    return true;
+                }
+
+                internal void Recalculate() { }
+
+                public sealed class Line
+                {
+                    public int Quantity { get; init; }
+                }
             }
 
-            public interface IOrderPolicy { }
+            public interface IOrderPolicy
+            {
+                bool Allows(Order order);
+            }
             """);
 
         Write("src/Domain/Money.cs",
@@ -91,12 +122,20 @@ public sealed class SolutionFixture : IDisposable
 
             namespace Reference.Domain;
 
-            public interface IRepository { }
+            public interface IRepository
+            {
+                void Save(object entity);
+            }
 
-            public abstract class RepositoryBase : IRepository { }
+            public abstract class RepositoryBase : IRepository
+            {
+                public abstract void Save(object entity);
+            }
 
             public sealed class OrderRepository : RepositoryBase, IDisposable
             {
+                public override void Save(object entity) { }
+
                 public void Dispose() { }
             }
 
@@ -125,6 +164,22 @@ public sealed class SolutionFixture : IDisposable
             namespace Reference.Domain;
 
             public partial class Catalog { }
+            """);
+
+        // Gerador de codigo real: o [GeneratedRegex] emite tipos dentro de
+        // obj/, com `<` e `>` no nome. Foi assim que a saida de build entrou
+        // na Base publicada, e e o caso que a ADR-041 fecha.
+        Write("src/Domain/PathRules.cs",
+            """
+            using System.Text.RegularExpressions;
+
+            namespace Reference.Domain;
+
+            public static partial class PathRules
+            {
+                [GeneratedRegex("^[a-z]+$")]
+                public static partial Regex LowerOnly();
+            }
             """);
 
         Write("src/Core/Kernel/Clock.cs",

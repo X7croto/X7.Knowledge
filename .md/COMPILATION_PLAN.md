@@ -1,9 +1,9 @@
 # COMPILATION_PLAN.md
 
 **Projeto:** X7.Knowledge
-**Versão:** 2.2
+**Versão:** 2.3
 **Status:** Normativo (autoridade 2)
-**Derivado de:** `PROJECT_CONSTITUTION.md` v2.3
+**Derivado de:** `PROJECT_CONSTITUTION.md` v2.5
 **Substitui:** `COMPILATION_PLAN.md` v1.0 e `ROADMAP.md` v1.0 (ambos revogados — ver ADR-032)
 
 ---
@@ -206,21 +206,44 @@ Métodos, construtores, propriedades, campos, eventos, operadores, assinaturas, 
 
 A separação entre representação estrutural e comportamental é preservada no modelo.
 
-**Projeções mínimas.**
+**Entrega em fatias.** A primeira fatia cobre métodos, construtores e
+propriedades com assinatura (ADR-039). Campos, eventos, operadores,
+indexadores e restrições genéricas vêm na seguinte, e até lá a ausência é
+declarada por `acquisition.limitation` de escopo `type-members-partial`.
+Fatiar não altera a capacidade: ela só conclui quando todo o conhecimento
+acima existe.
+
+**Projeções mínimas.** (Alteradas por ADR-040.)
 ```
 Knowledge/
   Behavior/
-    PublicSurface.md    superfície pública por tipo
-    Methods.md
-    Properties.md
+    INDEX.md                  projeto, contagem, convenção de nome
+    {projeto}/
+      {nomeQualificado}.md    superfície pública de um tipo
 ```
 
-**Dependências.** C04. Exige nível S.
+Um arquivo por tipo, e não por projeto: a unidade de consulta desta projeção é
+o tipo, porque quem pergunta o que um tipo expõe já sabe qual é o tipo
+(`KNOWLEDGE_MODEL.md` §9.1, segunda regra). O índice nunca lista nomes de
+tipo; o caminho é derivado da identidade.
+
+É nesta projeção que acessibilidade e modificadores de tipo aparecem
+publicados, quitando o prazo declarado na ADR-036.
+
+**Dependências.** C04. Exige nível S. Em nível X a capacidade não produz saída
+degradada: declara `acquisition.limitation` de escopo `type-members` e nada
+mais (PL-08).
 
 **Critério de conclusão.**
 1. O comportamento público da solução é compreensível sem abrir código.
 2. Toda assinatura publicada é semanticamente correta e verificável contra o compilador de referência.
 3. CR não regride.
+
+O critério 1 não é verificável por invariante, ao contrário do critério
+equivalente do C04: não existe invariante de cobertura para membro, porque
+tipo sem membro é legítimo e o modelo não sabe o que ficou de fora
+(ADR-039). Quem o torna objetivo, como PL-05 exige, é o critério 2 — a
+conferência de assinatura contra o compilador de referência.
 
 ---
 
@@ -490,5 +513,6 @@ Ao término deste plano, o X7.Knowledge transforma uma solução C# suportada em
 Implementações evoluem continuamente. As capacidades acima constituem o contrato permanente do compilador.
 
 ---
-*Fim de `COMPILATION_PLAN.md` v2.2.*
-*Alterado por ADR-034 (PL-07), ADR-035 e ADR-036 (projeções do C04).*
+*Fim de `COMPILATION_PLAN.md` v2.3.*
+*Alterado por ADR-034 (PL-07), ADR-035 e ADR-036 (projeções do C04),*
+*ADR-039 e ADR-040 (fatias, projeções e critério do C05).*

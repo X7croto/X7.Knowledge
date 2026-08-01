@@ -25,10 +25,16 @@ internal static class TypeIdentity
         => Qualify(type.OriginalDefinition);
 
     /// <summary>Como o tipo aparece no código, com argumentos genéricos.</summary>
-    public static string Display(INamedTypeSymbol type)
+    /// <remarks>
+    /// Aceita qualquer tipo, e não apenas o nomeado: o C05 precisa exibir
+    /// parâmetro de tipo (`T`), arranjo e ponteiro, que não são
+    /// <see cref="INamedTypeSymbol"/>. Um só caminho de exibição evita que
+    /// dois lugares formatem o mesmo tipo de formas diferentes.
+    /// </remarks>
+    public static string Display(ITypeSymbol type)
         => Qualify(type);
 
-    private static string Qualify(INamedTypeSymbol type)
+    private static string Qualify(ITypeSymbol type)
         => type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
                .Replace("global::", string.Empty, StringComparison.Ordinal);
 
