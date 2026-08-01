@@ -1,7 +1,7 @@
 # PROJECT_CONSTITUTION.md
 
 **Projeto:** X7.Knowledge
-**Versão:** 2.0
+**Versão:** 2.1
 **Status:** Normativo — fonte única de verdade
 **Substitui:** `PROJECT_CONSTITUTION.md` v1.0 e `ObjetivoX7.docx` (ambos revogados)
 
@@ -246,7 +246,7 @@ A métrica do projeto é a **mediana de CR** sobre o conjunto de perguntas.
 ### 7.3 Regras
 
 - **MT-01** Toda capacidade nova mede CR antes e depois. O resultado entra no critério de conclusão.
-- **MT-02** Nenhuma capacidade pode aumentar a mediana de CR. Aumento é regressão e bloqueia a conclusão.
+- **MT-02** Nenhuma capacidade pode aumentar a mediana de CR do **conjunto pareado**, definido em ADR-034. Aumento é regressão e bloqueia a conclusão. Aumento em pergunta individual exige causa registrada; sem ela, bloqueia igualmente.
 - **MT-03** Uma resposta que a Base não consegue sustentar conta como falha, não como CR baixo.
 - **MT-04** O conjunto de perguntas cresce; nunca encolhe.
 
@@ -254,7 +254,7 @@ A métrica do projeto é a **mediana de CR** sobre o conjunto de perguntas.
 
 ## 8. ADRs
 
-ADRs de v1 permanecem válidas salvo revogação explícita. As ADRs 027–033 abaixo resolvem os conflitos identificados na consolidação.
+ADRs de v1 permanecem válidas salvo revogação explícita. As ADRs 027–033 abaixo resolvem os conflitos identificados na consolidação. As ADRs 034 e 035 são posteriores e decorrem de medição.
 
 ### ADR-001 a ADR-026 — Mantidas
 
@@ -351,6 +351,34 @@ Consolidadas e incorporadas às Seções 1–5 deste documento. Exceções:
 
 ---
 
+### ADR-034 — Verificação de MT-02 por comparação pareada
+
+**Status:** APROVADA
+
+**Contexto:** MT-02, aplicada literalmente, é inválida quando a cobertura muda. Duas medições com conjuntos de perguntas sustentadas diferentes produzem medianas calculadas sobre populações diferentes: a mediana sobe porque o conjunto cresceu, não porque a Base piorou. Uma capacidade que passa a sustentar perguntas caras seria bloqueada por ter melhorado. Há um segundo modo de invalidação: quando a solução de referência muda entre as medições, `T_code` muda, e as frações deixam de ser comparáveis.
+
+**Decisão:** MT-02 é verificada sobre o **conjunto pareado** — perguntas sustentadas em ambas as medições, excluídas nominalmente aquelas cujo `T_code` mudou. Regressão é aumento da mediana desse conjunto. Cobertura é métrica independente e nunca diminui. Aumento em pergunta individual exige causa registrada: causa externa à capacidade conclui, causa na capacidade bloqueia, ausência de causa bloqueia.
+
+**Validade:** a comparação exige snapshot fixo da solução de referência. Conjunto pareado menor que metade das sustentadas não conclui capacidade; a linha de base é regravada antes.
+
+**Consequências:** ganho de cobertura deixa de aparecer como falha. Degradação de resposta existente continua bloqueando. Exclusões são sempre relatadas — exclusão silenciosa permitiria esconder regressão mexendo na entrada. Medir o compilador contra o próprio código passa a ter custo explícito, reforçando a migração da solução de referência prevista antes do C08.
+
+---
+
+### ADR-035 — Projeções do C04 particionadas por projeto
+
+**Status:** APROVADA
+
+**Contexto:** o `COMPILATION_PLAN.md` exigia, no C04, seis arquivos monolíticos por classificação (`Classes.md`, `Interfaces.md`, …). O `KNOWLEDGE_MODEL.md` §9.1 exige partição por projeto e separação entre inventário e relação. A §9.1 nasceu de medição: publicar herança como coluna da tabela de tipos elevou o CR de "onde está o tipo X" de 5410‰ para 6731‰. Pela hierarquia da §0 o plano prevaleceria, desfazendo um ganho medido e contrariando PR-09 e AC-11.
+
+**Decisão:** as projeções mínimas do C04 passam a ser `Structure/Types/{projeto}.md` mais `INDEX.md`, e `Relations/{projeto}.md` mais `INDEX.md`. Classificação vira seção dentro do arquivo do projeto, não arquivo próprio. O índice nunca lista nomes de tipo.
+
+**Motivo da alteração de documento de maior autoridade:** o plano foi redigido antes de a medição existir. O conflito não se resolve escolhendo um lado da hierarquia, e sim corrigindo o documento que ficou desatualizado em relação ao fato medido.
+
+**Consequências:** o conhecimento exigido pelo C04 permanece integralmente publicado; muda o eixo de particionamento. O critério de conclusão do C04 não muda. Precedente registrado para C05 e C06, cujas projeções serão redigidas sob a §9.1 por ADR própria.
+
+---
+
 ## 9. Decisões rejeitadas
 
 Não reabrir sem nova ADR.
@@ -426,4 +454,4 @@ A missão permanece:
 > Compilar, de forma determinística e rastreável, o conhecimento existente em uma solução de software, reduzindo drasticamente a quantidade de código que uma LLM precisa ler para compreendê-la e evoluí-la.
 
 ---
-*Fim de `PROJECT_CONSTITUTION.md` v2.0.*
+*Fim de `PROJECT_CONSTITUTION.md` v2.1.*

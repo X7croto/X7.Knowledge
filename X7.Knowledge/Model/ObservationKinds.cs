@@ -28,9 +28,16 @@ public static class ObservationKinds
     public const string TypeDeclared = "type.declared";
     public const string TypeLocation = "type.location";
 
-    // C04
+    // C04 — relações (nível S)
     public const string TypeInherits = "type.inherits";
     public const string TypeImplements = "type.implements";
+
+    // C04 — estrutura do tipo (qualquer nível)
+    public const string TypeKind = "type.kind";
+    public const string TypeAccessibility = "type.accessibility";
+    public const string TypeModifier = "type.modifier";
+    public const string TypeGenericParameter = "type.generic-parameter";
+    public const string TypeNestedIn = "type.nested-in";
 
     public const string AcquisitionLimitation = "acquisition.limitation";
 
@@ -54,6 +61,11 @@ public static class ObservationKinds
         TypeLocation,
         TypeInherits,
         TypeImplements,
+        TypeKind,
+        TypeAccessibility,
+        TypeModifier,
+        TypeGenericParameter,
+        TypeNestedIn,
         AcquisitionLimitation
     };
 

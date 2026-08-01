@@ -1,4 +1,4 @@
-# Estrutura Física — X7.ProjectIndexer
+# Estrutura Física — X7.Knowledge
 
 ## Projetos
 
@@ -9,19 +9,11 @@
 | X7.Knowledge.Specifications | `X7.Knowledge.Specifications/X7.Knowledge.Specifications.csproj` | net10.0 | — | sim |
 | X7.Knowledge | `X7.Knowledge/X7.Knowledge.csproj` | net10.0 | — | — |
 | X7.KnowledgeTests | `X7.KnowledgeTests/X7.KnowledgeTests.csproj` | net10.0 | — | sim |
-| X7.ProjectIndexer.CLI | `X7.ProjectIndexer.CLI/X7.ProjectIndexer.CLI.csproj` | net10.0 | Exe | — |
-| X7.ProjectIndexer.CSharp | `X7.ProjectIndexer.CSharp/X7.ProjectIndexer.CSharp.csproj` | net10.0 | — | — |
-| X7.ProjectIndexer.Core | `X7.ProjectIndexer.Core/X7.ProjectIndexer.Core.csproj` | net10.0 | — | — |
-| X7.ProjectIndexer.Graph | `X7.ProjectIndexer.Graph/X7.ProjectIndexer.Graph.csproj` | net10.0 | — | — |
-| X7.ProjectIndexer.Knowledge | `X7.ProjectIndexer.Knowledge/X7.ProjectIndexer.Knowledge.csproj` | net10.0 | — | — |
-| X7.ProjectIndexer.Markdown | `X7.ProjectIndexer.Markdown/X7.ProjectIndexer.Markdown.csproj` | net10.0 | — | — |
-| X7.ProjectIndexer.Output | `X7.ProjectIndexer.Output/X7.ProjectIndexer.Output.csproj` | net10.0 | — | — |
-| X7.ProjectIndexer.Tests | `X7.ProjectIndexer.Tests/X7.ProjectIndexer.Tests.csproj` | net10.0 | — | sim |
 
 ## Árvore lógica
 
 ```
-X7.ProjectIndexer
+X7.Knowledge
   src/
     X7.Knowledge.Cli
     X7.Knowledge
@@ -29,14 +21,6 @@ X7.ProjectIndexer
     X7.Knowledge.Specifications
     X7.KnowledgeTests
   X7.Knowledge.Benchmark
-  X7.ProjectIndexer.CLI
-  X7.ProjectIndexer.CSharp
-  X7.ProjectIndexer.Core
-  X7.ProjectIndexer.Graph
-  X7.ProjectIndexer.Knowledge
-  X7.ProjectIndexer.Markdown
-  X7.ProjectIndexer.Output
-  X7.ProjectIndexer.Tests
 ```
 
 ## Limitações de aquisição
@@ -50,11 +34,4 @@ O que o compilador não conseguiu obter, declarado explicitamente.
 | project-property | Directory.Build.props presente e não resolvido (leitura sintática) | `Directory.Build.props` |
 | project-property | Directory.Build.props presente e não resolvido (leitura sintática) | `Directory.Build.props` |
 | project-property | Directory.Build.props presente e não resolvido (leitura sintática) | `Directory.Build.props` |
-| project-property | Directory.Build.props presente e não resolvido (leitura sintática) | `Directory.Build.props` |
-| project-property | Directory.Build.props presente e não resolvido (leitura sintática) | `Directory.Build.props` |
-| project-property | Directory.Build.props presente e não resolvido (leitura sintática) | `Directory.Build.props` |
-| project-property | Directory.Build.props presente e não resolvido (leitura sintática) | `Directory.Build.props` |
-| project-property | Directory.Build.props presente e não resolvido (leitura sintática) | `Directory.Build.props` |
-| project-property | Directory.Build.props presente e não resolvido (leitura sintática) | `Directory.Build.props` |
-| project-property | Directory.Build.props presente e não resolvido (leitura sintática) | `Directory.Build.props` |
-| project-property | Directory.Build.props presente e não resolvido (leitura sintática) | `Directory.Build.props` |
+| type-partial-single-site | Tipo `partial` declarado em um único arquivo não é detectado; a regra deriva parcialidade de múltiplos locais de declaração | `X7.Knowledge.slnx` |

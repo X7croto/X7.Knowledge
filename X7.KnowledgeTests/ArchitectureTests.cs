@@ -113,12 +113,21 @@ public sealed class ArchitectureTests : IClassFixture<SolutionFixture>
 
         var evidenceIds = model.Evidence.Select(e => e.Id).ToHashSet();
 
+        // Vale para toda Inference, de qualquer capacidade: o teste verifica a
+        // forma, não quem produziu. Fixar "C02" aqui era lista fechada, e
+        // quebrou na primeira Inference do C04.
         Assert.All(model.Inferences, i =>
         {
             Assert.Contains(i.Evidence, evidenceIds);
             Assert.False(string.IsNullOrWhiteSpace(i.Provenance.Rule));
-            Assert.Equal("C02", i.Provenance.Capability);
+            Assert.False(string.IsNullOrWhiteSpace(i.Provenance.Capability));
         });
+
+        // O que era o alvo real do teste: as conclusões sobre o grafo são do
+        // C02 e continuam sendo.
+        Assert.All(
+            model.Inferences.Where(i => i.Kind.StartsWith("project.", StringComparison.Ordinal)),
+            i => Assert.Equal("C02", i.Provenance.Capability));
     }
 
     [Fact]

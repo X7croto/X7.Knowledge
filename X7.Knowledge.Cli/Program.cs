@@ -20,8 +20,8 @@ OPÇÕES
 
 EXEMPLOS
   x7k
-  x7k X7.ProjectIndexer.slnx
-  x7k X7.ProjectIndexer.slnx -o Knowledge
+  x7k X7.Knowledge.slnx
+  x7k X7.Knowledge.slnx -o C:\Temp\X7Knowledge
 
 SAÍDA
   <output>/README.md

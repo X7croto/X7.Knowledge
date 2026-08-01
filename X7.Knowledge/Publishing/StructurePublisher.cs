@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using X7.Knowledge.Model;
 
@@ -30,6 +31,10 @@ public sealed class StructurePublisher : IPublisher
             .GroupBy(o => KnowledgeId.Parse(o.Payload["projectId"]!))
             .ToDictionary(g => g.Key, g => g.ToArray());
 
+        // Varrer o modelo inteiro por tipo publicado é quadrático e a Base
+        // cresce com a solução. Os índices são montados uma vez.
+        var facts = TypeFacts.Build(model);
+
         foreach (var project in model.Entities.Projects)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -39,7 +44,7 @@ public sealed class StructurePublisher : IPublisher
 
             await CanonicalFile.WriteAsync(
                 Path.Combine(outputDirectory, "Structure", "Types", $"{project.Name}.md"),
-                BuildProject(model, project.Name, projectTypes),
+                BuildProject(facts, project.Name, projectTypes),
                 cancellationToken);
         }
 
@@ -54,13 +59,132 @@ public sealed class StructurePublisher : IPublisher
             cancellationToken);
     }
 
-    private static string LocationOf(KnowledgeModel model, KnowledgeId typeId)
-        => model.Observations
-            .FirstOrDefault(o => o.Kind == ObservationKinds.TypeLocation && o.Subject.Equals(typeId))
-            ?.Payload["file"] ?? "—";
+    /// <summary>
+    /// Índices de leitura sobre as Observations de tipo. Não produz nada:
+    /// um Publisher que calculasse conhecimento violaria PR-06.
+    /// </summary>
+    private sealed class TypeFacts
+    {
+        private readonly Dictionary<KnowledgeId, List<string>> _locations = [];
+        private readonly Dictionary<KnowledgeId, List<string>> _modifiers = [];
+        private readonly Dictionary<KnowledgeId, List<(int Ordinal, string Name)>> _parameters = [];
+        private readonly Dictionary<KnowledgeId, string> _kinds = [];
+        private readonly Dictionary<KnowledgeId, string> _accessibilities = [];
+
+        public static TypeFacts Build(KnowledgeModel model)
+        {
+            var facts = new TypeFacts();
+
+            foreach (var observation in model.Observations)
+            {
+                switch (observation.Kind)
+                {
+                    case ObservationKinds.TypeLocation:
+                        Append(facts._locations, observation.Subject, observation.Payload["file"]!);
+                        break;
+
+                    case ObservationKinds.TypeModifier:
+                        Append(facts._modifiers, observation.Subject, observation.Payload["name"]!);
+                        break;
+
+                    case ObservationKinds.TypeKind:
+                        facts._kinds[observation.Subject] = observation.Payload["kind"]!;
+                        break;
+
+                    case ObservationKinds.TypeAccessibility:
+                        facts._accessibilities[observation.Subject] = observation.Payload["value"]!;
+                        break;
+
+                    case ObservationKinds.TypeGenericParameter:
+                        if (!facts._parameters.TryGetValue(observation.Subject, out var parameters))
+                        {
+                            parameters = [];
+                            facts._parameters[observation.Subject] = parameters;
+                        }
+
+                        parameters.Add((
+                            int.Parse(observation.Payload["ordinal"]!, CultureInfo.InvariantCulture),
+                            observation.Payload["name"]!));
+
+                        break;
+                }
+            }
+
+            return facts;
+        }
+
+        private static void Append(
+            Dictionary<KnowledgeId, List<string>> target,
+            KnowledgeId subject,
+            string value)
+        {
+            if (!target.TryGetValue(subject, out var values))
+            {
+                values = [];
+                target[subject] = values;
+            }
+
+            values.Add(value);
+        }
+
+        public string Kind(KnowledgeId typeId) => _kinds.GetValueOrDefault(typeId, "—");
+
+        /// <summary>
+        /// Todos os arquivos de declaração, ordenados. Tipo parcial tem mais
+        /// de um; escolher só o primeiro mandaria quem procura ao lugar
+        /// errado metade das vezes.
+        /// </summary>
+        public string Location(KnowledgeId typeId)
+        {
+            if (!_locations.TryGetValue(typeId, out var files))
+                return "—";
+
+            return string.Join("`, `", files.OrderBy(f => f, StringComparer.Ordinal));
+        }
+
+        /// <summary>Acessibilidade e modificadores, na ordem em que se escreve.</summary>
+        public string Declaration(KnowledgeId typeId)
+        {
+            var parts = new List<string>();
+
+            if (_accessibilities.TryGetValue(typeId, out var accessibility))
+                parts.Add(accessibility.Replace('-', ' '));
+
+            if (_modifiers.TryGetValue(typeId, out var modifiers))
+                parts.AddRange(modifiers.OrderBy(m => m, StringComparer.Ordinal));
+
+            return parts.Count == 0 ? "—" : string.Join(' ', parts);
+        }
+
+        /// <summary>
+        /// Nome como foi declarado, a partir do nome curto de metadados, que
+        /// vem com crase e aridade e não é o que ninguém escreve nem procura.
+        /// Os parâmetros genéricos já estão na Base; reconstruir
+        /// `Cache&lt;TKey, TValue&gt;` a partir deles não inventa nada.
+        /// </summary>
+        /// <remarks>
+        /// Recebe o nome curto (`name`), nunca o qualificado
+        /// (`metadataName`): em nível S o qualificado já traz
+        /// `&lt;TKey, TValue&gt;` e a lista sairia duplicada, além de repetir
+        /// o namespace que já é coluna da tabela.
+        /// </remarks>
+        public string Display(KnowledgeId typeId, string shortName)
+        {
+            var arity = shortName.IndexOf('`', StringComparison.Ordinal);
+
+            var name = arity < 0 ? shortName : shortName[..arity];
+
+            if (!_parameters.TryGetValue(typeId, out var parameters) || parameters.Count == 0)
+                return name;
+
+            var ordered = parameters.OrderBy(p => p.Ordinal).Select(p => p.Name);
+
+            return $"{name}<{string.Join(", ", ordered)}>";
+        }
+    }
 
     private static string BuildProject(
-        KnowledgeModel model,
+        TypeFacts facts,
         string projectName,
         IReadOnlyList<Observation> types)
     {
@@ -69,17 +193,23 @@ public sealed class StructurePublisher : IPublisher
         builder.Append("# Tipos — ").Append(projectName).Append("\n\n");
         builder.Append(types.Count).Append(" tipo(s).\n\n");
 
+        // Seccionado por classificação (ADR-035). Classificação é consultada
+        // junto com o inventário — "onde está X e o que X é" é uma pergunta
+        // só. Relação de tipo não é, e fica em Relations/ (§9.1).
         foreach (var group in types
-                     .GroupBy(o => o.Payload["namespace"] ?? "(global)")
+                     .GroupBy(o => facts.Kind(o.Subject))
                      .OrderBy(g => g.Key, StringComparer.Ordinal))
         {
             builder.Append("## ").Append(group.Key).Append("\n\n");
-            builder.Append("| Tipo | Arquivo |\n|---|---|\n");
+            builder.Append("| Tipo | Namespace | Declaração | Arquivo |\n|---|---|---|---|\n");
 
             foreach (var type in group.OrderBy(o => o.Payload["metadataName"], StringComparer.Ordinal))
             {
-                builder.Append("| ").Append(type.Payload["name"])
-                       .Append(" | `").Append(LocationOf(model, type.Subject))
+                builder.Append("| ")
+                       .Append(facts.Display(type.Subject, type.Payload["name"]!))
+                       .Append(" | ").Append(type.Payload["namespace"] ?? "(global)")
+                       .Append(" | ").Append(facts.Declaration(type.Subject))
+                       .Append(" | `").Append(facts.Location(type.Subject))
                        .Append("` |\n");
             }
 

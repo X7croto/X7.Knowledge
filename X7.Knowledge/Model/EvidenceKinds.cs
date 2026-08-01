@@ -16,10 +16,18 @@ public static class EvidenceKinds
     /// <summary>Referências que fecham um ciclo.</summary>
     public const string ProjectCyclePath = "project.cycle-path";
 
+    /// <summary>
+    /// C04 — as `type.location` de um mesmo tipo. Só é registrada com duas ou
+    /// mais Observations (IV-17): um único local não sustenta conclusão
+    /// alguma sobre parcialidade.
+    /// </summary>
+    public const string TypeDeclarationSites = "type.declaration-sites";
+
     private static readonly HashSet<string> Catalog = new(StringComparer.Ordinal)
     {
         ProjectGraphPosition,
-        ProjectCyclePath
+        ProjectCyclePath,
+        TypeDeclarationSites
     };
 
     public static bool IsKnown(string kind) => Catalog.Contains(kind);

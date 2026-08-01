@@ -15,7 +15,7 @@ namespace X7.Knowledge;
 /// </summary>
 public static class KnowledgeCompiler
 {
-    public const string ModelVersion = "0.6.0";
+    public const string ModelVersion = "0.7.0";
 
     public static async ValueTask<KnowledgeModel> CompileAsync(
         string solutionPath,
@@ -43,7 +43,9 @@ public static class KnowledgeCompiler
             new ProjectReferenceProducer(),
             new ArchitectureProducer(),
             new CodeStructureProducer(sources),
-            new TypeRelationProducer(sources)
+            new TypeStructureProducer(sources),
+            new TypeRelationProducer(sources),
+            new PartialTypeProducer()
         ]);
 
         await pipeline.ExecuteAsync(context, cancellationToken);

@@ -21,7 +21,7 @@ public sealed class SymbolTable
 
     public List<Reference> References { get; } = [];
 
-    public List<Dependency> Dependencies { get; } = [];
+    public List<Dependency2> Dependencies { get; } = [];
 
     public List<Inheritance> Inheritances { get; } = [];
 
@@ -55,7 +55,7 @@ public sealed class SymbolTable
 
     public Dictionary<MethodSymbol, List<MethodCall>> CallsByCallee { get; } = [];
 
-    public Dictionary<TypeSymbol, List<Dependency>> DependenciesBySource { get; } = [];
+    public Dictionary<TypeSymbol, List<Dependency2>> DependenciesBySource { get; } = [];
 
-    public Dictionary<TypeSymbol, List<Dependency>> DependenciesByTarget { get; } = [];
+    public Dictionary<TypeSymbol, List<Dependency2>> DependenciesByTarget { get; } = [];
 }

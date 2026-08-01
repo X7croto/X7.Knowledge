@@ -1,10 +1,10 @@
 # KNOWLEDGE_MODEL.md
 
 **Projeto:** X7.Knowledge
-**Versão do modelo:** v0.6 (provisório)
-**Esquema:** `0.6.0`
+**Versão do modelo:** v0.7 (provisório)
+**Esquema:** `0.7.0`
 **Status:** Normativo (autoridade 3)
-**Derivado de:** `PROJECT_CONSTITUTION.md` v2.0, `COMPILATION_PLAN.md` v2.0
+**Derivado de:** `PROJECT_CONSTITUTION.md` v2.1, `COMPILATION_PLAN.md` v2.1
 
 ---
 
@@ -40,7 +40,7 @@ Todo KnowledgeModel começa por um manifesto. Ele existe para tornar a compilaç
 
 | Campo | Tipo | Descrição |
 |---|---|---|
-| `modelVersion` | string | Versão deste esquema. `0.6.0` |
+| `modelVersion` | string | Versão deste esquema. `0.7.0` |
 | `compilerVersion` | string | Versão do compilador que produziu |
 | `solutionId` | KnowledgeId | Identidade da solução |
 | `acquisitionLevel` | `S` \| `X` | Nível alcançado (Constituição §5.3) |
@@ -258,8 +258,14 @@ Namespace intermediário é declarado mesmo sem tipo direto: `A.B.C` implica
 
 ### 6.1.3 Observation — C04
 
-Exigem nível S. Em nível X o Producer declara `acquisition.limitation` com
-escopo `type-relations` e não produz nada — deduzir herança por nome é o que
+O C04 produz dois grupos de fatos com exigências de nível diferentes. O grupo
+declara o seu nível; o `acquisitionLevel` por item registra o que de fato
+ocorreu (Seção 5).
+
+#### 6.1.3.a Relações entre tipos — exigem nível S
+
+Em nível X o Producer declara `acquisition.limitation` com escopo
+`type-relations` e não produz nada — deduzir herança por nome é o que
 §5.3 proíbe.
 
 | `kind` | `subject` | `payload` |
@@ -281,19 +287,106 @@ observar isso produziria uma Observation por tipo da solução sem informar nada
 é observada: é derivável do conjunto, e computá-la aqui seria inferência
 disfarçada de observação (OB-01).
 
+#### 6.1.3.b Estrutura do tipo — nível X é suficiente
+
+Classificação, acessibilidade, modificadores, parâmetros genéricos e
+aninhamento são fatos da declaração, não do modelo semântico. São observáveis
+em ambos os níveis e não produzem `acquisition.limitation` por nível.
+
+| `kind` | `subject` | `payload` |
+|---|---|---|
+| `type.kind` | Tipo | `{ kind }` |
+| `type.accessibility` | Tipo | `{ value }` |
+| `type.modifier` | Tipo | `{ name }` |
+| `type.generic-parameter` | Tipo | `{ name, ordinal, variance? }` |
+| `type.nested-in` | Tipo | `{ containerId }` |
+
+**Vocabulário de `type.kind`.** Fechado, e espelha exatamente as formas
+declaráveis em C#:
+
+```
+class  interface  record  record-struct  struct  enum  delegate
+```
+
+`record` é o `record class`. `record struct` tem valor próprio: é o que está
+escrito na declaração, e classificá-lo como `struct` seria interpretar. Valor
+fora do vocabulário é erro de compilação (IV-04).
+
+**Vocabulário de `type.accessibility`.** Fechado:
+
+```
+public  internal  protected  private  protected-internal  private-protected
+```
+
+Acessibilidade é total e de valor único; modificador é conjunto de zero ou
+mais. Mantê-los em `kind`s distintos preserva OB-03 — o payload de um `kind`
+tem sempre a mesma forma. Uma Observation por modificador segue o padrão já
+estabelecido por `project.target-framework`.
+
+**Vocabulário de `type.modifier`.** Fechado, apenas o que o símbolo expõe:
+
+```
+abstract  sealed  static  readonly  ref  unsafe
+```
+
+`partial` **não** pertence a este vocabulário. Não existe no símbolo; é tratado
+como Inference (6.3, `type.is-partial`).
+
+**Por que `ordinal` está no payload.** A ordem dos parâmetros genéricos é
+semântica: `<TKey, TValue>` não é `<TValue, TKey>`. D-01 ordena coleções de
+saída por identidade canônica, o que embaralharia a ordem de declaração. O
+ordinal preserva a informação dentro do próprio fato, e não na posição.
+
+`variance` só aparece em parâmetro de interface ou delegate, com valores
+`in` ou `out`; ausente significa invariante.
+
+**Aninhamento — decisão registrada.** Tipo aninhado recebe `type.nested-in`
+apontando o tipo contentor. A alternativa avaliada era declarar
+`acquisition.limitation` de escopo `type-nesting` e não representar
+aninhamento. Rejeitada:
+
+- contenção é fato declarado e diretamente observável (`ContainingType`),
+  exatamente a natureza do conhecimento do C04;
+- sem ela, o único caminho até a contenção seria interpretar a string do nome
+  qualificado — dedução por nome, que §5.3 proíbe em espírito;
+- `namespace.contains` já estabeleceu o precedente para contenção lógica em
+  C03; `type.nested-in` é o análogo direto;
+- o custo é uma Observation por tipo aninhado, uma minoria do total.
+
+Apenas a direção filho → contentor é observada. A direção inversa é derivável
+do conjunto, e publicar as duas aqui duplicaria conhecimento; relação
+bidirecional é critério do C06, não deste catálogo.
+
+**Consequência sobre `namespace.contains`.** Tipo aninhado tem o mesmo
+namespace do contentor. `namespace.contains` referencia apenas tipos de nível
+superior; caso contrário a hierarquia passa a ter dois caminhos até o mesmo
+tipo e deixa de ser árvore.
+
 Cada nova capacidade adiciona `kind`s ao catálogo. Nenhuma capacidade altera
 `kind` existente.
 
-### 6.2 Evidence — reservados para C02
+### 6.2 Evidence
 
-Declarados no catálogo; ainda não produzidos por nenhum Producer.
+#### 6.2.1 C02
 
 | `kind` | Agrupa |
 |---|---|
 | `project.graph-position` | O grafo inteiro: `project.declared` e `project.references-project` |
 | `project.cycle-path` | Referências que fecham um ciclo |
 
-### 6.3 Inference — reservados para C02
+#### 6.2.2 C04
+
+| `kind` | Agrupa |
+|---|---|
+| `type.declaration-sites` | As `type.location` de um mesmo tipo |
+
+Esta Evidence só é registrada quando agrupa **duas ou mais** Observations
+(IV-17). Um único local de declaração não sustenta conclusão alguma sobre
+parcialidade.
+
+### 6.3 Inference
+
+#### 6.3.1 C02
 
 | `kind` | `subject` | `payload` | Confidence | Regra |
 |---|---|---|---|---|
@@ -308,6 +401,31 @@ estatística. `Observed` aparecerá em C08, onde convenção é frequência.
 `depth` é a maior distância até um projeto que não referencia nenhum outro da
 solução, calculada sobre a condensação em componentes fortemente conexos —
 assim a presença de ciclo não torna a profundidade indefinida.
+
+#### 6.3.2 C04
+
+| `kind` | `subject` | `payload` | Confidence | Regra |
+|---|---|---|---|---|
+| `type.is-partial` | Tipo | `{}` | `Asserted` | `partial-by-multiple-declaration-sites` |
+
+`Asserted` porque a implicação é exata: um tipo com mais de um local de
+declaração é necessariamente `partial`. A regra não admite exceção.
+
+**Limitação declarada — obrigatória.** A recíproca é falsa. Um tipo declarado
+`partial` com um único local existe e é comum, e esta regra não o detecta.
+Ausência de `type.is-partial` significa portanto *não detectado*, nunca *não
+parcial*. Toda compilação registra `acquisition.limitation` com escopo
+`type-partial-single-site`, porque ausência silenciosa é proibida (6.1).
+
+**Nota de revisão.** Esta é a única Inference do modelo que existe por
+indisponibilidade, e não por natureza derivada: `partial` é modificador
+sintático e não aparece no símbolo. A observação direta é possível — ler os
+modificadores da declaração — e produziria `type.modifier` com valor
+`partial`, completo e sem limitação. Se o custo dessa leitura se mostrar
+aceitável, ou se a limitação acima começar a distorcer alguma resposta do
+benchmark, a substituição é: acrescentar `partial` ao vocabulário de
+`type.modifier`, remover este `kind` e a limitação correspondente. A troca
+custa incremento de versão maior (EX-03) e ADR, por remoção de `kind`.
 
 Kind fora de qualquer um dos três catálogos é erro de compilação (IV-04).
 
@@ -412,14 +530,29 @@ no índice anularia o ganho da partição.
 
 ## 10. Estrutura publicada
 
+Estado após C04. Cada capacidade acrescenta; nenhuma remove.
+
 ```
 Knowledge/
   README.md                     visão geral e manifesto legível
   Structure/
     Solution.md                 solução, projetos, frameworks, árvore
+    Namespaces.md               hierarquia de namespaces
+    Types/
+      INDEX.md                  projeto, contagem, link
+      {projeto}.md              inventário de tipos do projeto
+  Architecture/
+    Architecture.md
+    ProjectDependencies.md
+  Relations/
+    INDEX.md
+    {projeto}.md                herança e implementação
   model/
     knowledge.model.json        forma canônica
 ```
+
+A separação entre `Structure/Types/` e `Relations/` é exigida pela §9.1 e
+registrada em ADR-035.
 
 ---
 
@@ -439,8 +572,20 @@ Testáveis por automação; falha bloqueia a conclusão de qualquer capacidade.
 - **IV-10** Toda Evidence é não vazia e referencia apenas Observations existentes.
 - **IV-11** `Observed` tem frequência declarada; `Asserted` não tem frequência.
 - **IV-12** Toda Inference declara sua regra.
-- **IV-13** Referência a tipo dentro de payload (`baseTypeId`, `interfaceId`)
-  aponta para tipo existente no modelo.
+- **IV-13** Referência a tipo dentro de payload (`baseTypeId`, `interfaceId`,
+  `containerId`) aponta para tipo existente no modelo.
+- **IV-14** Todo tipo presente no modelo possui exatamente uma `type.kind` e
+  exatamente uma `type.accessibility`.
+- **IV-15** O grafo formado por `type.nested-in` é acíclico, e nenhum tipo
+  possui mais de um contentor.
+- **IV-16** Os `ordinal` de `type.generic-parameter` de um mesmo tipo formam
+  a sequência `0..n-1`, sem repetição e sem lacuna.
+- **IV-17** Evidence de kind `type.declaration-sites` referencia ao menos duas
+  Observations.
+
+IV-14 é o que torna testável o critério 1 do C04 — *todo tipo possui
+representação própria e completa*. Sem ela, "completa" seria julgamento
+subjetivo, e PL-05 não admite julgamento subjetivo como conclusão.
 
 ---
 
@@ -454,6 +599,7 @@ Testáveis por automação; falha bloqueia a conclusão de qualquer capacidade.
 | `0.4.0` | Kinds de C03 (6.1.2); identidades `ns:` e `type:`; regra de granularidade (9.1) | **Aditiva**. Nenhum `kind` anterior alterado |
 | `0.5.0` | `msBuildVersion` no manifesto, presente apenas em nível S | **Aditiva**. Campo opcional (EX-02) |
 | `0.6.0` | Kinds de C04 (6.1.3); IV-13 | **Aditiva**. Nenhum `kind` anterior alterado |
+| `0.7.0` | Estrutura do tipo em C04 (6.1.3.b): `type.kind`, `type.accessibility`, `type.modifier`, `type.generic-parameter`, `type.nested-in`; Evidence `type.declaration-sites`; Inference `type.is-partial`; IV-14..IV-17; §10 atualizada | **Aditiva** (EX-01, EX-04). Nenhum `kind` anterior alterado; `IV-13` teve escopo ampliado para `containerId`, sem alterar payload existente |
 
 ---
 
@@ -469,4 +615,4 @@ Este documento passa de `PROVISÓRIO` a `CONGELADO` quando, simultaneamente:
 O congelamento é formalizado por ADR e, a partir dele, vale a regra de extensão da Seção 8.
 
 ---
-*Fim de `KNOWLEDGE_MODEL.md` v0.6.*
+*Fim de `KNOWLEDGE_MODEL.md` v0.7.*

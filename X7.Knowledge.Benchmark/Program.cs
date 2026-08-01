@@ -67,9 +67,9 @@ if (set is null)
     return 1;
 }
 
-var measurements = BenchmarkRunner.Measure(set, root, knowledgeRoot);
+var (solutionDigest, projectCount, baseCapabilities) = ReadBaseIdentity(knowledgeRoot);
 
-var (solutionDigest, projectCount) = ReadBaseIdentity(knowledgeRoot);
+var measurements = BenchmarkRunner.Measure(set, root, knowledgeRoot, baseCapabilities);
 
 Directory.CreateDirectory(output);
 
@@ -95,6 +95,18 @@ Console.WriteLine($"Cobertura    {(measurements.Count == 0 ? 0 : supported * 100
 Console.WriteLine($"Mediana CR   {(median is null ? "—" : $"{median.Value * 1000:F0}‰")}");
 Console.WriteLine();
 Console.WriteLine($"Resultado em {Path.GetFullPath(output)}");
+
+var foraDeEscopo = measurements.Where(m => m.OutOfScope).ToArray();
+
+if (foraDeEscopo.Length > 0)
+{
+    Console.WriteLine();
+    Console.WriteLine(
+        $"Base compilada até {string.Join(", ", baseCapabilities!)}. "
+        + $"{foraDeEscopo.Length} pergunta(s) exigem capacidade não executada "
+        + $"e contam como não sustentadas: "
+        + string.Join(", ", foraDeEscopo.Select(m => m.Question.Id)));
+}
 
 if (baseline is not null)
 {
@@ -176,12 +188,13 @@ return 0;
 /// Lê digest das entradas e contagem de projetos direto do manifesto da Base.
 /// Duas medições só são comparáveis se estes valores baterem.
 /// </summary>
-static (string? Digest, int Projects) ReadBaseIdentity(string knowledgeRoot)
+static (string? Digest, int Projects, IReadOnlyCollection<string>? Capabilities)
+    ReadBaseIdentity(string knowledgeRoot)
 {
     var path = Path.Combine(knowledgeRoot, "model", "knowledge.model.json");
 
     if (!File.Exists(path))
-        return (null, 0);
+        return (null, 0, null);
 
     try
     {
@@ -197,10 +210,21 @@ static (string? Digest, int Projects) ReadBaseIdentity(string knowledgeRoot)
             .GetProperty("projects")
             .GetArrayLength();
 
-        return (digest, projects);
+        // O manifesto declara o que a Base executou. É o que separa "não
+        // responde" de "está quebrada" quando a Base foi truncada por
+        // `--until`.
+        var capabilities = document.RootElement
+            .GetProperty("manifest")
+            .GetProperty("capabilities")
+            .EnumerateArray()
+            .Select(c => c.GetString())
+            .OfType<string>()
+            .ToHashSet(StringComparer.Ordinal);
+
+        return (digest, projects, capabilities);
     }
     catch (Exception e) when (e is JsonException or KeyNotFoundException or IOException)
     {
-        return (null, 0);
+        return (null, 0, null);
     }
 }

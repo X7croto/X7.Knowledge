@@ -26,6 +26,7 @@ public static class ModelInvariants
         var evidenceIds = model.Evidence.Select(e => e.Id).ToHashSet();
 
         ValidateObservations(model, subjects, violations);
+        ValidateTypeStructure(model, violations);
         ValidateEvidence(model, observationIds, violations);
         ValidateInferences(model, subjects, evidenceIds, violations);
 
@@ -75,7 +76,7 @@ public static class ModelInvariants
 
         foreach (var observation in model.Observations)
         {
-            foreach (var key in (string[])["baseTypeId", "interfaceId"])
+            foreach (var key in (string[])["baseTypeId", "interfaceId", "containerId"])
             {
                 var reference = observation.Payload[key];
 
@@ -97,6 +98,132 @@ public static class ModelInvariants
             violations.Add($"IV-05: id repetido com payloads divergentes: {id}");
     }
 
+    /// <summary>
+    /// IV-14 a IV-16. IV-14 é o que torna testável o critério 1 do C04 —
+    /// "todo tipo possui representação própria e completa". Sem ela,
+    /// "completa" seria julgamento subjetivo, e PL-05 não admite julgamento
+    /// subjetivo como conclusão de capacidade.
+    /// </summary>
+    private static void ValidateTypeStructure(KnowledgeModel model, List<string> violations)
+    {
+        var declared = model.Observations
+            .Where(o => o.Kind == ObservationKinds.TypeDeclared)
+            .Select(o => o.Subject)
+            .ToHashSet();
+
+        if (declared.Count == 0)
+            return;
+
+        var kinds = Count(model, ObservationKinds.TypeKind);
+        var accessibilities = Count(model, ObservationKinds.TypeAccessibility);
+
+        // IV-14
+        foreach (var type in declared.OrderBy(t => t))
+        {
+            if (kinds.GetValueOrDefault(type) != 1)
+            {
+                violations.Add(
+                    $"IV-14: {type} tem {kinds.GetValueOrDefault(type)} type.kind; esperado exatamente 1");
+            }
+
+            if (accessibilities.GetValueOrDefault(type) != 1)
+            {
+                violations.Add(
+                    $"IV-14: {type} tem {accessibilities.GetValueOrDefault(type)} "
+                    + "type.accessibility; esperado exatamente 1");
+            }
+        }
+
+        ValidateNesting(model, violations);
+        ValidateGenericParameters(model, violations);
+    }
+
+    /// <summary>IV-15: contenção é árvore, não grafo qualquer.</summary>
+    private static void ValidateNesting(KnowledgeModel model, List<string> violations)
+    {
+        var container = new Dictionary<KnowledgeId, KnowledgeId>();
+
+        foreach (var observation in model.Observations
+                     .Where(o => o.Kind == ObservationKinds.TypeNestedIn)
+                     .OrderBy(o => o.Id))
+        {
+            var target = KnowledgeId.Parse(observation.Payload["containerId"]!);
+
+            if (container.TryGetValue(observation.Subject, out var existing)
+                && !existing.Equals(target))
+            {
+                violations.Add($"IV-15: {observation.Subject} declara mais de um contentor");
+                continue;
+            }
+
+            container[observation.Subject] = target;
+        }
+
+        foreach (var start in container.Keys.OrderBy(k => k))
+        {
+            var seen = new HashSet<KnowledgeId> { start };
+
+            var current = start;
+
+            while (container.TryGetValue(current, out var next))
+            {
+                if (!seen.Add(next))
+                {
+                    violations.Add($"IV-15: ciclo de aninhamento envolvendo {start}");
+                    break;
+                }
+
+                current = next;
+            }
+        }
+    }
+
+    /// <summary>IV-16: os ordinais formam 0..n-1, sem repetição e sem lacuna.</summary>
+    private static void ValidateGenericParameters(KnowledgeModel model, List<string> violations)
+    {
+        var groups = model.Observations
+            .Where(o => o.Kind == ObservationKinds.TypeGenericParameter)
+            .GroupBy(o => o.Subject)
+            .OrderBy(g => g.Key);
+
+        foreach (var group in groups)
+        {
+            var ordinals = new List<int>();
+
+            foreach (var observation in group)
+            {
+                if (int.TryParse(
+                        observation.Payload["ordinal"],
+                        System.Globalization.NumberStyles.Integer,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out var ordinal))
+                {
+                    ordinals.Add(ordinal);
+                    continue;
+                }
+
+                violations.Add($"IV-16: ordinal não numérico em {observation.Id}");
+            }
+
+            ordinals.Sort();
+
+            var expected = Enumerable.Range(0, ordinals.Count);
+
+            if (!ordinals.SequenceEqual(expected))
+            {
+                violations.Add(
+                    $"IV-16: {group.Key} tem ordinais [{string.Join(", ", ordinals)}]; "
+                    + $"esperado 0..{ordinals.Count - 1}");
+            }
+        }
+    }
+
+    private static Dictionary<KnowledgeId, int> Count(KnowledgeModel model, string kind)
+        => model.Observations
+            .Where(o => o.Kind == kind)
+            .GroupBy(o => o.Subject)
+            .ToDictionary(g => g.Key, g => g.Count());
+
     private static void ValidateEvidence(
         KnowledgeModel model,
         HashSet<KnowledgeId> observationIds,
@@ -113,6 +240,15 @@ public static class ModelInvariants
 
             if (!EvidenceKinds.IsKnown(evidence.Kind))
                 violations.Add($"IV-04: kind de Evidence fora do catálogo: {evidence.Kind}");
+
+            // IV-17: um único local de declaração não sustenta conclusão
+            // alguma sobre parcialidade.
+            if (evidence.Kind == EvidenceKinds.TypeDeclarationSites
+                && evidence.Observations.Count < 2)
+            {
+                violations.Add(
+                    $"IV-17: Evidence {evidence.Id} agrupa menos de duas Observations");
+            }
 
             foreach (var observation in evidence.Observations)
             {

@@ -60,8 +60,7 @@ public sealed class CodeStructureProducer : IProducer
                 : FromSemantics(source);
 
             foreach (var declaration in declarations
-                         .OrderBy(d => d.MetadataName, StringComparer.Ordinal)
-                         .ThenBy(d => d.File, StringComparer.Ordinal))
+                         .OrderBy(d => d.MetadataName, StringComparer.Ordinal))
             {
                 Emit(context, source, projectId, projectName, declaration, namespaces);
             }
@@ -80,7 +79,18 @@ public sealed class CodeStructureProducer : IProducer
 
         public required string Name { get; init; }
 
-        public required string File { get; init; }
+        /// <summary>
+        /// Todos os arquivos onde o tipo é declarado, ordenados. Tipo parcial
+        /// tem mais de um, e registrar apenas o primeiro apagaria o fato — é
+        /// dele que a Inference `type.is-partial` deriva.
+        /// </summary>
+        public required IReadOnlyList<string> Files { get; init; }
+
+        /// <summary>
+        /// Tipo aninhado não é conteúdo direto do namespace: quem o contém é
+        /// o tipo externo. Ver `type.nested-in` (C04).
+        /// </summary>
+        public required bool IsNested { get; init; }
     }
 
     private void Emit(
@@ -95,7 +105,7 @@ public sealed class CodeStructureProducer : IProducer
 
         var provenance = new Provenance
         {
-            Source = declaration.File,
+            Source = declaration.Files[0],
             Producer = Name,
             Capability = Capability,
             AcquisitionLevel = source.Level
@@ -111,16 +121,25 @@ public sealed class CodeStructureProducer : IProducer
                 ("projectId", projectId.Value)),
             provenance);
 
-        context.Knowledge.Add(
-            ObservationKinds.TypeLocation,
-            typeId,
-            ObservationPayload.From(("file", declaration.File)),
-            provenance);
+        foreach (var file in declaration.Files)
+        {
+            context.Knowledge.Add(
+                ObservationKinds.TypeLocation,
+                typeId,
+                ObservationPayload.From(("file", file)),
+                provenance with { Source = file });
+        }
 
         if (declaration.Namespace.Length == 0)
             return;
 
         namespaces.Add(declaration.Namespace);
+
+        // Tipo aninhado tem o namespace do contentor, mas não é conteúdo
+        // direto dele: publicar os dois daria dois caminhos até o mesmo tipo
+        // e a hierarquia deixaria de ser árvore.
+        if (declaration.IsNested)
+            return;
 
         context.Knowledge.Add(
             ObservationKinds.NamespaceContains,
@@ -180,9 +199,17 @@ public sealed class CodeStructureProducer : IProducer
                         break;
 
                     case INamedTypeSymbol type:
-                        var location = type.Locations.FirstOrDefault(l => l.IsInSource);
+                        var files = type.Locations
+                            .Where(l => l.IsInSource)
+                            .Select(l => l.SourceTree?.FilePath)
+                            .OfType<string>()
+                            .Select(path => source.Files
+                                .FirstOrDefault(f => f.Tree.FilePath == path)?.RelativePath ?? path)
+                            .Distinct(StringComparer.Ordinal)
+                            .OrderBy(f => f, StringComparer.Ordinal)
+                            .ToArray();
 
-                        if (location?.SourceTree?.FilePath is not { } path)
+                        if (files.Length == 0)
                             continue;
 
                         results.Add(new Declaration
@@ -190,16 +217,13 @@ public sealed class CodeStructureProducer : IProducer
                             // OriginalDefinition explícito: a identidade de um
                             // genérico é sempre a declaração, nunca uma
                             // instanciação. C04 depende dessa mesma regra.
-                            MetadataName = type.OriginalDefinition
-                                .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
-                                .Replace("global::", string.Empty, StringComparison.Ordinal),
+                            MetadataName = TypeIdentity.Semantic(type),
                             Namespace = type.ContainingNamespace.IsGlobalNamespace
                                 ? string.Empty
                                 : type.ContainingNamespace.ToDisplayString(),
                             Name = type.MetadataName,
-                            File = source.Files
-                                .FirstOrDefault(f => f.Tree.FilePath == path)?.RelativePath
-                                   ?? path
+                            Files = files,
+                            IsNested = type.ContainingType is not null
                         });
 
                         Walk(type);
@@ -219,54 +243,42 @@ public sealed class CodeStructureProducer : IProducer
     /// </summary>
     private static IEnumerable<Declaration> FromSyntax(SourceCompilation source)
     {
+        // Agrupado por nome: um tipo parcial aparece em vários arquivos e é
+        // um tipo só. Sem o agrupamento, o mesmo tipo entraria duas vezes e a
+        // contagem da Base mentiria.
+        var byName = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+        var declarations = new Dictionary<string, Declaration>(StringComparer.Ordinal);
+
         foreach (var file in source.Files)
         {
             foreach (var node in file.Tree.GetRoot().DescendantNodes()
                          .Where(n => n is BaseTypeDeclarationSyntax or DelegateDeclarationSyntax))
             {
-                var name = node switch
+                var identity = TypeIdentity.Syntactic(node);
+
+                if (!byName.TryGetValue(identity.MetadataName, out var files))
                 {
-                    BaseTypeDeclarationSyntax t => t.Identifier.ValueText,
-                    DelegateDeclarationSyntax d => d.Identifier.ValueText,
-                    _ => null
-                };
+                    files = [];
+                    byName[identity.MetadataName] = files;
 
-                if (name is null)
-                    continue;
-
-                // Namespaces e tipos aninhados são acumulados em separado:
-                // o namespace do tipo é só a parte de namespace.
-                var namespaces = new List<string>();
-                var outerTypes = new List<string>();
-
-                for (var current = node.Parent; current is not null; current = current.Parent)
-                {
-                    switch (current)
+                    declarations[identity.MetadataName] = new Declaration
                     {
-                        case BaseNamespaceDeclarationSyntax ns:
-                            namespaces.Insert(0, ns.Name.ToString());
-                            break;
-
-                        case BaseTypeDeclarationSyntax outer:
-                            outerTypes.Insert(0, outer.Identifier.ValueText);
-                            break;
-                    }
+                        MetadataName = identity.MetadataName,
+                        Namespace = identity.Namespace,
+                        Name = identity.Name,
+                        Files = files,
+                        IsNested = TypeIdentity.ContainerOf(node) is not null
+                    };
                 }
 
-                var namespaceName = string.Join('.', namespaces);
-
-                var qualifiedName = string.Join('.', outerTypes.Append(name));
-
-                yield return new Declaration
-                {
-                    MetadataName = namespaceName.Length == 0
-                        ? qualifiedName
-                        : $"{namespaceName}.{qualifiedName}",
-                    Namespace = namespaceName,
-                    Name = name,
-                    File = file.RelativePath
-                };
+                if (!files.Contains(file.RelativePath, StringComparer.Ordinal))
+                    files.Add(file.RelativePath);
             }
         }
+
+        foreach (var files in byName.Values)
+            files.Sort(StringComparer.Ordinal);
+
+        return declarations.Values;
     }
 }

@@ -1,9 +1,9 @@
 # COMPILATION_PLAN.md
 
 **Projeto:** X7.Knowledge
-**Versão:** 2.0
+**Versão:** 2.1
 **Status:** Normativo (autoridade 2)
-**Derivado de:** `PROJECT_CONSTITUTION.md` v2.0
+**Derivado de:** `PROJECT_CONSTITUTION.md` v2.1
 **Substitui:** `COMPILATION_PLAN.md` v1.0 e `ROADMAP.md` v1.0 (ambos revogados — ver ADR-032)
 
 ---
@@ -26,7 +26,7 @@ Este documento não descreve implementação, arquitetura interna, tecnologia ne
 - **PL-04 — Entrega publicada.** Toda capacidade termina com projeção publicada e utilizável. Não existe capacidade cujo resultado seja apenas código interno.
 - **PL-05 — Conclusão verificável.** Todo critério de conclusão é objetivo e automatizável. Julgamento subjetivo não conclui capacidade.
 - **PL-06 — Não regressão.** Nenhuma capacidade degrada conhecimento ou projeção anterior.
-- **PL-07 — Medição obrigatória.** Toda capacidade mede o Context Ratio (Constituição §7) antes e depois. Aumento da mediana bloqueia a conclusão.
+- **PL-07 — Medição obrigatória.** Toda capacidade mede o Context Ratio (Constituição §7) antes e depois. Aumento da mediana do conjunto pareado (ADR-034) bloqueia a conclusão.
 - **PL-08 — Nível declarado.** Toda capacidade declara o nível de aquisição exigido (S ou X). Capacidade de nível S não produz saída degradada em nível X; produz ausência declarada.
 
 ---
@@ -166,22 +166,27 @@ Knowledge/
 **Conhecimento produzido.**
 Para cada tipo: classificação (classe, interface, record, struct, enum, delegate), nome, namespace, projeto, localização, modificadores, parâmetros genéricos, tipo base declarado e interfaces implementadas.
 
-**Projeções mínimas.**
+**Projeções mínimas.** (Alteradas por ADR-035.)
 ```
 Knowledge/
-  Types/
-    Classes.md
-    Interfaces.md
-    Records.md
-    Structs.md
-    Enums.md
-    Delegates.md
+  Structure/
+    Types/
+      INDEX.md        projeto, contagem de tipos, link
+      {projeto}.md    inventário de tipos do projeto, seccionado por classificação
+  Relations/
+    INDEX.md
+    {projeto}.md      herança e implementação, por projeto
 ```
 
-**Dependências.** C03. Exige nível S.
+Partição por projeto e separação entre inventário e relação são exigidas por
+`KNOWLEDGE_MODEL.md` §9.1. O índice nunca lista nomes de tipo.
+
+**Dependências.** C03. Exige nível S para relações entre tipos; classificação,
+modificadores, parâmetros genéricos e aninhamento são obtidos em qualquer
+nível.
 
 **Critério de conclusão.**
-1. Todo tipo da solução possui representação própria e completa na Base.
+1. Todo tipo da solução possui representação própria e completa na Base, verificado por IV-14 (`KNOWLEDGE_MODEL.md` §11).
 2. Herança e implementação são fatos resolvidos semanticamente, nunca deduzidos por nome.
 3. CR não regride.
 
@@ -480,4 +485,5 @@ Ao término deste plano, o X7.Knowledge transforma uma solução C# suportada em
 Implementações evoluem continuamente. As capacidades acima constituem o contrato permanente do compilador.
 
 ---
-*Fim de `COMPILATION_PLAN.md` v2.0.*
+*Fim de `COMPILATION_PLAN.md` v2.1.*
+*Alterado por ADR-034 (PL-07) e ADR-035 (projeções do C04).*

@@ -1,0 +1,128 @@
+{
+  "benchmarkVersion": 5,
+  "brokenCount": 0,
+  "coveragePerMille": 533,
+  "measurements": [
+    {
+      "codeTokens": 0,
+      "expectedCapability": "C01",
+      "id": "Q01",
+      "kbTokens": 434,
+      "missingCodeFiles": [
+        "X7.ProjectIndexer.slnx"
+      ],
+      "supported": true
+    },
+    {
+      "codeTokens": 4100,
+      "contextRatioPerMille": 106,
+      "expectedCapability": "C01",
+      "id": "Q02",
+      "kbTokens": 434,
+      "supported": true
+    },
+    {
+      "codeTokens": 609,
+      "contextRatioPerMille": 713,
+      "expectedCapability": "C01",
+      "id": "Q03",
+      "kbTokens": 434,
+      "supported": true
+    },
+    {
+      "codeTokens": 1917,
+      "contextRatioPerMille": 196,
+      "expectedCapability": "C02",
+      "id": "Q04",
+      "kbTokens": 375,
+      "supported": true
+    },
+    {
+      "codeTokens": 1917,
+      "contextRatioPerMille": 196,
+      "expectedCapability": "C02",
+      "id": "Q05",
+      "kbTokens": 375,
+      "supported": true
+    },
+    {
+      "codeTokens": 1917,
+      "contextRatioPerMille": 94,
+      "expectedCapability": "C02",
+      "id": "Q06",
+      "kbTokens": 180,
+      "supported": true
+    },
+    {
+      "codeTokens": 376,
+      "contextRatioPerMille": 7745,
+      "expectedCapability": "C03",
+      "id": "Q07",
+      "kbTokens": 2912,
+      "supported": true
+    },
+    {
+      "codeTokens": 1335,
+      "contextRatioPerMille": 661,
+      "expectedCapability": "C04",
+      "id": "Q08",
+      "kbTokens": 883,
+      "supported": true
+    },
+    {
+      "codeTokens": 712,
+      "expectedCapability": "C05",
+      "id": "Q09",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 7367,
+      "expectedCapability": "C06",
+      "id": "Q10",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 4764,
+      "expectedCapability": "C07",
+      "id": "Q11",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 1428,
+      "expectedCapability": "C08",
+      "id": "Q12",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 1309,
+      "expectedCapability": "C09",
+      "id": "Q13",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 1271,
+      "expectedCapability": "C10",
+      "id": "Q14",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 3402,
+      "expectedCapability": "C11",
+      "id": "Q15",
+      "kbTokens": 0,
+      "supported": false
+    }
+  ],
+  "medianContextRatioPerMille": 196,
+  "projectCount": 5,
+  "questionCount": 15,
+  "referenceSolution": "X7.ProjectIndexer.slnx",
+  "solutionDigest": "a0e430d38833d497c02c96211812f74bc6aa27a3b40b4dfe08ffd2a25037b8fb",
+  "supportedCount": 8
+}

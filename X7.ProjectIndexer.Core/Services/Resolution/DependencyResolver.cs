@@ -57,7 +57,7 @@ public sealed class DependencyResolver : IRelationshipResolver
             d.Kind == kind))
             return;
 
-        symbolTable.Dependencies.Add(new Dependency
+        symbolTable.Dependencies.Add(new Dependency2
         {
             Source = source,
             Target = target,

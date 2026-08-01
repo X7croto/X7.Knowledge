@@ -214,21 +214,13 @@ public sealed class TypeRelationProducer : IProducer
         }
     }
 
-    /// <summary>Como o tipo aparece no código, com argumentos genéricos.</summary>
+    // Identidade e nome de exibição vivem em TypeIdentity: dois Producers
+    // nomeando tipos por conta própria divergiriam em silêncio.
     private static string DisplayName(INamedTypeSymbol type)
-        => Qualify(type);
+        => TypeIdentity.Display(type);
 
-    /// <summary>
-    /// Como o tipo é identificado no modelo: sempre a definição original.
-    /// `IFoo&lt;List&lt;string&gt;&gt;` e `IFoo&lt;int&gt;` são usos do mesmo
-    /// tipo declarado `IFoo&lt;T&gt;`, e é ele que existe como identidade.
-    /// </summary>
     private static string IdentityName(INamedTypeSymbol type)
-        => Qualify(type.OriginalDefinition);
-
-    private static string Qualify(INamedTypeSymbol type)
-        => type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
-               .Replace("global::", string.Empty, StringComparison.Ordinal);
+        => TypeIdentity.Semantic(type);
 
     private static string? FileOf(SourceCompilation source, INamedTypeSymbol type)
     {

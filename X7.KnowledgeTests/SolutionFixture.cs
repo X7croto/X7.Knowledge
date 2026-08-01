@@ -107,6 +107,26 @@ public sealed class SolutionFixture : IDisposable
             public sealed class NameQuery : IQuery<System.Collections.Generic.List<string>> { }
             """);
 
+        // Tipo parcial em dois arquivos, variância declarada e delegate:
+        // cobre os kinds de estrutura do C04 que a fixture não exercitava.
+        Write("src/Domain/Catalog.cs",
+            """
+            namespace Reference.Domain;
+
+            public partial class Catalog { }
+
+            public interface IEvents<in TIn, out TOut> { }
+
+            internal delegate void Notify();
+            """);
+
+        Write("src/Domain/Catalog.Extra.cs",
+            """
+            namespace Reference.Domain;
+
+            public partial class Catalog { }
+            """);
+
         Write("src/Core/Kernel/Clock.cs",
             """
             namespace Reference.Kernel;

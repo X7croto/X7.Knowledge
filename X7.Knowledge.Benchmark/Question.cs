@@ -51,8 +51,20 @@ public sealed record Measurement
     /// </summary>
     public required IReadOnlyList<string> MissingKbFiles { get; init; }
 
+    /// <summary>
+    /// A capacidade que a pergunta exige não foi executada nesta Base.
+    /// </summary>
+    /// <remarks>
+    /// Distingue "a Base não responde" de "a Base está quebrada". Uma Base
+    /// truncada em C03 não tem `Relations/`, e a pergunta do C04 aponta para
+    /// lá: ausência esperada, e a resposta correta é falha de cobertura
+    /// (MT-03), não medição inválida. Sem essa distinção, a comparação
+    /// pareada que MT-02 exige seria impossível de produzir.
+    /// </remarks>
+    public bool OutOfScope { get; init; }
+
     /// <summary>BM-04: sem kbFiles, a Base não sustenta a resposta.</summary>
-    public bool Supported => Question.KbFiles.Count > 0;
+    public bool Supported => Question.KbFiles.Count > 0 && !OutOfScope;
 
     /// <summary>Medição inválida: declarou sustentar e o arquivo não existe.</summary>
     public bool Broken => Supported && MissingKbFiles.Count > 0;

@@ -2,7 +2,7 @@
 
 namespace X7.ProjectIndexer.Core.Models.Relations;
 
-public sealed class Dependency
+public sealed class Dependency2
 {
     public required TypeSymbol Source { get; init; }
 

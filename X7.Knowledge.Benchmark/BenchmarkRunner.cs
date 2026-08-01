@@ -4,16 +4,27 @@ namespace X7.Knowledge.Benchmark;
 
 public sealed class BenchmarkRunner
 {
+    /// <param name="baseCapabilities">
+    /// Capacidades executadas na Base medida, lidas do manifesto. Nulo
+    /// significa manifesto ilegível: nesse caso nenhuma pergunta é
+    /// considerada fora de escopo, e o comportamento é o anterior.
+    /// </param>
     public static IReadOnlyList<Measurement> Measure(
         QuestionSet set,
         string solutionRoot,
-        string knowledgeRoot)
+        string knowledgeRoot,
+        IReadOnlyCollection<string>? baseCapabilities = null)
     {
         var results = new List<Measurement>();
 
         foreach (var question in set.Questions.Where(q => !q.Retired)
                                               .OrderBy(q => q.Id, StringComparer.Ordinal))
         {
+            var outOfScope = baseCapabilities is not null
+                             && !baseCapabilities.Contains(
+                                    question.ExpectedCapability,
+                                    StringComparer.Ordinal);
+
             var missing = new List<string>();
             var codeTokens = 0;
 
@@ -33,19 +44,24 @@ public sealed class BenchmarkRunner
             var missingKb = new List<string>();
             var kbTokens = 0;
 
-            foreach (var relative in question.KbFiles)
+            // Fora de escopo não conta token nem arquivo faltando: a Base
+            // nunca prometeu responder isso.
+            if (!outOfScope)
             {
-                var path = Path.Combine(
-                    knowledgeRoot,
-                    relative.Replace('/', Path.DirectorySeparatorChar));
-
-                if (!File.Exists(path))
+                foreach (var relative in question.KbFiles)
                 {
-                    missingKb.Add(relative);
-                    continue;
-                }
+                    var path = Path.Combine(
+                        knowledgeRoot,
+                        relative.Replace('/', Path.DirectorySeparatorChar));
 
-                kbTokens += TokenCounter.CountFile(path);
+                    if (!File.Exists(path))
+                    {
+                        missingKb.Add(relative);
+                        continue;
+                    }
+
+                    kbTokens += TokenCounter.CountFile(path);
+                }
             }
 
             results.Add(new Measurement
@@ -54,7 +70,8 @@ public sealed class BenchmarkRunner
                 CodeTokens = codeTokens,
                 KbTokens = kbTokens,
                 MissingCodeFiles = missing,
-                MissingKbFiles = missingKb
+                MissingKbFiles = missingKb,
+                OutOfScope = outOfScope
             });
         }
 
