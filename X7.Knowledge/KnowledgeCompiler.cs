@@ -17,11 +17,31 @@ public static class KnowledgeCompiler
 {
     public const string ModelVersion = "0.7.0";
 
+    /// <summary>
+    /// Capacidades que este compilador possui, em ordem. Fonte única: o CLI
+    /// valida contra ela e o manifesto a declara.
+    /// </summary>
+    public static IReadOnlyList<string> Capabilities { get; } = ["C01", "C02", "C03", "C04"];
+
+    /// <param name="until">
+    /// Compila apenas até esta capacidade, inclusive. Serve à medição pareada
+    /// exigida por MT-02: comparar duas capacidades sobre a mesma entrada
+    /// exige a Base anterior sobre o snapshot atual, e recuperá-la do
+    /// histórico do repositório é arqueologia. Aqui a mesma entrada e o mesmo
+    /// compilador produzem as duas Bases; a única diferença é o corte.
+    ///
+    /// Não altera conhecimento nenhum: capacidades são aditivas, então
+    /// truncar a lista de Producers é exatamente a Base da capacidade
+    /// anterior. Publishers se desligam sozinhos por ausência de conteúdo.
+    /// </param>
     public static async ValueTask<KnowledgeModel> CompileAsync(
         string solutionPath,
         string outputDirectory,
+        string? until = null,
         CancellationToken cancellationToken = default)
     {
+        var capabilities = Truncate(until);
+
         var solution = SolutionReader.Read(solutionPath);
 
         using var provider = new CompilationProvider();
@@ -36,7 +56,7 @@ public static class KnowledgeCompiler
 
         var context = new CompilationContext(solution, level);
 
-        var pipeline = new KnowledgePipeline(
+        IProducer[] producers =
         [
             new SolutionProducer(),
             new ProjectProducer(),
@@ -46,7 +66,12 @@ public static class KnowledgeCompiler
             new TypeStructureProducer(sources),
             new TypeRelationProducer(sources),
             new PartialTypeProducer()
-        ]);
+        ];
+
+        var pipeline = new KnowledgePipeline(
+            producers
+                .Where(p => capabilities.Contains(p.Capability, StringComparer.Ordinal))
+                .ToArray());
 
         await pipeline.ExecuteAsync(context, cancellationToken);
 
@@ -54,7 +79,7 @@ public static class KnowledgeCompiler
             ModelVersion,
             CompilerVersion(),
             context.AcquisitionLevel,
-            ["C01", "C02", "C03", "C04"],
+            capabilities,
             InputDigest.Compute(solution),
             level == AcquisitionLevel.Semantic ? MsBuildBootstrap.Version : null);
 
@@ -94,6 +119,28 @@ public static class KnowledgeCompiler
         }
 
         return model;
+    }
+
+    /// <summary>
+    /// Prefixo da lista de capacidades até <paramref name="until"/>, inclusive.
+    /// </summary>
+    private static IReadOnlyList<string> Truncate(string? until)
+    {
+        if (until is null)
+            return Capabilities;
+
+        var index = Capabilities
+            .ToList()
+            .FindIndex(c => c.Equals(until, StringComparison.OrdinalIgnoreCase));
+
+        if (index < 0)
+        {
+            throw new InvalidOperationException(
+                $"Capacidade desconhecida: '{until}'. "
+                + $"Conhecidas: {string.Join(", ", Capabilities)}.");
+        }
+
+        return Capabilities.Take(index + 1).ToArray();
     }
 
     /// <summary>

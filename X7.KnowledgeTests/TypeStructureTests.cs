@@ -222,7 +222,7 @@ public sealed class TypeStructureTests : IClassFixture<SolutionFixture>
     }
 
     [Fact]
-    public async Task Projecao_de_tipos_seciona_por_classificacao()
+    public async Task Inventario_publica_so_o_que_a_pergunta_de_localizacao_usa()
     {
         var output = Path.Combine(_fixture.Root, "out-" + Guid.NewGuid().ToString("n"));
 
@@ -231,14 +231,55 @@ public sealed class TypeStructureTests : IClassFixture<SolutionFixture>
         var domain = await File.ReadAllTextAsync(
             Path.Combine(output, "Structure", "Types", "Domain.md"));
 
-        Assert.Contains("## interface", domain, StringComparison.Ordinal);
-        Assert.Contains("## class", domain, StringComparison.Ordinal);
+        // Seção por namespace, classificação em coluna (ADR-036): o eixo de
+        // seção é o campo mais caro de repetir.
+        Assert.Contains("## Reference.Domain", domain, StringComparison.Ordinal);
+        Assert.Contains("| Tipo | Classificação | Arquivo |", domain, StringComparison.Ordinal);
 
         // Nome curto com os parâmetros reconstruídos, uma vez só.
         Assert.Contains("| IEvents<TIn, TOut> |", domain, StringComparison.Ordinal);
         Assert.DoesNotContain("Reference.Domain.IEvents", domain, StringComparison.Ordinal);
 
-        // Relação de tipo continua fora do inventário (§9.1, ADR-035).
+        // O que não é consultado junto não é publicado junto (§9.1). Estes
+        // existem na Base e não nesta projeção.
         Assert.DoesNotContain("Herda de", domain, StringComparison.Ordinal);
+        Assert.DoesNotContain("Declaração", domain, StringComparison.Ordinal);
+        Assert.DoesNotContain("sealed", domain, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task Corte_por_capacidade_produz_a_base_anterior()
+    {
+        var output = Path.Combine(_fixture.Root, "out-" + Guid.NewGuid().ToString("n"));
+
+        var model = await KnowledgeCompiler.CompileAsync(
+            _fixture.SolutionPath, output, "C03");
+
+        // A lista de capacidades é o prefixo, e o manifesto declara o corte:
+        // uma Base truncada nunca passa por completa.
+        Assert.Equal(["C01", "C02", "C03"], model.Manifest.Capabilities);
+
+        // Nenhum kind de C04 sobrevive ao corte.
+        Assert.DoesNotContain(model.Observations, o =>
+            o.Kind is ObservationKinds.TypeKind
+                   or ObservationKinds.TypeAccessibility
+                   or ObservationKinds.TypeModifier
+                   or ObservationKinds.TypeGenericParameter
+                   or ObservationKinds.TypeNestedIn
+                   or ObservationKinds.TypeInherits
+                   or ObservationKinds.TypeImplements);
+
+        Assert.DoesNotContain(model.Inferences, i => i.Kind == InferenceKinds.TypeIsPartial);
+
+        // O que é do C03 continua inteiro.
+        Assert.Contains(model.Observations, o => o.Kind == ObservationKinds.TypeDeclared);
+
+        // Publisher se desliga sozinho por ausência de conteúdo: nenhum
+        // Publisher precisa saber de capacidade.
+        Assert.False(Directory.Exists(Path.Combine(output, "Relations")));
+
+        // E os invariantes valem igual — IV-14 não exige type.kind onde o
+        // C04 não rodou.
+        Assert.Empty(ModelInvariants.Validate(model));
     }
 }

@@ -1,7 +1,7 @@
 # PROJECT_CONSTITUTION.md
 
 **Projeto:** X7.Knowledge
-**Versão:** 2.1
+**Versão:** 2.2
 **Status:** Normativo — fonte única de verdade
 **Substitui:** `PROJECT_CONSTITUTION.md` v1.0 e `ObjetivoX7.docx` (ambos revogados)
 
@@ -254,7 +254,7 @@ A métrica do projeto é a **mediana de CR** sobre o conjunto de perguntas.
 
 ## 8. ADRs
 
-ADRs de v1 permanecem válidas salvo revogação explícita. As ADRs 027–033 abaixo resolvem os conflitos identificados na consolidação. As ADRs 034 e 035 são posteriores e decorrem de medição.
+ADRs de v1 permanecem válidas salvo revogação explícita. As ADRs 027–033 abaixo resolvem os conflitos identificados na consolidação. As ADRs 034 a 036 são posteriores e decorrem de medição.
 
 ### ADR-001 a ADR-026 — Mantidas
 
@@ -379,6 +379,21 @@ Consolidadas e incorporadas às Seções 1–5 deste documento. Exceções:
 
 ---
 
+### ADR-036 — Eixo de seção da projeção de tipos
+
+**Status:** APROVADA
+
+**Contexto:** a ADR-035 decidiu, sem medir, que a classificação vira seção dentro do arquivo do projeto. Medido, o resultado é o oposto do pretendido: o `T_kb` da Q07 — *onde está o tipo X* — subiu de 2034 para 2912 tokens, e o CR de 5410‰ para 7745‰. Seccionar por classificação obriga o namespace a ser coluna, escrita uma vez por tipo a 6–8 tokens; e acessibilidade e modificadores foram publicados num inventário onde ninguém os consulta.
+
+**Decisão:** o inventário é seccionado por **namespace**, com a classificação em coluna. Acessibilidade e modificadores não são publicados nesta projeção; permanecem no KnowledgeModel e aparecem no C05, junto da superfície pública. Permanece válido da ADR-035: classificação não é eixo de partição em arquivos, inventário e relação em árvores separadas, um arquivo por projeto mais índice, e índice sem nomes de tipo.
+
+**Consequências:** a §9.1 ganha um corolário — **secciona-se pelo campo mais caro de repetir**, porque o eixo de seção é o único campo que deixa de aparecer linha a linha. O critério de conclusão do C04 não muda. A Q07 volta a ser comparável com a medição do C03.
+
+**Nota de processo:** segundo caso no projeto em que granularidade de projeção só se resolveu contra número. Decisão de granularidade não fecha sem medição, mesmo quando o princípio parece claro.
+
+---
+
+
 ## 9. Decisões rejeitadas
 
 Não reabrir sem nova ADR.
@@ -454,4 +469,4 @@ A missão permanece:
 > Compilar, de forma determinística e rastreável, o conhecimento existente em uma solução de software, reduzindo drasticamente a quantidade de código que uma LLM precisa ler para compreendê-la e evoluí-la.
 
 ---
-*Fim de `PROJECT_CONSTITUTION.md` v2.1.*
+*Fim de `PROJECT_CONSTITUTION.md` v2.2.*

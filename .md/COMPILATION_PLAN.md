@@ -1,9 +1,9 @@
 # COMPILATION_PLAN.md
 
 **Projeto:** X7.Knowledge
-**Versão:** 2.1
+**Versão:** 2.2
 **Status:** Normativo (autoridade 2)
-**Derivado de:** `PROJECT_CONSTITUTION.md` v2.1
+**Derivado de:** `PROJECT_CONSTITUTION.md` v2.2
 **Substitui:** `COMPILATION_PLAN.md` v1.0 e `ROADMAP.md` v1.0 (ambos revogados — ver ADR-032)
 
 ---
@@ -166,13 +166,13 @@ Knowledge/
 **Conhecimento produzido.**
 Para cada tipo: classificação (classe, interface, record, struct, enum, delegate), nome, namespace, projeto, localização, modificadores, parâmetros genéricos, tipo base declarado e interfaces implementadas.
 
-**Projeções mínimas.** (Alteradas por ADR-035.)
+**Projeções mínimas.** (Alteradas por ADR-035 e ADR-036.)
 ```
 Knowledge/
   Structure/
     Types/
       INDEX.md        projeto, contagem de tipos, link
-      {projeto}.md    inventário de tipos do projeto, seccionado por classificação
+      {projeto}.md    inventário do projeto, seccionado por namespace
   Relations/
     INDEX.md
     {projeto}.md      herança e implementação, por projeto
@@ -180,6 +180,11 @@ Knowledge/
 
 Partição por projeto e separação entre inventário e relação são exigidas por
 `KNOWLEDGE_MODEL.md` §9.1. O índice nunca lista nomes de tipo.
+
+Acessibilidade e modificadores integram o conhecimento produzido e **não** são
+publicados nesta projeção: são consultados com a superfície pública, no C05
+(ADR-036). IV-07 proíbe projeção com informação ausente do modelo, não o
+contrário.
 
 **Dependências.** C03. Exige nível S para relações entre tipos; classificação,
 modificadores, parâmetros genéricos e aninhamento são obtidos em qualquer
@@ -485,5 +490,5 @@ Ao término deste plano, o X7.Knowledge transforma uma solução C# suportada em
 Implementações evoluem continuamente. As capacidades acima constituem o contrato permanente do compilador.
 
 ---
-*Fim de `COMPILATION_PLAN.md` v2.1.*
-*Alterado por ADR-034 (PL-07) e ADR-035 (projeções do C04).*
+*Fim de `COMPILATION_PLAN.md` v2.2.*
+*Alterado por ADR-034 (PL-07), ADR-035 e ADR-036 (projeções do C04).*

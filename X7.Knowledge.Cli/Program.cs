@@ -16,12 +16,16 @@ ARGUMENTOS
 
 OPÇÕES
   -o, --output       Diretório da Base publicada. Padrão: Knowledge
+  -u, --until        Compila apenas até esta capacidade, inclusive.
+                     Ex.: --until C03. Serve à comparação pareada de MT-02:
+                     produz a Base anterior sobre a entrada de hoje.
   -h, --help         Esta ajuda.
 
 EXEMPLOS
   x7k
   x7k X7.Knowledge.slnx
   x7k X7.Knowledge.slnx -o C:\Temp\X7Knowledge
+  x7k X7.Knowledge.slnx --until C03 -o C:\Temp\Base-C03
 
 SAÍDA
   <output>/README.md
@@ -54,7 +58,8 @@ try
 
     var model = await KnowledgeCompiler.CompileAsync(
         options.SolutionPath,
-        options.OutputDirectory);
+        options.OutputDirectory,
+        options.Until);
 
     stopwatch.Stop();
 

@@ -3,7 +3,7 @@
   "questions": [
     {
       "codeFiles": [
-        "X7.ProjectIndexer.slnx"
+        "X7.Knowledge.slnx"
       ],
       "expectedCapability": "C01",
       "id": "Q01",
@@ -236,5 +236,5 @@
       "text": "Que regras impedem a publicação de um modelo inválido?"
     }
   ],
-  "referenceSolution": "X7.ProjectIndexer.slnx"
+  "referenceSolution": "X7.Knowledge.slnx"
 }

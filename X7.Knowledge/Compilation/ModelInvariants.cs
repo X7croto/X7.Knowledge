@@ -106,6 +106,14 @@ public static class ModelInvariants
     /// </summary>
     private static void ValidateTypeStructure(KnowledgeModel model, List<string> violations)
     {
+        // IV-14 é invariante do C04. Uma Base que não executou o C04 tem
+        // tipos sem classificação por definição, e isso não é violação: é o
+        // estado correto do C03. Ler o manifesto, e não a presença de
+        // `type.kind`, é o que distingue "capacidade não executada" de
+        // "capacidade executada e omissa" — a segunda tem de falhar.
+        if (!model.Manifest.Capabilities.Contains("C04", StringComparer.Ordinal))
+            return;
+
         var declared = model.Observations
             .Where(o => o.Kind == ObservationKinds.TypeDeclared)
             .Select(o => o.Subject)

@@ -1,3 +1,5 @@
+using X7.Knowledge;
+
 namespace X7.Knowledge.Cli;
 
 internal sealed record Options
@@ -6,10 +8,14 @@ internal sealed record Options
 
     public required string OutputDirectory { get; init; }
 
+    /// <summary>Compilar apenas até esta capacidade, inclusive. Nulo = todas.</summary>
+    public string? Until { get; init; }
+
     public static Options? Parse(string[] args, TextWriter error)
     {
         string? solution = null;
         string? output = null;
+        string? until = null;
 
         for (var i = 0; i < args.Length; i++)
         {
@@ -23,6 +29,26 @@ internal sealed record Options
                     }
 
                     output = args[i];
+                    break;
+
+                case "-u" or "--until":
+                    if (++i >= args.Length)
+                    {
+                        error.WriteLine("Erro: '--until' exige uma capacidade.");
+                        return null;
+                    }
+
+                    until = args[i];
+
+                    if (!KnowledgeCompiler.Capabilities.Contains(until, StringComparer.OrdinalIgnoreCase))
+                    {
+                        error.WriteLine(
+                            $"Erro: capacidade desconhecida '{until}'. "
+                            + $"Conhecidas: {string.Join(", ", KnowledgeCompiler.Capabilities)}.");
+
+                        return null;
+                    }
+
                     break;
 
                 case "-h" or "--help":
@@ -54,7 +80,8 @@ internal sealed record Options
         return new Options
         {
             SolutionPath = Path.GetFullPath(solution),
-            OutputDirectory = Path.GetFullPath(output ?? "Knowledge")
+            OutputDirectory = Path.GetFullPath(output ?? "Knowledge"),
+            Until = until
         };
     }
 

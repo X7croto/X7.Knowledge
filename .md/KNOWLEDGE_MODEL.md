@@ -4,7 +4,7 @@
 **Versão do modelo:** v0.7 (provisório)
 **Esquema:** `0.7.0`
 **Status:** Normativo (autoridade 3)
-**Derivado de:** `PROJECT_CONSTITUTION.md` v2.1, `COMPILATION_PLAN.md` v2.1
+**Derivado de:** `PROJECT_CONSTITUTION.md` v2.2, `COMPILATION_PLAN.md` v2.2
 
 ---
 
@@ -523,6 +523,21 @@ dessa pergunta subiu de 5410‰ para 6731‰ quando as colunas foram acrescentad
 
 A regra geral: **o que não é consultado junto não é publicado junto.**
 
+**Corolário — eixo de seção (ADR-036).** Dentro de um arquivo, secciona-se
+pelo campo **mais caro de repetir**, não pelo que parece organizar melhor. O
+eixo de seção é o único campo que deixa de aparecer linha a linha.
+
+Medido: seccionar `Structure/Types/{projeto}.md` por classificação obriga o
+namespace a virar coluna, escrita uma vez por tipo a 6–8 tokens. O `T_kb` de
+"onde está o tipo X" subiu de 2034 para 2912 tokens. Seccionado por namespace,
+com a classificação em coluna de um token, o custo volta ao patamar do C03.
+
+Pelo mesmo critério, acessibilidade e modificadores não são publicados no
+inventário: existem no KnowledgeModel e são publicados no C05, junto da
+superfície pública, que é onde são consultados. IV-07 proíbe projeção com
+informação **ausente** do modelo; não exige que todo fato seja projetado em
+toda parte.
+
 O índice lista projeto, contagem e link. Nunca nomes de tipo: repetir conteúdo
 no índice anularia o ganho da partição.
 
@@ -574,8 +589,11 @@ Testáveis por automação; falha bloqueia a conclusão de qualquer capacidade.
 - **IV-12** Toda Inference declara sua regra.
 - **IV-13** Referência a tipo dentro de payload (`baseTypeId`, `interfaceId`,
   `containerId`) aponta para tipo existente no modelo.
-- **IV-14** Todo tipo presente no modelo possui exatamente uma `type.kind` e
-  exatamente uma `type.accessibility`.
+- **IV-14** Quando o manifesto declara C04, todo tipo presente no modelo
+  possui exatamente uma `type.kind` e exatamente uma `type.accessibility`.
+  A condição é lida do manifesto, e não da presença de `type.kind`: só assim
+  "capacidade não executada" se distingue de "capacidade executada e omissa",
+  e a segunda tem de falhar.
 - **IV-15** O grafo formado por `type.nested-in` é acíclico, e nenhum tipo
   possui mais de um contentor.
 - **IV-16** Os `ordinal` de `type.generic-parameter` de um mesmo tipo formam
@@ -586,6 +604,14 @@ Testáveis por automação; falha bloqueia a conclusão de qualquer capacidade.
 IV-14 é o que torna testável o critério 1 do C04 — *todo tipo possui
 representação própria e completa*. Sem ela, "completa" seria julgamento
 subjetivo, e PL-05 não admite julgamento subjetivo como conclusão.
+
+**Compilação truncada.** O compilador aceita produzir a Base de uma capacidade
+anterior sobre a entrada atual (`--until`). Isso não é uma Base degradada nem
+um modo de operação alternativo: capacidades são aditivas, então o prefixo da
+lista de Producers é exatamente a Base daquela capacidade. O manifesto declara
+o prefixo, e os invariantes de capacidades não executadas não se aplicam.
+Existe para satisfazer MT-02, que exige comparar duas capacidades sobre a
+mesma entrada.
 
 ---
 

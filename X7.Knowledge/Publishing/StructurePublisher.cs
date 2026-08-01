@@ -66,10 +66,8 @@ public sealed class StructurePublisher : IPublisher
     private sealed class TypeFacts
     {
         private readonly Dictionary<KnowledgeId, List<string>> _locations = [];
-        private readonly Dictionary<KnowledgeId, List<string>> _modifiers = [];
         private readonly Dictionary<KnowledgeId, List<(int Ordinal, string Name)>> _parameters = [];
         private readonly Dictionary<KnowledgeId, string> _kinds = [];
-        private readonly Dictionary<KnowledgeId, string> _accessibilities = [];
 
         public static TypeFacts Build(KnowledgeModel model)
         {
@@ -83,16 +81,8 @@ public sealed class StructurePublisher : IPublisher
                         Append(facts._locations, observation.Subject, observation.Payload["file"]!);
                         break;
 
-                    case ObservationKinds.TypeModifier:
-                        Append(facts._modifiers, observation.Subject, observation.Payload["name"]!);
-                        break;
-
                     case ObservationKinds.TypeKind:
                         facts._kinds[observation.Subject] = observation.Payload["kind"]!;
-                        break;
-
-                    case ObservationKinds.TypeAccessibility:
-                        facts._accessibilities[observation.Subject] = observation.Payload["value"]!;
                         break;
 
                     case ObservationKinds.TypeGenericParameter:
@@ -142,20 +132,6 @@ public sealed class StructurePublisher : IPublisher
             return string.Join("`, `", files.OrderBy(f => f, StringComparer.Ordinal));
         }
 
-        /// <summary>Acessibilidade e modificadores, na ordem em que se escreve.</summary>
-        public string Declaration(KnowledgeId typeId)
-        {
-            var parts = new List<string>();
-
-            if (_accessibilities.TryGetValue(typeId, out var accessibility))
-                parts.Add(accessibility.Replace('-', ' '));
-
-            if (_modifiers.TryGetValue(typeId, out var modifiers))
-                parts.AddRange(modifiers.OrderBy(m => m, StringComparer.Ordinal));
-
-            return parts.Count == 0 ? "—" : string.Join(' ', parts);
-        }
-
         /// <summary>
         /// Nome como foi declarado, a partir do nome curto de metadados, que
         /// vem com crase e aridade e não é o que ninguém escreve nem procura.
@@ -193,22 +169,31 @@ public sealed class StructurePublisher : IPublisher
         builder.Append("# Tipos — ").Append(projectName).Append("\n\n");
         builder.Append(types.Count).Append(" tipo(s).\n\n");
 
-        // Seccionado por classificação (ADR-035). Classificação é consultada
-        // junto com o inventário — "onde está X e o que X é" é uma pergunta
-        // só. Relação de tipo não é, e fica em Relations/ (§9.1).
+        // Seccionado por namespace, com a classificação em coluna (ADR-036).
+        //
+        // O eixo de seção é o campo mais caro de repetir. Namespace custa 6 a
+        // 8 tokens por linha; classificação custa um. Seccionar por
+        // classificação escreve o namespace uma vez por tipo; seccionar por
+        // namespace o escreve uma vez por namespace, que é uma ordem de
+        // grandeza menos.
+        //
+        // Acessibilidade e modificadores não são publicados aqui: quem
+        // pergunta onde um tipo está não usa `sealed`. Permanecem no
+        // KnowledgeModel e aparecem no C05, junto da superfície pública, que
+        // é onde são consultados. Relação de tipo, pelo mesmo critério, fica
+        // em Relations/ (§9.1).
         foreach (var group in types
-                     .GroupBy(o => facts.Kind(o.Subject))
+                     .GroupBy(o => o.Payload["namespace"] ?? "(global)")
                      .OrderBy(g => g.Key, StringComparer.Ordinal))
         {
             builder.Append("## ").Append(group.Key).Append("\n\n");
-            builder.Append("| Tipo | Namespace | Declaração | Arquivo |\n|---|---|---|---|\n");
+            builder.Append("| Tipo | Classificação | Arquivo |\n|---|---|---|\n");
 
             foreach (var type in group.OrderBy(o => o.Payload["metadataName"], StringComparer.Ordinal))
             {
                 builder.Append("| ")
                        .Append(facts.Display(type.Subject, type.Payload["name"]!))
-                       .Append(" | ").Append(type.Payload["namespace"] ?? "(global)")
-                       .Append(" | ").Append(facts.Declaration(type.Subject))
+                       .Append(" | ").Append(facts.Kind(type.Subject))
                        .Append(" | `").Append(facts.Location(type.Subject))
                        .Append("` |\n");
             }

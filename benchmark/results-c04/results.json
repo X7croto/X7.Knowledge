@@ -4,13 +4,11 @@
   "coveragePerMille": 533,
   "measurements": [
     {
-      "codeTokens": 0,
+      "codeTokens": 171,
+      "contextRatioPerMille": 2538,
       "expectedCapability": "C01",
       "id": "Q01",
       "kbTokens": 434,
-      "missingCodeFiles": [
-        "X7.ProjectIndexer.slnx"
-      ],
       "supported": true
     },
     {
@@ -55,10 +53,10 @@
     },
     {
       "codeTokens": 376,
-      "contextRatioPerMille": 7745,
+      "contextRatioPerMille": 6287,
       "expectedCapability": "C03",
       "id": "Q07",
-      "kbTokens": 2912,
+      "kbTokens": 2364,
       "supported": true
     },
     {
@@ -77,14 +75,14 @@
       "supported": false
     },
     {
-      "codeTokens": 7367,
+      "codeTokens": 7472,
       "expectedCapability": "C06",
       "id": "Q10",
       "kbTokens": 0,
       "supported": false
     },
     {
-      "codeTokens": 4764,
+      "codeTokens": 5148,
       "expectedCapability": "C07",
       "id": "Q11",
       "kbTokens": 0,
@@ -98,7 +96,7 @@
       "supported": false
     },
     {
-      "codeTokens": 1309,
+      "codeTokens": 1693,
       "expectedCapability": "C09",
       "id": "Q13",
       "kbTokens": 0,
@@ -112,17 +110,17 @@
       "supported": false
     },
     {
-      "codeTokens": 3402,
+      "codeTokens": 3507,
       "expectedCapability": "C11",
       "id": "Q15",
       "kbTokens": 0,
       "supported": false
     }
   ],
-  "medianContextRatioPerMille": 196,
+  "medianContextRatioPerMille": 429,
   "projectCount": 5,
   "questionCount": 15,
-  "referenceSolution": "X7.ProjectIndexer.slnx",
+  "referenceSolution": "X7.Knowledge.slnx",
   "solutionDigest": "a0e430d38833d497c02c96211812f74bc6aa27a3b40b4dfe08ffd2a25037b8fb",
   "supportedCount": 8
 }
