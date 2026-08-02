@@ -75,14 +75,16 @@ public sealed class MemberSurfaceTests : IClassFixture<SolutionFixture>
     }
 
     /// <summary>
-    /// O que a fatia não cobre é ausência declarada, nunca silenciosa.
+    /// A superfície declarada fechou na fatia C: a limitação que as fatias A
+    /// e B carregavam deixa de ser produzida. Limitação que sobrevive ao que
+    /// a justificava vira ruído, e treina o leitor a ignorar as demais.
     /// </summary>
     [Fact]
-    public async Task Fatia_incompleta_declara_a_propria_limitacao()
+    public async Task Superficie_completa_nao_declara_limitacao_de_membros()
     {
         var model = await CompileAsync();
 
-        Assert.Contains(model.Observations, o =>
+        Assert.DoesNotContain(model.Observations, o =>
             o.Kind == ObservationKinds.AcquisitionLimitation
             && o.Payload["affectedScope"] == "type-members-partial");
     }
@@ -158,8 +160,14 @@ public sealed class MemberSurfaceTests : IClassFixture<SolutionFixture>
         Assert.Equal(2, sobrecargas.Length);
     }
 
+    /// <summary>
+    /// A forma da identidade segue a da declaração: parênteses onde há lista
+    /// de parâmetros, colchetes no indexador, nada onde o membro é acessado
+    /// pelo nome. É o que impede uma propriedade e um método sem parâmetros
+    /// de colidirem.
+    /// </summary>
     [Fact]
-    public async Task Propriedade_nao_tem_parenteses_na_identidade_e_metodo_tem()
+    public async Task A_identidade_distingue_as_formas_de_membro()
     {
         var model = await CompileAsync();
 
@@ -170,10 +178,23 @@ public sealed class MemberSurfaceTests : IClassFixture<SolutionFixture>
         {
             var identidade = member.Subject.Value;
 
-            if (member.Payload["kind"] == MemberVocabulary.Property)
-                Assert.DoesNotContain("(", identidade, StringComparison.Ordinal);
-            else
-                Assert.Contains("(", identidade, StringComparison.Ordinal);
+            switch (member.Payload["kind"])
+            {
+                case MemberVocabulary.Property:
+                case MemberVocabulary.Field:
+                case MemberVocabulary.Event:
+                    Assert.DoesNotContain("(", identidade, StringComparison.Ordinal);
+                    Assert.DoesNotContain("[", identidade, StringComparison.Ordinal);
+                    break;
+
+                case MemberVocabulary.Indexer:
+                    Assert.Contains("this[", identidade, StringComparison.Ordinal);
+                    break;
+
+                default:
+                    Assert.Contains("(", identidade, StringComparison.Ordinal);
+                    break;
+            }
         }
     }
 

@@ -12,14 +12,14 @@ falta a fatia B.
 
 | Documento | Versão | Status |
 |---|---|---|
-| `PROJECT_CONSTITUTION.md` | **2.5** | Normativo, autoridade 1 |
+| `PROJECT_CONSTITUTION.md` | **2.8** | Normativo, autoridade 1 |
 | `COMPILATION_PLAN.md` | **2.3** | Normativo, autoridade 2 |
-| `KNOWLEDGE_MODEL.md` | **1.1** | Normativo, autoridade 3 — **CONGELADO** |
+| `KNOWLEDGE_MODEL.md` | **1.4** | Normativo, autoridade 3 — **CONGELADO** |
 | `BENCHMARK.md` | conjunto v6 | `benchmark/` |
 | `SECURITY-NOTES.md` | — | informativo |
 | `MIGRATION_v1_to_v2.md` | — | histórico |
 
-ADRs 027 a 041 registradas na Constituição §8. As de 034 em diante decorrem de
+ADRs 027 a 044 registradas na Constituição §8. As de 034 em diante decorrem de
 medição, de amadurecimento do modelo, da entrada do C05 ou de defeito
 descoberto em produção, e têm texto completo em `.md/`.
 
@@ -42,7 +42,7 @@ exercida contra a maior adição do plano e não precisou ser quebrada.
 | C02 Arquitetural | concluída |
 | C03 Estrutura do Código | concluída |
 | C04 Modelo Estrutural | **concluída** |
-| C05 Modelo Comportamental | **em andamento — fatia A concluída e medida** |
+| C05 Modelo Comportamental | **em andamento — falta só o critério 2** |
 | C06 em diante | não iniciadas |
 
 C04 entregue em duas fatias: relações (`type.inherits`, `type.implements`) e
@@ -53,10 +53,15 @@ estrutura do tipo (`type.kind`, `type.accessibility`, `type.modifier`,
 C05 fatia A entregue com oito `kind`s (`type.declares-member`,
 `member.declared`, `member.accessibility`, `member.modifier`, `member.type`,
 `member.parameter`, `member.generic-parameter`, `member.accessor`), identidade
-`member:`, IV-18 a IV-21 e a projeção `Behavior/` por tipo. Fatia B — campos,
-eventos, operadores, indexadores, construtores estáticos, implementações
-explícitas de interface e restrições genéricas — está declarada em
-`acquisition.limitation` de escopo `type-members-partial`.
+`member:`, IV-18 a IV-21 e a projeção `Behavior/` por tipo. Fatia B entregue com o `kind`
+`member.explicit-interface`, quatro valores em `member.declared`, dois em
+`member.modifier`, dois em `member.accessor`, IV-22 e IV-19/IV-21 ampliadas.
+Fatia C entregou restrições
+genéricas (`member.generic-constraint`, `type.generic-constraint`), o campo
+`defaultValue` em `member.parameter`, o modificador `ref-readonly` que o
+vocabulário declarava sem produtor, e IV-23. A limitação
+`type-members-partial` deixou de existir: a superfície declarada está
+completa.
 
 Critério de conclusão verificado nos três itens. O item 1 — *representação
 própria e completa* — é verificado por **IV-14** dentro da compilação, e não
@@ -257,6 +262,18 @@ ponto. Verificar propriedade, nunca superfície.
 Agora compara `ModelVersion` com o `**Esquema:**` do `KNOWLEDGE_MODEL.md`:
 testa que código e documento concordam.
 
+**Forma não é estrutura e valor não é dado.** Errei nisso duas vezes na mesma
+direção: a ADR-042 tirou o valor do `const` chamando-o de dado, e a fatia A
+publicava `= …` no lugar do valor padrão de parâmetro. Nos dois casos o que o
+consumidor precisa é do valor. A pergunta útil não é *isto é dado?*, e sim
+*trocar isto quebra alguém?* — para `const` público a resposta é sim, e sem
+recompilação.
+
+**A conferência que concorda com a projeção não verifica nada.** A tentação,
+quando a conferência de assinatura acusou `public const string Kind`, era
+afrouxá-la para tolerar. Ela existe para discordar; normalizar até os dois
+lados coincidirem transforma verificação em tautologia.
+
 **Nem todo critério vira invariante.** A IV-14 funcionou porque todo tipo tem
 classificação. Não existe equivalente para membro: tipo sem membro é legítimo,
 e o modelo não sabe o que ficou de fora. Quando a cobertura não é verificável
@@ -266,34 +283,27 @@ a capacidade anterior.
 
 ---
 
-## 8. Próximo passo — C05, fatia B
+## 8. Próximo passo — fechar o C05
 
-A fatia A entregou método, construtor e propriedade. Falta o resto da
-superfície: **campos, eventos, operadores, indexadores, construtores
-estáticos, implementações explícitas de interface e restrições genéricas.**
+A superfície declarada está completa. Falta **um item**, e ele é de
+verificação, não de conhecimento.
+
+**Na medição da fatia C, Q01, Q02 e Q03 devem melhorar.** A limitação
+`type-members-partial` saiu, e `Structure/Solution.md` perdeu uma linha — as
+mesmas três perguntas que pioraram nas fatias A e B, agora pela razão inversa.
+Causa externa à capacidade nos dois sentidos (ADR-034).
+
+Candidato registrado para o C11: **teste de cobertura de vocabulário** — todo
+valor declarado é produzido ao menos uma vez pela fixture. O `ref-readonly`
+ficou dois ciclos no vocabulário sem que nada pudesse produzi-lo, e nenhum
+invariante cobre essa classe de defeito.
 
 O critério 1 do C05 — *o comportamento público é compreensível sem abrir
-código* — só se verifica com a superfície inteira, e não é verificável por
-invariante: não existe equivalente da IV-14 para membro, porque tipo sem
-membro é legítimo. Quem o torna objetivo é o critério 2, a conferência de
-assinatura contra o compilador de referência (ADR-039 §6). **Esse teste ainda
-não existe** e é o que falta para PL-05 ser satisfeito.
-
-Ordem de trabalho:
-
-1. **ADR dos valores novos de `member.declared`** — `field`, `event`,
-   `operator`, `indexer`, `static-constructor`. Vocabulário fechado é parte do
-   esquema, e o modelo está congelado.
-2. Estender o `MemberSurfaceProducer`. `member.type`, `member.parameter` e
-   `member.accessor` são reaproveitados sem alteração — foi para isso que
-   `member.type` nasceu com esse nome.
-3. Restrições genéricas: decidir se são `kind` próprio ou payload de
-   `member.generic-parameter`. Campo novo em entidade existente é sempre
-   opcional (EX-02), então as duas portas estão abertas; a escolha é de custo
-   de projeção e sai medida.
-4. Retirar a limitação `type-members-partial` quando a superfície fechar.
-5. Conferência de assinatura contra o Roslyn — o critério 2.
-6. Medição por corte: `--until C04` sobre a árvore do dia.
+código* — não é verificável por invariante: não existe equivalente da IV-14
+para membro, porque tipo sem membro é legítimo. Quem o torna objetivo é o
+critério 2, a conferência de assinatura contra o compilador de referência
+(ADR-039 §6). **Esse teste ainda não existe**, e é o único item que separa o
+C05 da conclusão.
 
 Depois do C05, o C06 herda a segunda regra da §9.1: `Relations/` hoje é por
 projeto porque responde *quem implementa X*, uma varredura. As projeções novas

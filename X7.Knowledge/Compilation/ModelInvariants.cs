@@ -214,7 +214,8 @@ public static class ModelInvariants
                     + "type.declares-member; esperado exatamente 1");
             }
 
-            // IV-19
+            // IV-19. Construtor não escreve tipo na declaração, inclusive o
+            // estático; todas as demais espécies escrevem exatamente um.
             var esperado = kind == MemberVocabulary.Constructor ? 0 : 1;
 
             if (types.GetValueOrDefault(member) != esperado)
@@ -233,6 +234,20 @@ public static class ModelInvariants
         ValidateMemberOrdinals(model, ObservationKinds.MemberParameter, "IV-20", violations);
         ValidateMemberOrdinals(model, ObservationKinds.MemberGenericParameter, "IV-20", violations);
         ValidateAccessors(model, kindOf, violations);
+        ValidateParameterOwners(model, kindOf, violations);
+        ValidateConstantValues(model, kindOf, violations);
+
+        ValidateConstraints(
+            model,
+            ObservationKinds.MemberGenericConstraint,
+            ObservationKinds.MemberGenericParameter,
+            violations);
+
+        ValidateConstraints(
+            model,
+            ObservationKinds.TypeGenericConstraint,
+            ObservationKinds.TypeGenericParameter,
+            violations);
     }
 
     /// <summary>IV-20: os ordinais formam 0..n-1, sem repetição e sem lacuna.</summary>
@@ -275,7 +290,68 @@ public static class ModelInvariants
         }
     }
 
-    /// <summary>IV-21: acessor só existe em propriedade, um por espécie.</summary>
+    /// <summary>
+    /// IV-24: valor de constante só existe em campo, no máximo um. Em
+    /// qualquer outra espécie significaria que o Producer confundiu a forma
+    /// do membro.
+    /// </summary>
+    private static void ValidateConstantValues(
+        KnowledgeModel model,
+        IReadOnlyDictionary<KnowledgeId, string> kindOf,
+        List<string> violations)
+    {
+        foreach (var group in model.Observations
+                     .Where(o => o.Kind == ObservationKinds.MemberConstantValue)
+                     .GroupBy(o => o.Subject)
+                     .OrderBy(g => g.Key))
+        {
+            var kind = kindOf.GetValueOrDefault(group.Key);
+
+            if (kind != MemberVocabulary.Field)
+                violations.Add($"IV-24: {group.Key} tem member.constant-value e é de espécie '{kind}'");
+
+            if (group.Count() > 1)
+                violations.Add($"IV-24: {group.Key} declara {group.Count()} valores de constante");
+        }
+    }
+
+    /// <summary>
+    /// IV-22: parâmetro só existe em membro que admite parâmetro. Campo,
+    /// evento e propriedade não admitem, e uma Observation dessas ali
+    /// significaria que o Producer confundiu a forma do membro.
+    /// </summary>
+    private static void ValidateParameterOwners(
+        KnowledgeModel model,
+        IReadOnlyDictionary<KnowledgeId, string> kindOf,
+        List<string> violations)
+    {
+        var admitem = new[]
+        {
+            MemberVocabulary.Method,
+            MemberVocabulary.Constructor,
+            MemberVocabulary.Operator,
+            MemberVocabulary.Indexer
+        };
+
+        foreach (var group in model.Observations
+                     .Where(o => o.Kind == ObservationKinds.MemberParameter)
+                     .GroupBy(o => o.Subject)
+                     .OrderBy(g => g.Key))
+        {
+            var kind = kindOf.GetValueOrDefault(group.Key);
+
+            if (kind is null || !admitem.Contains(kind, StringComparer.Ordinal))
+            {
+                violations.Add(
+                    $"IV-22: {group.Key} tem member.parameter e é de espécie '{kind}'");
+            }
+        }
+    }
+
+    /// <summary>
+    /// IV-21: acessor só existe em propriedade, indexador ou evento, um por
+    /// espécie.
+    /// </summary>
     private static void ValidateAccessors(
         KnowledgeModel model,
         IReadOnlyDictionary<KnowledgeId, string> kindOf,
@@ -286,10 +362,16 @@ public static class ModelInvariants
                      .GroupBy(o => o.Subject)
                      .OrderBy(g => g.Key))
         {
-            if (kindOf.GetValueOrDefault(group.Key) != MemberVocabulary.Property)
+            var kind = kindOf.GetValueOrDefault(group.Key);
+
+            var admite = kind is MemberVocabulary.Property
+                or MemberVocabulary.Indexer
+                or MemberVocabulary.Event;
+
+            if (!admite)
             {
                 violations.Add(
-                    $"IV-21: {group.Key} tem member.accessor sem ser propriedade");
+                    $"IV-21: {group.Key} tem member.accessor e é de espécie '{kind}'");
             }
 
             foreach (var byKind in group.GroupBy(o => o.Payload["kind"]))
@@ -302,6 +384,76 @@ public static class ModelInvariants
 
                 if (byKind.Count() > 1)
                     violations.Add($"IV-21: {group.Key} declara '{byKind.Key}' mais de uma vez");
+            }
+        }
+    }
+
+    /// <summary>
+    /// IV-23: toda restrição referencia um parâmetro genérico declarado no
+    /// mesmo sujeito, e os ordinais de um mesmo par (sujeito, parâmetro)
+    /// formam `0..n-1`. É IV-20 aplicada a outro agrupamento: lá a sequência
+    /// é por membro, aqui é por parâmetro dentro dele.
+    /// </summary>
+    private static void ValidateConstraints(
+        KnowledgeModel model,
+        string constraintKind,
+        string parameterKind,
+        List<string> violations)
+    {
+        var declared = model.Observations
+            .Where(o => o.Kind == parameterKind)
+            .GroupBy(o => o.Subject)
+            .ToDictionary(
+                g => g.Key,
+                g => g.Select(o => o.Payload["name"] ?? string.Empty)
+                      .ToHashSet(StringComparer.Ordinal));
+
+        var groups = model.Observations
+            .Where(o => o.Kind == constraintKind)
+            .GroupBy(o => (o.Subject, Parameter: o.Payload["parameter"] ?? string.Empty))
+            .OrderBy(g => g.Key.Subject)
+            .ThenBy(g => g.Key.Parameter, StringComparer.Ordinal);
+
+        foreach (var group in groups)
+        {
+            var (subject, parameter) = group.Key;
+
+            if (!declared.TryGetValue(subject, out var names) || !names.Contains(parameter))
+            {
+                violations.Add(
+                    $"IV-23: {subject} restringe '{parameter}', que não é parâmetro "
+                    + "genérico declarado nesse sujeito");
+            }
+
+            var ordinals = new List<int>();
+
+            foreach (var observation in group)
+            {
+                var form = observation.Payload["form"];
+
+                if (form is null || !MemberVocabulary.IsKnownConstraintForm(form))
+                    violations.Add($"IV-04: forma de restrição fora do vocabulário em {observation.Id}: {form}");
+
+                if (int.TryParse(
+                        observation.Payload["ordinal"],
+                        System.Globalization.NumberStyles.Integer,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out var ordinal))
+                {
+                    ordinals.Add(ordinal);
+                    continue;
+                }
+
+                violations.Add($"IV-23: ordinal não numérico em {observation.Id}");
+            }
+
+            ordinals.Sort();
+
+            if (!ordinals.SequenceEqual(Enumerable.Range(0, ordinals.Count)))
+            {
+                violations.Add(
+                    $"IV-23: {subject} tem ordinais [{string.Join(", ", ordinals)}] nas "
+                    + $"restrições de '{parameter}'; esperado 0..{ordinals.Count - 1}");
             }
         }
     }

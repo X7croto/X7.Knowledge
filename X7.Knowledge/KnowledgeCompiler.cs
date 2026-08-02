@@ -15,7 +15,7 @@ namespace X7.Knowledge;
 /// </summary>
 public static class KnowledgeCompiler
 {
-    public const string ModelVersion = "1.1.0";
+    public const string ModelVersion = "1.4.0";
 
     /// <summary>
     /// Capacidades que este compilador possui, em ordem. Fonte única: o CLI
@@ -73,7 +73,8 @@ public static class KnowledgeCompiler
             new TypeStructureProducer(sources),
             new TypeRelationProducer(sources),
             new PartialTypeProducer(),
-            new MemberSurfaceProducer(sources)
+            new MemberSurfaceProducer(sources),
+            new GenericConstraintProducer(sources)
         ];
 
         var pipeline = new KnowledgePipeline(

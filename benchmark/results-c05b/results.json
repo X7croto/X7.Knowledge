@@ -1,0 +1,127 @@
+{
+  "benchmarkVersion": 6,
+  "brokenCount": 0,
+  "coveragePerMille": 600,
+  "measurements": [
+    {
+      "codeTokens": 171,
+      "contextRatioPerMille": 2690,
+      "expectedCapability": "C01",
+      "id": "Q01",
+      "kbTokens": 460,
+      "supported": true
+    },
+    {
+      "codeTokens": 4100,
+      "contextRatioPerMille": 112,
+      "expectedCapability": "C01",
+      "id": "Q02",
+      "kbTokens": 460,
+      "supported": true
+    },
+    {
+      "codeTokens": 609,
+      "contextRatioPerMille": 755,
+      "expectedCapability": "C01",
+      "id": "Q03",
+      "kbTokens": 460,
+      "supported": true
+    },
+    {
+      "codeTokens": 1917,
+      "contextRatioPerMille": 196,
+      "expectedCapability": "C02",
+      "id": "Q04",
+      "kbTokens": 375,
+      "supported": true
+    },
+    {
+      "codeTokens": 1917,
+      "contextRatioPerMille": 196,
+      "expectedCapability": "C02",
+      "id": "Q05",
+      "kbTokens": 375,
+      "supported": true
+    },
+    {
+      "codeTokens": 1917,
+      "contextRatioPerMille": 94,
+      "expectedCapability": "C02",
+      "id": "Q06",
+      "kbTokens": 180,
+      "supported": true
+    },
+    {
+      "codeTokens": 376,
+      "contextRatioPerMille": 5170,
+      "expectedCapability": "C03",
+      "id": "Q07",
+      "kbTokens": 1944,
+      "supported": true
+    },
+    {
+      "codeTokens": 1335,
+      "contextRatioPerMille": 633,
+      "expectedCapability": "C04",
+      "id": "Q08",
+      "kbTokens": 845,
+      "supported": true
+    },
+    {
+      "codeTokens": 712,
+      "contextRatioPerMille": 427,
+      "expectedCapability": "C05",
+      "id": "Q09",
+      "kbTokens": 304,
+      "supported": true
+    },
+    {
+      "codeTokens": 9272,
+      "expectedCapability": "C06",
+      "id": "Q10",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 5259,
+      "expectedCapability": "C07",
+      "id": "Q11",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 1428,
+      "expectedCapability": "C08",
+      "id": "Q12",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 1804,
+      "expectedCapability": "C09",
+      "id": "Q13",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 1406,
+      "expectedCapability": "C10",
+      "id": "Q14",
+      "kbTokens": 0,
+      "supported": false
+    },
+    {
+      "codeTokens": 5307,
+      "expectedCapability": "C11",
+      "id": "Q15",
+      "kbTokens": 0,
+      "supported": false
+    }
+  ],
+  "medianContextRatioPerMille": 427,
+  "projectCount": 5,
+  "questionCount": 15,
+  "referenceSolution": "X7.Knowledge.slnx",
+  "solutionDigest": "a0e430d38833d497c02c96211812f74bc6aa27a3b40b4dfe08ffd2a25037b8fb",
+  "supportedCount": 9
+}

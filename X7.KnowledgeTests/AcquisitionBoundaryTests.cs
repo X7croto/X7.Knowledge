@@ -87,7 +87,7 @@ public sealed class AcquisitionBoundaryTests : IClassFixture<SolutionFixture>
         Assert.NotEmpty(nomes);
 
         // O tipo escrito à mão continua lá; o que o gerador emitiu a partir
-        // dele, não.
+        // dele, não.t
         Assert.Contains(nomes, n => n.Contains("PathRules", StringComparison.Ordinal));
 
         // `<` em nome de tipo é legítimo: é a lista de parâmetros genéricos,

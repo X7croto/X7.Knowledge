@@ -48,6 +48,10 @@ public static class ObservationKinds
     public const string MemberParameter = "member.parameter";
     public const string MemberGenericParameter = "member.generic-parameter";
     public const string MemberAccessor = "member.accessor";
+    public const string MemberExplicitInterface = "member.explicit-interface";
+    public const string MemberConstantValue = "member.constant-value";
+    public const string MemberGenericConstraint = "member.generic-constraint";
+    public const string TypeGenericConstraint = "type.generic-constraint";
 
     public const string AcquisitionLimitation = "acquisition.limitation";
 
@@ -84,6 +88,10 @@ public static class ObservationKinds
         MemberParameter,
         MemberGenericParameter,
         MemberAccessor,
+        MemberExplicitInterface,
+        MemberConstantValue,
+        MemberGenericConstraint,
+        TypeGenericConstraint,
         AcquisitionLimitation
     };
 

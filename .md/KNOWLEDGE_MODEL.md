@@ -1,10 +1,10 @@
 # KNOWLEDGE_MODEL.md
 
 **Projeto:** X7.Knowledge
-**Versão do modelo:** v1.1
-**Esquema:** `1.1.0`
+**Versão do modelo:** v1.4
+**Esquema:** `1.4.0`
 **Status:** Normativo (autoridade 3) — **CONGELADO** (ADR-037)
-**Derivado de:** `PROJECT_CONSTITUTION.md` v2.5, `COMPILATION_PLAN.md` v2.3
+**Derivado de:** `PROJECT_CONSTITUTION.md` v2.8, `COMPILATION_PLAN.md` v2.3
 
 ---
 
@@ -55,7 +55,7 @@ Todo KnowledgeModel começa por um manifesto. Ele existe para tornar a compilaç
 
 | Campo | Tipo | Descrição |
 |---|---|---|
-| `modelVersion` | string | Versão deste esquema. `1.1.0` |
+| `modelVersion` | string | Versão deste esquema. `1.4.0` |
 | `compilerVersion` | string | Versão do compilador que produziu |
 | `solutionId` | KnowledgeId | Identidade da solução |
 | `acquisitionLevel` | `S` \| `X` | Nível alcançado (Constituição §5.3) |
@@ -103,7 +103,10 @@ member:{tipoQualificado}.{nome}({tiposDosParâmetros})@{projeto}
 | Método | `...KnowledgeModelBuilder.Add(X7.Knowledge.Model.Observation)@X7.Knowledge` |
 | Método genérico | aridade de metadados no nome: ``Map`1(System.String)`` |
 | Construtor | nome `.ctor`, sempre com parênteses |
-| Propriedade | sem parênteses: `...KnowledgeModelBuilder.Observations@X7.Knowledge` |
+| Propriedade, campo, evento | sem parênteses: `...KnowledgeModelBuilder.Observations@X7.Knowledge` |
+| Indexador | tipos entre colchetes: `...ObservationPayload.this[System.String]` |
+| Operador | nome de metadados: `...Money.op_Addition(...,...)` |
+| Construtor estático | `..cctor()` |
 
 Regras:
 
@@ -442,9 +445,13 @@ seria dedução por nome, que a §5.3 da Constituição proíbe.
 | `member.accessibility` | Membro | `{ value }` |
 | `member.modifier` | Membro | `{ name }` |
 | `member.type` | Membro | `{ typeName, typeId?, external? }` |
-| `member.parameter` | Membro | `{ name, ordinal, typeName, typeId?, external?, modifier?, optional? }` |
+| `member.parameter` | Membro | `{ name, ordinal, typeName, typeId?, external?, modifier?, optional?, defaultValue? }` |
 | `member.generic-parameter` | Membro | `{ name, ordinal }` |
 | `member.accessor` | Membro | `{ kind, accessibility? }` |
+| `member.explicit-interface` | Membro | `{ interfaceName, interfaceId?, external? }` |
+| `member.constant-value` | Membro | `{ value }` |
+| `member.generic-constraint` | Membro | `{ parameter, ordinal, form, value, typeId?, external? }` |
+| `type.generic-constraint` | Tipo | `{ parameter, ordinal, form, value, typeId?, external? }` |
 
 `type.declares-member` segue o precedente de `namespace.contains`: contenção é
 observada só na direção contentor → contido, e a inversa é derivável do
@@ -466,13 +473,65 @@ deixou a composição de `Cache<TKey, TValue>` para a projeção.
 (IV-04).
 
 ```
-member.declared / kind        method  constructor  property
+member.declared / kind        method  constructor  property  field
+                              event  operator  indexer
 member.accessibility / value  o mesmo vocabulário de type.accessibility
 member.modifier / name        static  abstract  virtual  override  sealed
-                              readonly  required  extern
-member.accessor / kind        get  set  init
+                              readonly  required  extern  const  volatile
+member.accessor / kind        get  set  init  add  remove
 member.parameter / modifier   ref  out  in  params  ref-readonly
+constraint / form             keyword  type  type-parameter
 ```
+
+**Restrição é `kind` próprio, e não campo** (ADR-043). `where T : class,
+IFoo, new()` é conjunto, e conjunto em campo só caberia como texto delimitado
+— o oposto do que OB-03 pede ao exigir forma fixa de payload.
+
+O parâmetro é referenciado **por nome**. Parâmetro de tipo não é entidade: não
+tem identidade na §3, e criar uma custaria formato novo e invariante de
+referência para substituir um nome que já é único no escopo que o declara.
+
+`form` existe para distinguir `T : U` de `T : class` sem depender da ausência
+de `typeId` — ausência como discriminante é o que a §6.1.4 já rejeitou ao
+observar todo membro em vez de só o público.
+
+`ordinal` é a posição na cláusula **como escrita**. A linguagem exige ordem, e
+guardá-la deixa a projeção reproduzir a cláusula sem embutir a gramática do C#
+no Publisher.
+
+**Restrições, modificadores de parâmetro e valores padrão vêm da sintaxe**,
+pelo motivo já estabelecido para modificadores: o símbolo expõe a forma de
+metadados. `default` e `null` são a mesma coisa nos metadados e coisas
+diferentes na declaração, e `ref readonly` não se distingue de `in` por
+`RefKind` sem conhecer o valor que a linguagem reserva para ele.
+
+**Construtor estático não tem valor próprio** (ADR-042). A declaração escreve
+`static X()`: é `constructor` com `member.modifier` de valor `static`. Criar
+`static-constructor` duplicaria em vocabulário o que já está em modificador.
+
+**Implementação explícita de interface também não.** Continua sendo `method`,
+`property` ou `event`, e o que a distingue é `member.explicit-interface`. A
+acessibilidade dela permanece `private`: é o que o símbolo responde e o que
+está nos metadados, e C# proíbe modificador de acesso ali, de modo que não há
+declaração para espelhar — publicar `public` seria fabricar. Quem decide que
+ela é superfície é a projeção, pela presença do fato, e não pela
+acessibilidade. É a mesma separação de planos de §9.1: o modelo observa, a
+projeção filtra.
+
+**O valor de um `const` é observado** (ADR-044, que revoga a exclusão da
+ADR-042). Ele é embutido no chamador em tempo de compilação: trocá-lo quebra
+quem já compilou, sem recompilação e sem aviso. É contrato, e mais rígido que
+o valor padrão de parâmetro — que ao menos o chamador pode ignorar.
+
+A condição é o modificador **escrito**, e não `IsConst`: membro de enum também
+é constante para o símbolo, mas a declaração dele não escreve `const` e
+`public MyEnum Valor` já é declaração válida. `static readonly` não entra: o
+valor ali é inicialização, lida em tempo de execução, e a declaração já é
+válida sem ele.
+
+Quem encontrou o erro foi a conferência de assinatura: `public const string
+Kind` não é C# válido, e uma assinatura que não é declaração válida não
+descreve nada.
 
 Ficam declaradamente de fora: `async`, detalhe de implementação e não
 superfície; `new`, que descreve ocultação e não é exposto pelo símbolo;
@@ -493,10 +552,10 @@ qualquer acessibilidade; a projeção do C05 é que filtra a superfície públic
 público. Ampliar depois o alcance de um `kind` existente é alterá-lo, que
 EX-01 proíbe.
 
-**Fatia declarada.** Esta é a primeira fatia do C05: métodos, construtores e
-propriedades. Campos, eventos, operadores, indexadores e restrições genéricas
-entram na fatia seguinte, e até lá toda compilação registra
-`acquisition.limitation` de escopo `type-members-partial`.
+**A superfície declarada está completa.** A `acquisition.limitation` de escopo
+`type-members-partial` deixou de ser produzida na fatia C. Limitação que
+sobrevive ao que a justificava vira ruído e treina o leitor a ignorar as
+demais.
 
 ### 6.2 Evidence
 
@@ -776,13 +835,25 @@ Testáveis por automação; falha bloqueia a conclusão de qualquer capacidade.
 - **IV-18** Todo membro possui exatamente um `member.declared`, exatamente uma
   `member.accessibility`, e é alvo de exatamente um `type.declares-member`
   cujo `subject` existe no modelo.
-- **IV-19** Membro de `kind` `method` ou `property` possui exatamente um
-  `member.type`; membro de `kind` `constructor` não possui nenhum.
+- **IV-19** Todo membro possui exatamente um `member.type`, exceto o de
+  `kind` `constructor` — inclusive o estático —, que não possui nenhum: a
+  declaração não escreve tipo ali.
 - **IV-20** Os `ordinal` de `member.parameter` de um mesmo membro formam a
   sequência `0..n-1`, sem repetição e sem lacuna. O mesmo vale para
   `member.generic-parameter`.
-- **IV-21** `member.accessor` ocorre apenas em membro de `kind` `property`, no
-  máximo um por valor de `kind`.
+- **IV-21** `member.accessor` ocorre apenas em membro de `kind` `property`,
+  `indexer` ou `event`, no máximo um por valor de `kind`.
+- **IV-22** `member.parameter` ocorre apenas em membro de `kind` `method`,
+  `constructor`, `operator` ou `indexer`. Campo, evento e propriedade não
+  admitem parâmetro, e uma Observation dessas ali significaria que o Producer
+  confundiu a forma do membro.
+- **IV-24** `member.constant-value` ocorre apenas em membro de `kind`
+  `field`, no máximo um por membro.
+- **IV-23** Toda restrição referencia, pelo `parameter`, um parâmetro genérico
+  declarado no mesmo sujeito; e os `ordinal` das restrições de um mesmo par
+  (sujeito, `parameter`) formam `0..n-1`, sem repetição e sem lacuna. É IV-20
+  em outro agrupamento: lá a sequência é por membro, aqui é por parâmetro
+  dentro dele.
 
 IV-14 é o que torna testável o critério 1 do C04 — *todo tipo possui
 representação própria e completa*. Sem ela, "completa" seria julgamento
@@ -823,6 +894,9 @@ Registra alterações do **esquema**. Alteração deste documento que não toque
 | `0.6.0` | Kinds de C04 (6.1.3); IV-13 | **Aditiva**. Nenhum `kind` anterior alterado |
 | `0.7.0` | Estrutura do tipo em C04 (6.1.3.b): `type.kind`, `type.accessibility`, `type.modifier`, `type.generic-parameter`, `type.nested-in`; Evidence `type.declaration-sites`; Inference `type.is-partial`; IV-14..IV-17; §10 atualizada | **Aditiva** (EX-01, EX-04). Nenhum `kind` anterior alterado; `IV-13` teve escopo ampliado para `containerId`, sem alterar payload existente |
 | `1.0.0` | Congelamento (ADR-037). Nenhum `kind`, campo ou invariante alterado | **Idêntica a `0.7.0` em conteúdo.** A mudança de versão maior declara o fim do estado provisório, não uma quebra de compatibilidade |
+| `1.4.0` | `member.constant-value` e IV-24 (ADR-044, que revoga a exclusão da ADR-042 §2) | **Aditiva** (EX-01, EX-04). Encontrada pela conferência de assinatura do critério 2, não por invariante: `public const string Kind` não é declaração C# válida |
+| `1.3.0` | Terceira fatia do C05 (ADR-043): `kind`s `member.generic-constraint` e `type.generic-constraint`; campo `defaultValue` em `member.parameter`; vocabulário `form`; IV-23 | **Aditiva** (EX-01, EX-02, EX-04). `defaultValue` é campo novo em entidade existente, e portanto opcional. `type.generic-constraint` é a primeira adição do C05 ao território do C04: adição pura, nenhum `kind` do C04 alterado |
+| `1.2.0` | Segunda fatia do C05 (ADR-042): `kind` `member.explicit-interface`; quatro valores em `member.declared`, dois em `member.modifier`, dois em `member.accessor`; IV-19 e IV-21 ampliadas; IV-22 | **Aditiva** (EX-01, EX-04). Nenhum `kind`, campo ou payload existente alterado. `member.type`, `member.parameter` e `member.accessor` receberam as formas novas sem alteração — foi para isso que `member.type` nasceu com esse nome |
 | `1.1.0` | Primeira fatia do C05 (ADR-039, ADR-040): identidade `member:` (§3.1); oito `kind`s em 6.1.4; IV-18..IV-21; IV-13 ampliado para `typeId`; segunda regra da §9.1; §10 atualizada | **Aditiva** (EX-01, EX-04). Nenhum `kind` anterior alterado. Primeira alteração sob o modelo congelado, e por ADR, como a ADR-037 exige |
 
 ---
@@ -856,5 +930,5 @@ A partir daqui vale a regra de extensão da Seção 8, e toda alteração exige
 ADR.
 
 ---
-*Fim de `KNOWLEDGE_MODEL.md` v1.1 — CONGELADO.*
-*Alterado por ADR-039 e ADR-040. Fronteira de observação por ADR-041 (§11.2).*
+*Fim de `KNOWLEDGE_MODEL.md` v1.4 — CONGELADO.*
+*Alterado por ADR-039, ADR-040, ADR-042, ADR-043 e ADR-044. Fronteira de observação por ADR-041 (§11.2).*

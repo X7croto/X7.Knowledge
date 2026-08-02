@@ -32,9 +32,14 @@ public enum BehaviorLayout
 public sealed class BehaviorPublisher : IPublisher
 {
     /// <summary>Ordem canônica dos modificadores na assinatura escrita.</summary>
+    /// <remarks>
+    /// Não é o vocabulário: é a ordem em que a linguagem os escreve. O que
+    /// não estiver aqui sai no fim, e não sumido — ver <c>Ordered</c>.
+    /// </remarks>
     private static readonly string[] ModifierOrder =
     [
-        "static", "extern", "abstract", "virtual", "override", "sealed", "readonly", "required"
+        "static", "extern", "const", "volatile",
+        "abstract", "virtual", "override", "sealed", "readonly", "required"
     ];
 
     private static readonly char[] InvalidInPath = ['<', '>', ':', '"', '/', '\\', '|', '?', '*'];
@@ -200,6 +205,14 @@ public sealed class BehaviorPublisher : IPublisher
 
                         break;
 
+                    case ObservationKinds.TypeGenericConstraint:
+                        facts.Type(observation.Subject).Constraints.Add(Constraint(observation));
+                        break;
+
+                    case ObservationKinds.MemberGenericConstraint:
+                        facts.Member(observation.Subject).Constraints.Add(Constraint(observation));
+                        break;
+
                     case ObservationKinds.TypeNestedIn:
                         facts.Type(observation.Subject).Container =
                             KnowledgeId.Parse(observation.Payload["containerId"]!);
@@ -235,6 +248,10 @@ public sealed class BehaviorPublisher : IPublisher
                         facts.Member(observation.Subject).Type = observation.Payload["typeName"];
                         break;
 
+                    case ObservationKinds.MemberConstantValue:
+                        facts.Member(observation.Subject).ConstantValue = observation.Payload["value"];
+                        break;
+
                     case ObservationKinds.MemberParameter:
                         facts.Member(observation.Subject).Parameters.Add(new ParameterRecord
                         {
@@ -242,7 +259,8 @@ public sealed class BehaviorPublisher : IPublisher
                             Name = observation.Payload["name"] ?? string.Empty,
                             Type = observation.Payload["typeName"] ?? string.Empty,
                             Modifier = observation.Payload["modifier"],
-                            Optional = observation.Payload["optional"] is not null
+                            Optional = observation.Payload["optional"] is not null,
+                            Default = observation.Payload["defaultValue"]
                         });
 
                         break;
@@ -250,6 +268,12 @@ public sealed class BehaviorPublisher : IPublisher
                     case ObservationKinds.MemberGenericParameter:
                         facts.Member(observation.Subject).TypeParameters.Add(
                             (Ordinal(observation), observation.Payload["name"]!));
+
+                        break;
+
+                    case ObservationKinds.MemberExplicitInterface:
+                        facts.Member(observation.Subject).ExplicitInterfaces.Add(
+                            observation.Payload["interfaceName"] ?? string.Empty);
 
                         break;
 
@@ -348,9 +372,62 @@ public sealed class BehaviorPublisher : IPublisher
                 ? all.Where(IsPublished).ToArray()
                 : Array.Empty<KnowledgeId>();
 
-            AppendSection(builder, headingLevel + 1, "Construtores", members, MemberVocabulary.Constructor, type);
-            AppendSection(builder, headingLevel + 1, "Propriedades", members, MemberVocabulary.Property, type);
-            AppendSection(builder, headingLevel + 1, "Métodos", members, MemberVocabulary.Method, type);
+            // A ordem é a de quem lê um tipo, não a do vocabulário.
+            var declarados = members
+                .Where(m => Member(m).ExplicitInterfaces.Count == 0)
+                .ToArray();
+
+            var nivel = headingLevel + 1;
+
+            AppendSection(builder, nivel, "Construtores", declarados, MemberVocabulary.Constructor, type);
+            AppendSection(builder, nivel, "Campos", declarados, MemberVocabulary.Field, type);
+            AppendSection(builder, nivel, "Propriedades", declarados, MemberVocabulary.Property, type);
+            AppendSection(builder, nivel, "Indexadores", declarados, MemberVocabulary.Indexer, type);
+            AppendSection(builder, nivel, "Eventos", declarados, MemberVocabulary.Event, type);
+            AppendSection(builder, nivel, "Operadores", declarados, MemberVocabulary.Operator, type);
+            AppendSection(builder, nivel, "Métodos", declarados, MemberVocabulary.Method, type);
+
+            AppendExplicit(builder, nivel, members, type);
+        }
+
+        /// <summary>
+        /// Implementação explícita é superfície, ainda que a acessibilidade
+        /// registrada seja `private` — C# proíbe modificador de acesso ali, e
+        /// quem alcança o membro é quem tem a interface. Publicada por seção
+        /// própria, com a interface ao lado, porque é por ela que se chega
+        /// até o membro (ADR-042).
+        /// </summary>
+        private void AppendExplicit(
+            StringBuilder builder,
+            int headingLevel,
+            IReadOnlyList<KnowledgeId> members,
+            TypeRecord type)
+        {
+            var selected = members
+                .Where(m => Member(m).ExplicitInterfaces.Count > 0)
+                .OrderBy(m => Signature(Member(m), type), StringComparer.Ordinal)
+                .ToArray();
+
+            if (selected.Length == 0)
+                return;
+
+            builder.Append(new string('#', headingLevel))
+                   .Append(" Implementações explícitas de interface\n\n");
+
+            foreach (var id in selected)
+            {
+                var member = Member(id);
+
+                builder.Append("- `")
+                       .Append(Signature(member, type))
+                       .Append("` — de `")
+                       .Append(string.Join("`, `", member.ExplicitInterfaces
+                           .OrderBy(i => i, StringComparer.Ordinal)
+                           .Select(Short)))
+                       .Append("`\n");
+            }
+
+            builder.Append('\n');
         }
 
         private void AppendSection(
@@ -392,8 +469,48 @@ public sealed class BehaviorPublisher : IPublisher
 
             parts.Add(Short(NameWithParameters(type)));
 
-            return string.Join(' ', parts);
+            return string.Join(' ', parts) + Where(type.Parameters, type.Constraints);
         }
+
+        /// <summary>
+        /// A cláusula sai na ordem dos parâmetros e, dentro de cada uma, na
+        /// ordem em que foi escrita. O ordinal está no payload justamente
+        /// para que a projeção não precise conhecer a gramática do C# para
+        /// reproduzir uma cláusula válida (ADR-043).
+        /// </summary>
+        private static string Where(
+            IEnumerable<(int Ordinal, string Name)> parameters,
+            IReadOnlyCollection<(string Parameter, int Ordinal, string Value)> constraints)
+        {
+            if (constraints.Count == 0)
+                return string.Empty;
+
+            var builder = new StringBuilder();
+
+            foreach (var (_, name) in parameters.OrderBy(p => p.Ordinal))
+            {
+                var written = constraints
+                    .Where(c => string.Equals(c.Parameter, name, StringComparison.Ordinal))
+                    .OrderBy(c => c.Ordinal)
+                    .Select(c => Short(c.Value))
+                    .ToArray();
+
+                if (written.Length == 0)
+                    continue;
+
+                builder.Append(" where ")
+                       .Append(name)
+                       .Append(" : ")
+                       .Append(string.Join(", ", written));
+            }
+
+            return builder.ToString();
+        }
+
+        private static (string Parameter, int Ordinal, string Value) Constraint(Observation observation)
+            => (observation.Payload["parameter"] ?? string.Empty,
+                Ordinal(observation),
+                observation.Payload["value"] ?? string.Empty);
 
         private static string NameWithParameters(TypeRecord type)
         {
@@ -411,35 +528,103 @@ public sealed class BehaviorPublisher : IPublisher
         {
             var parts = new List<string>();
 
-            if (member.Accessibility is { } accessibility)
+            // Implementação explícita não escreve acessibilidade: a linguagem
+            // proíbe. Repetir o `private` dos metadados aqui seria publicar
+            // algo que a declaração não diz.
+            if (member.Accessibility is { } accessibility && member.ExplicitInterfaces.Count == 0)
                 parts.Add(accessibility.Replace('-', ' '));
 
             parts.AddRange(Ordered(member.Modifiers));
 
-            if (member.Type is { } declared)
-                parts.Add(Short(declared));
+            var kind = member.Kind ?? MemberVocabulary.Method;
+            var declared = Short(member.Type ?? string.Empty);
+            var name = NameFor(member, type);
 
-            var name = string.Equals(member.Kind, MemberVocabulary.Constructor, StringComparison.Ordinal)
-                ? Strip(type.Name)
-                : Strip(member.Name ?? string.Empty);
-
-            if (member.TypeParameters.Count > 0)
+            switch (kind)
             {
-                var ordered = member.TypeParameters.OrderBy(p => p.Ordinal).Select(p => p.Name);
+                case MemberVocabulary.Field:
+                    parts.Add(declared);
 
-                name += $"<{string.Join(", ", ordered)}>";
+                    // `public const string Kind` não é declaração válida: o
+                    // valor faz parte dela. Foi a conferência de assinatura
+                    // que encontrou isso (ADR-044).
+                    parts.Add(member.ConstantValue is null
+                        ? name
+                        : name + " = " + member.ConstantValue);
+
+                    break;
+
+                case MemberVocabulary.Event:
+                    parts.Add("event");
+                    parts.Add(declared);
+                    parts.Add(name);
+                    break;
+
+                case MemberVocabulary.Property:
+                    parts.Add(declared);
+                    parts.Add(name + " { " + Accessors(member) + " }");
+                    break;
+
+                case MemberVocabulary.Indexer:
+                    parts.Add(declared);
+                    parts.Add("this[" + Parameters(member) + "] { " + Accessors(member) + " }");
+                    break;
+
+                case MemberVocabulary.Operator when name is "implicit" or "explicit":
+                    parts.Add(name);
+                    parts.Add("operator");
+                    parts.Add(declared + "(" + Parameters(member) + ")");
+                    break;
+
+                case MemberVocabulary.Operator:
+                    parts.Add(declared);
+                    parts.Add("operator " + name + "(" + Parameters(member) + ")");
+                    break;
+
+                case MemberVocabulary.Constructor:
+                    parts.Add(name + "(" + Parameters(member) + ")");
+                    break;
+
+                default:
+                    parts.Add(declared);
+
+                    parts.Add(name + TypeParameters(member) + "(" + Parameters(member) + ")"
+                              + Where(member.TypeParameters, member.Constraints));
+
+                    break;
             }
-
-            if (string.Equals(member.Kind, MemberVocabulary.Property, StringComparison.Ordinal))
-            {
-                parts.Add(name + " { " + Accessors(member) + " }");
-
-                return string.Join(' ', parts);
-            }
-
-            parts.Add(name + "(" + Parameters(member) + ")");
 
             return string.Join(' ', parts);
+        }
+
+        private static string NameFor(MemberRecord member, TypeRecord type)
+        {
+            if (string.Equals(member.Kind, MemberVocabulary.Constructor, StringComparison.Ordinal))
+                return Strip(type.Name);
+
+            var name = Strip(member.Name ?? string.Empty);
+
+            // `Reference.Domain.IRepository.Save` fica `IRepository.Save`: o
+            // namespace já está no cabeçalho do arquivo.
+            if (member.ExplicitInterfaces.Count > 0)
+            {
+                var parts = name.Split('.');
+
+                if (parts.Length > 2)
+                    name = string.Join('.', parts[^2..]);
+            }
+
+            return name;
+        }
+
+        private static string TypeParameters(MemberRecord member)
+        {
+            if (member.TypeParameters.Count == 0)
+                return string.Empty;
+
+            var ordered = member.TypeParameters.OrderBy(p => p.Ordinal).Select(p => p.Name);
+
+            return $"<{string.Join(", ", ordered)}>";
         }
 
         private string Accessors(MemberRecord member)
@@ -465,23 +650,55 @@ public sealed class BehaviorPublisher : IPublisher
 
                     text += Short(p.Type) + " " + p.Name;
 
-                    return p.Optional ? text + " = …" : text;
+                    if (!p.Optional)
+                        return text;
+
+                    return text + " = " + (p.Default ?? "…");
                 });
 
             return string.Join(", ", ordered);
         }
 
+        /// <summary>
+        /// Ordena pela ordem em que a linguagem escreve, e **nunca descarta**.
+        /// A primeira versão filtrava por uma lista fechada copiada do
+        /// vocabulário, e quando o `const` entrou pela ADR-042 ele
+        /// simplesmente desapareceu da projeção sem que nada falhasse. Lista
+        /// fechada duplicada do vocabulário já quebrou quatro vezes neste
+        /// projeto; aqui a degradação passa a ser posição errada, que se vê,
+        /// e não ausência, que não se vê.
+        /// </summary>
         private static IEnumerable<string> Ordered(IEnumerable<string> modifiers)
         {
             var present = modifiers.ToHashSet(StringComparer.Ordinal);
 
-            return ModifierOrder.Where(m => present.Contains(m));
+            foreach (var modifier in ModifierOrder)
+            {
+                if (present.Remove(modifier))
+                    yield return modifier;
+            }
+
+            foreach (var restante in present.Order(StringComparer.Ordinal))
+                yield return restante;
         }
 
+        /// <summary>
+        /// A projeção decide por acessibilidade, exceto na implementação
+        /// explícita: ali a acessibilidade registrada é `private` e o membro
+        /// é superfície mesmo assim, alcançável por quem tem a interface
+        /// (ADR-042).
+        /// </summary>
         private bool IsPublished(KnowledgeId memberId)
-            => _members.TryGetValue(memberId, out var member)
-               && member.Accessibility is { } accessibility
-               && Published.Contains(accessibility, StringComparer.Ordinal);
+        {
+            if (!_members.TryGetValue(memberId, out var member))
+                return false;
+
+            if (member.ExplicitInterfaces.Count > 0)
+                return true;
+
+            return member.Accessibility is { } accessibility
+                   && Published.Contains(accessibility, StringComparer.Ordinal);
+        }
 
         private TypeRecord Type(KnowledgeId id)
         {
@@ -591,6 +808,8 @@ public sealed class BehaviorPublisher : IPublisher
 
             public List<(int Ordinal, string Name)> Parameters { get; } = [];
 
+            public List<(string Parameter, int Ordinal, string Value)> Constraints { get; } = [];
+
             public SortedSet<string> Files { get; } = new(StringComparer.Ordinal);
         }
 
@@ -604,13 +823,19 @@ public sealed class BehaviorPublisher : IPublisher
 
             public string? Type { get; set; }
 
+            public string? ConstantValue { get; set; }
+
             public SortedSet<string> Modifiers { get; } = new(StringComparer.Ordinal);
 
             public List<ParameterRecord> Parameters { get; } = [];
 
             public List<(int Ordinal, string Name)> TypeParameters { get; } = [];
 
+            public List<(string Parameter, int Ordinal, string Value)> Constraints { get; } = [];
+
             public List<(string Kind, string? Accessibility)> Accessors { get; } = [];
+
+            public SortedSet<string> ExplicitInterfaces { get; } = new(StringComparer.Ordinal);
         }
 
         private sealed record ParameterRecord
@@ -624,6 +849,8 @@ public sealed class BehaviorPublisher : IPublisher
             public required string? Modifier { get; init; }
 
             public required bool Optional { get; init; }
+
+            public required string? Default { get; init; }
         }
     }
 }

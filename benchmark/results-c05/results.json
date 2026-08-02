@@ -5,26 +5,26 @@
   "measurements": [
     {
       "codeTokens": 171,
-      "contextRatioPerMille": 2760,
+      "contextRatioPerMille": 2538,
       "expectedCapability": "C01",
       "id": "Q01",
-      "kbTokens": 472,
+      "kbTokens": 434,
       "supported": true
     },
     {
       "codeTokens": 4100,
-      "contextRatioPerMille": 115,
+      "contextRatioPerMille": 106,
       "expectedCapability": "C01",
       "id": "Q02",
-      "kbTokens": 472,
+      "kbTokens": 434,
       "supported": true
     },
     {
       "codeTokens": 609,
-      "contextRatioPerMille": 775,
+      "contextRatioPerMille": 713,
       "expectedCapability": "C01",
       "id": "Q03",
-      "kbTokens": 472,
+      "kbTokens": 434,
       "supported": true
     },
     {
@@ -53,18 +53,18 @@
     },
     {
       "codeTokens": 376,
-      "contextRatioPerMille": 5170,
+      "contextRatioPerMille": 5221,
       "expectedCapability": "C03",
       "id": "Q07",
-      "kbTokens": 1944,
+      "kbTokens": 1963,
       "supported": true
     },
     {
       "codeTokens": 1335,
-      "contextRatioPerMille": 633,
+      "contextRatioPerMille": 638,
       "expectedCapability": "C04",
       "id": "Q08",
-      "kbTokens": 845,
+      "kbTokens": 852,
       "supported": true
     },
     {
@@ -76,14 +76,14 @@
       "supported": true
     },
     {
-      "codeTokens": 8988,
+      "codeTokens": 10088,
       "expectedCapability": "C06",
       "id": "Q10",
       "kbTokens": 0,
       "supported": false
     },
     {
-      "codeTokens": 5259,
+      "codeTokens": 5265,
       "expectedCapability": "C07",
       "id": "Q11",
       "kbTokens": 0,
@@ -97,21 +97,21 @@
       "supported": false
     },
     {
-      "codeTokens": 1804,
+      "codeTokens": 1810,
       "expectedCapability": "C09",
       "id": "Q13",
       "kbTokens": 0,
       "supported": false
     },
     {
-      "codeTokens": 1391,
+      "codeTokens": 1451,
       "expectedCapability": "C10",
       "id": "Q14",
       "kbTokens": 0,
       "supported": false
     },
     {
-      "codeTokens": 5023,
+      "codeTokens": 6123,
       "expectedCapability": "C11",
       "id": "Q15",
       "kbTokens": 0,

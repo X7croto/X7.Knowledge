@@ -87,7 +87,7 @@ public sealed class SolutionFixture : IDisposable
 
                 public void Add(string sku, int quantity = 1) { }
 
-                public T Map<T>(string sku) => default!;
+                public T Map<T>(string sku) where T : class, IOrderPolicy, new() => default!;
 
                 public bool TryFind(string sku, out string found)
                 {
@@ -141,7 +141,10 @@ public sealed class SolutionFixture : IDisposable
 
             public sealed class DomainError : Exception { }
 
-            public interface IQuery<T> { }
+            public interface IQuery<T> where T : notnull
+            {
+                T Run();
+            }
 
             public sealed class NameQuery : IQuery<System.Collections.Generic.List<string>> { }
             """);
@@ -154,7 +157,7 @@ public sealed class SolutionFixture : IDisposable
 
             public partial class Catalog { }
 
-            public interface IEvents<in TIn, out TOut> { }
+            public interface IEvents<in TIn, out TOut> where TIn : struct { }
 
             internal delegate void Notify();
             """);
@@ -164,6 +167,57 @@ public sealed class SolutionFixture : IDisposable
             namespace Reference.Domain;
 
             public partial class Catalog { }
+            """);
+
+        // Formas que a solucao de referencia nao tem: operador, conversao,
+        // evento em forma de campo, evento com acessores, indexador,
+        // construtor estatico, campo const e implementacao explicita de
+        // interface. A fatia B se verifica aqui, e nao contra a referencia.
+        Write("src/Domain/Ledger.cs",
+            """
+            using System;
+
+            namespace Reference.Domain;
+
+            public interface IAudit
+            {
+                void Record(string entry);
+            }
+
+            public sealed class Ledger : IAudit
+            {
+                public const string Kind = "ledger";
+
+                private static readonly int Limit = 100;
+
+                public event EventHandler? Changed;
+
+                public event EventHandler? Audited
+                {
+                    add { }
+                    remove { }
+                }
+
+                static Ledger() { }
+
+                public string this[int index] => string.Empty;
+
+                public static Ledger operator +(Ledger left, Ledger right) => left;
+
+                public static implicit operator string(Ledger ledger) => Kind;
+
+                void IAudit.Record(string entry) { }
+
+                // ref readonly, in, e valores padrao escritos de formas
+                // diferentes: `default` e `null` sao a mesma coisa nos
+                // metadados e coisas diferentes na declaracao.
+                public void Apply(
+                    in int origem,
+                    ref readonly int destino,
+                    string rotulo = "x",
+                    int? escala = null,
+                    string? nota = default) { }
+            }
             """);
 
         // Gerador de codigo real: o [GeneratedRegex] emite tipos dentro de

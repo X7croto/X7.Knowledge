@@ -50,11 +50,19 @@ internal static class MemberIdentity
         return member switch
         {
             IMethodSymbol method
-                => $"{container}.{method.MetadataName}({Parameters(method)})",
+                => $"{container}.{method.MetadataName}({Parameters(method.Parameters)})",
+
+            // Indexador é propriedade com parâmetros: sobrecargas existem, e
+            // sem os tipos duas viram uma. Colchete, e não parêntese, porque
+            // é o que a declaração escreve — e porque parêntese o tornaria
+            // indistinguível de um método (ADR-042).
+            IPropertySymbol { IsIndexer: true } indexer
+                => $"{container}.this[{Parameters(indexer.Parameters)}]",
+
             _ => $"{container}.{member.MetadataName}"
         };
     }
 
-    private static string Parameters(IMethodSymbol method)
-        => string.Join(",", method.Parameters.Select(p => p.Type.ToDisplayString(Qualified)));
+    private static string Parameters(IEnumerable<IParameterSymbol> parameters)
+        => string.Join(",", parameters.Select(p => p.Type.ToDisplayString(Qualified)));
 }

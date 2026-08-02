@@ -1,7 +1,7 @@
 # PROJECT_CONSTITUTION.md
 
 **Projeto:** X7.Knowledge
-**Versão:** 2.5
+**Versão:** 2.8
 **Status:** Normativo — fonte única de verdade
 **Substitui:** `PROJECT_CONSTITUTION.md` v1.0 e `ObjetivoX7.docx` (ambos revogados)
 
@@ -255,7 +255,7 @@ A métrica do projeto é a **mediana de CR** sobre o conjunto de perguntas.
 
 ## 8. ADRs
 
-ADRs de v1 permanecem válidas salvo revogação explícita. As ADRs 027–033 abaixo resolvem os conflitos identificados na consolidação. As ADRs 034 a 041 são posteriores e decorrem de medição, de amadurecimento do modelo, da entrada do C05 sob o modelo congelado ou de defeito descoberto em produção.
+ADRs de v1 permanecem válidas salvo revogação explícita. As ADRs 027–033 abaixo resolvem os conflitos identificados na consolidação. As ADRs 034 a 044 são posteriores e decorrem de medição, de amadurecimento do modelo, da entrada do C05 sob o modelo congelado ou de defeito descoberto em produção.
 
 ### ADR-001 a ADR-026 — Mantidas
 
@@ -463,6 +463,48 @@ Consolidadas e incorporadas às Seções 1–5 deste documento. Exceções:
 
 ---
 
+### ADR-042 — Formas de membro restantes
+
+**Status:** APROVADA
+
+**Contexto:** a fatia A do C05 entregou método, construtor e propriedade. Faltavam campos, eventos, operadores, indexadores, construtores estáticos, implementações explícitas de interface e restrições genéricas.
+
+**Decisão:** o escopo se divide em dois. Seis formas respondem *que membros o tipo declara* e reaproveitam `member.type`, `member.parameter` e `member.accessor` sem alteração — são esta ADR. Restrição genérica responde *o que limita um parâmetro de tipo*, não é membro, alcança os parâmetros de tipo do C04 e fica para a fatia C. `member.declared` ganha `field`, `event`, `operator` e `indexer`; `member.modifier` ganha `const` e `volatile`; `member.accessor` ganha `add` e `remove`; entra o `kind` `member.explicit-interface`. Construtor estático não ganha valor próprio: a declaração escreve `static X()`, e isso é `constructor` com modificador. Implementação explícita mantém acessibilidade `private` — a linguagem proíbe modificador de acesso ali, e quem decide que ela é superfície é a projeção, pela presença do fato. O valor dos `const` não é observado: é dado, não estrutura. Esquema `1.2.0`.
+
+**Consequências:** a solução de referência tem um indexador e nenhuma das outras formas, então esta fatia se verifica contra a fixture e o benchmark não deve se mexer — nenhuma pergunta do conjunto v6 depende delas. Uma fatia que fecha catálogo sem mover a métrica é legítima, porque o critério de conclusão do C05 é a superfície completa e não CR menor; dizer isso antes de medir é o que impede confundir ausência de ganho com defeito. Reforça também a pendência de migrar a solução de referência antes do C08: um compilador medido contra o próprio código não exercita nem o próprio catálogo.
+
+**Evidência a favor do congelamento:** `member.type` recebeu campo e evento sem nenhuma alteração, porque foi nomeado na fatia A prevendo exatamente isto. Uma decisão tomada antes de a necessidade existir e que não precisou ser desfeita é o que a ADR-037 procurava.
+
+---
+
+### ADR-043 — Restrições genéricas e fechamento da superfície
+
+**Status:** APROVADA
+
+**Contexto:** faltava a restrição genérica, e escrever a fatia B revelou mais duas ausências não declaradas. Parâmetro opcional era registrado sem o valor, e a projeção publicava `int quantity = …` — as reticências eram do compilador, não do código. E `ref readonly` em parâmetro nunca era produzido: o vocabulário declarava `ref-readonly` desde a fatia A e o mapeamento partia de `RefKind`, cujo valor para esse caso caía no ramo padrão. Ausência silenciosa que dois conjuntos de testes não pegaram porque a fixture não tinha o caso.
+
+**Decisão:** restrição é `kind` próprio — `member.generic-constraint` e `type.generic-constraint` —, porque conjunto não cabe em campo sem virar texto delimitado. O parâmetro é referenciado por nome: parâmetro de tipo não é entidade, e criar identidade para ele custaria formato novo para substituir um nome já único no escopo. `form` (`keyword`, `type`, `type-parameter`) evita depender da ausência de `typeId` como discriminante. `ordinal` guarda a posição como escrita, para que a projeção reproduza a cláusula sem conhecer a gramática do C#. `member.parameter` ganha `defaultValue` opcional (EX-02), lido da sintaxe. Modificador de parâmetro passa a vir da sintaxe, fechando o `ref readonly`. Esquema `1.3.0`.
+
+**Consequências:** a `acquisition.limitation` de escopo `type-members-partial` deixa de existir, `Structure/Solution.md` perde uma linha e Q01, Q02 e Q03 **melhoram** — as mesmas três que pioraram nas fatias A e B pela razão inversa, e ADR-034 se aplica igual nos dois sentidos. O C05 fica pronto para concluir, faltando apenas o critério 2: a conferência de assinatura contra o compilador de referência, que é o que torna objetivo o critério 1 (ADR-039 §6).
+
+**Defeito de classe, registrado:** o vocabulário declarava um valor que nada podia produzir, e nenhum invariante cobre isso. Um teste de cobertura de vocabulário — *todo valor declarado é produzido ao menos uma vez pela fixture* — pega a classe inteira, e fica como candidato para o C11, que já trata de cobertura sobre catálogo declarado.
+
+---
+
+### ADR-044 — Valor de constante é superfície
+
+**Status:** APROVADA. **Substitui a exclusão declarada na ADR-042 §2** (RD-02); o resto da 042 permanece em vigor.
+
+**Contexto:** a conferência de assinatura escrita para o critério 2 do C05 falhou na primeira execução — `public const string Kind` não é declaração C# válida, porque `const` exige valor. A causa era a decisão da ADR-042 §2 de não observar o valor dos `const`, tomada com o argumento de que seria "dado, não estrutura". A ADR-043 já continha a refutação sem que ninguém notasse: lá o valor padrão de parâmetro entrou porque "muda o que o programa aceita". O valor de uma constante pública faz mais — é embutido no chamador em tempo de compilação, e trocá-lo quebra quem já compilou, sem recompilação e sem aviso.
+
+**Decisão:** `kind` `member.constant-value` com payload `{ value }`, lido da sintaxe. A condição é o modificador escrito, e não `IsConst`: membro de enum é constante para o símbolo mas não escreve `const`, e sua declaração já é válida. `static readonly` não entra — ali o valor é inicialização, não contrato. IV-24: ocorre apenas em campo, no máximo um. Esquema `1.4.0`.
+
+**Alternativa rejeitada:** afrouxar a conferência para tolerar `const` sem valor. Normalizar até os dois lados coincidirem é o modo de a verificação deixar de verificar; a conferência existe para discordar da projeção.
+
+**Consequências:** o critério 2 do C05 deixou de ser formalidade — encontrou uma decisão de desenho errada, dois ciclos depois de tomada, que nenhum invariante e nenhum teste anterior alcançava. E fica registrado um padrão, não dois incidentes: a ADR-042 tirou o valor do `const` e a fatia A publicava `= …` no lugar do valor padrão; nos dois casos a forma foi tratada como estrutura e o valor como dado, e nos dois o que o consumidor precisa é do valor.
+
+---
+
 ## 9. Decisões rejeitadas
 
 Não reabrir sem nova ADR.
@@ -538,4 +580,4 @@ A missão permanece:
 > Compilar, de forma determinística e rastreável, o conhecimento existente em uma solução de software, reduzindo drasticamente a quantidade de código que uma LLM precisa ler para compreendê-la e evoluí-la.
 
 ---
-*Fim de `PROJECT_CONSTITUTION.md` v2.5.*
+*Fim de `PROJECT_CONSTITUTION.md` v2.8.*

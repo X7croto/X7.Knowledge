@@ -62,8 +62,6 @@ public sealed class MemberSurfaceProducer : IProducer
             Produce(context, source, projectByAssembly);
         }
 
-        DeclareSliceLimitation(context);
-
         return ValueTask.CompletedTask;
     }
 
@@ -81,28 +79,6 @@ public sealed class MemberSurfaceProducer : IProducer
                 Producer = Name,
                 Capability = Capability,
                 AcquisitionLevel = AcquisitionLevel.Syntactic
-            });
-
-    /// <summary>
-    /// A fatia cobre método, construtor e propriedade. O que falta é ausência
-    /// declarada, nunca silenciosa (§6.1).
-    /// </summary>
-    private void DeclareSliceLimitation(CompilationContext context)
-        => context.Knowledge.Add(
-            ObservationKinds.AcquisitionLimitation,
-            context.SolutionId,
-            ObservationPayload.From(
-                ("reason",
-                    "Campos, eventos, operadores, indexadores, construtores estáticos, "
-                    + "implementações explícitas de interface e restrições genéricas "
-                    + "ainda não são observados"),
-                ("affectedScope", "type-members-partial")),
-            new Provenance
-            {
-                Source = context.Solution.FileName,
-                Producer = Name,
-                Capability = Capability,
-                AcquisitionLevel = context.AcquisitionLevel
             });
 
     private void Produce(
@@ -145,13 +121,10 @@ public sealed class MemberSurfaceProducer : IProducer
     /// <remarks>
     /// Membro implícito não entra: construtor padrão gerado, `Equals`,
     /// `GetHashCode`, `ToString`, `Deconstruct` e `&lt;Clone&gt;$` de record,
-    /// e os métodos `get_X`/`set_X` da propriedade — estes últimos
-    /// representados por `member.accessor`. É o argumento das bases
-    /// implícitas do C04: observar o que a linguagem gera produziria
+    /// e os acessores que a propriedade e o evento em forma de campo geram —
+    /// representados, quando declarados, por `member.accessor`. É o argumento
+    /// das bases implícitas do C04: observar o que a linguagem gera produziria
     /// Observations por tipo sem informar nada.
-    ///
-    /// Construtor estático, operador e indexador ficam para a fatia seguinte,
-    /// com limitação declarada.
     /// </remarks>
     private static IEnumerable<ISymbol> Surface(INamedTypeSymbol type)
         => type.GetMembers().Where(Included);
@@ -163,9 +136,16 @@ public sealed class MemberSurfaceProducer : IProducer
 
         return member switch
         {
-            IMethodSymbol method
-                => method.MethodKind is MethodKind.Ordinary or MethodKind.Constructor,
-            IPropertySymbol property => !property.IsIndexer,
+            IMethodSymbol method => method.MethodKind
+                is MethodKind.Ordinary
+                or MethodKind.Constructor
+                or MethodKind.StaticConstructor
+                or MethodKind.UserDefinedOperator
+                or MethodKind.Conversion
+                or MethodKind.ExplicitInterfaceImplementation,
+            IPropertySymbol => true,
+            IFieldSymbol => true,
+            IEventSymbol => true,
             _ => false
         };
     }
@@ -197,7 +177,7 @@ public sealed class MemberSurfaceProducer : IProducer
         context.Knowledge.Add(
             ObservationKinds.MemberDeclared,
             memberId,
-            ObservationPayload.From(("name", member.Name), ("kind", kind)),
+            ObservationPayload.From(("name", NameOf(member)), ("kind", kind)),
             provenance);
 
         context.Knowledge.Add(
@@ -206,7 +186,9 @@ public sealed class MemberSurfaceProducer : IProducer
             ObservationPayload.From(("value", accessibility)),
             provenance);
 
-        foreach (var modifier in DeclaredModifiers(member))
+        var modifiers = DeclaredModifiers(member).ToArray();
+
+        foreach (var modifier in modifiers)
         {
             context.Knowledge.Add(
                 ObservationKinds.MemberModifier,
@@ -215,16 +197,124 @@ public sealed class MemberSurfaceProducer : IProducer
                 provenance);
         }
 
+        // O valor de uma constante pública é contrato, e não dado: ele é
+        // embutido no chamador em tempo de compilação, e trocá-lo quebra quem
+        // já compilou sem recompilação e sem aviso (ADR-044).
+        //
+        // A condição é o modificador **escrito**, e não `IFieldSymbol.IsConst`:
+        // membro de enum também é constante para o símbolo, mas a declaração
+        // dele não escreve `const` e a projeção não tem o que completar ali.
+        if (member is IFieldSymbol && modifiers.Contains("const"))
+        {
+            var value = ConstantValueOf(member);
+
+            if (value is not null)
+            {
+                context.Knowledge.Add(
+                    ObservationKinds.MemberConstantValue,
+                    memberId,
+                    ObservationPayload.From(("value", value)),
+                    provenance);
+            }
+        }
+
         EmitType(context, memberId, member, provenance, projectByAssembly);
+        EmitExplicitInterfaces(context, memberId, member, provenance, projectByAssembly);
 
         if (member is IMethodSymbol method)
         {
-            EmitParameters(context, memberId, method, provenance, projectByAssembly);
+            EmitParameters(context, memberId, method.Parameters, provenance, projectByAssembly);
             EmitGenericParameters(context, memberId, method, provenance);
         }
 
+        if (member is IPropertySymbol { IsIndexer: true } indexer)
+            EmitParameters(context, memberId, indexer.Parameters, provenance, projectByAssembly);
+
         if (member is IPropertySymbol property)
             EmitAccessors(context, memberId, property, provenance);
+
+        if (member is IEventSymbol declaredEvent)
+            EmitEventAccessors(context, memberId, declaredEvent, provenance);
+    }
+
+    /// <summary>
+    /// O que a declaração escreve como nome. Para operador é o próprio
+    /// símbolo — `+`, `implicit`, `explicit` —, e não `op_Addition`, que é
+    /// forma de metadados e fica reservada à identidade. Para indexador é
+    /// `this`. Mesma divisão que a fatia A fez entre `MetadataName` e `Name`.
+    /// </summary>
+    private static string NameOf(ISymbol member)
+    {
+        if (member is IPropertySymbol { IsIndexer: true })
+            return "this";
+
+        foreach (var reference in member.DeclaringSyntaxReferences)
+        {
+            switch (reference.GetSyntax())
+            {
+                case OperatorDeclarationSyntax declared:
+                    return declared.OperatorToken.ValueText;
+
+                case ConversionOperatorDeclarationSyntax conversion:
+                    return conversion.ImplicitOrExplicitKeyword.ValueText;
+            }
+        }
+
+        return member.Name;
+    }
+
+    /// <summary>
+    /// Implementação explícita continua sendo método, propriedade ou evento
+    /// (ADR-042). A acessibilidade dela é `private`, que é o que o símbolo
+    /// responde e o que está nos metadados — C# proíbe modificador de acesso
+    /// ali, então não há declaração para espelhar, e publicar `public` seria
+    /// fabricar. Quem decide que ela é superfície é a projeção, pela presença
+    /// deste fato, e não pela acessibilidade.
+    /// </summary>
+    private void EmitExplicitInterfaces(
+        CompilationContext context,
+        KnowledgeId memberId,
+        ISymbol member,
+        Provenance provenance,
+        IReadOnlyDictionary<string, string> projectByAssembly)
+    {
+        var implemented = member switch
+        {
+            IMethodSymbol method => method.ExplicitInterfaceImplementations.Cast<ISymbol>(),
+            IPropertySymbol property => property.ExplicitInterfaceImplementations.Cast<ISymbol>(),
+            IEventSymbol declared => declared.ExplicitInterfaceImplementations.Cast<ISymbol>(),
+            _ => Enumerable.Empty<ISymbol>()
+        };
+
+        foreach (var target in implemented
+                     .Select(s => s.ContainingType)
+                     .Where(t => t is not null)
+                     .OrderBy(TypeIdentity.Display, StringComparer.Ordinal))
+        {
+            context.Knowledge.Add(
+                ObservationKinds.MemberExplicitInterface,
+                memberId,
+                Reference(target, projectByAssembly, "interfaceName", "interfaceId"),
+                provenance);
+        }
+    }
+
+    /// <summary>
+    /// Evento em forma de campo não declara acessor nenhum: os que o símbolo
+    /// expõe são gerados, e observá-los seria observar o que a linguagem
+    /// escreveu no lugar de quem programou.
+    /// </summary>
+    private void EmitEventAccessors(
+        CompilationContext context,
+        KnowledgeId memberId,
+        IEventSymbol declared,
+        Provenance provenance)
+    {
+        if (declared.AddMethod is { IsImplicitlyDeclared: false })
+            EmitAccessor(context, memberId, MemberVocabulary.Add, null, provenance);
+
+        if (declared.RemoveMethod is { IsImplicitlyDeclared: false })
+            EmitAccessor(context, memberId, MemberVocabulary.Remove, null, provenance);
     }
 
     /// <summary>
@@ -241,8 +331,14 @@ public sealed class MemberSurfaceProducer : IProducer
     {
         var declared = member switch
         {
-            IMethodSymbol { MethodKind: MethodKind.Ordinary } method => method.ReturnType,
+            IMethodSymbol
+            {
+                MethodKind: MethodKind.Constructor or MethodKind.StaticConstructor
+            } => null,
+            IMethodSymbol method => method.ReturnType,
             IPropertySymbol property => property.Type,
+            IFieldSymbol field => field.Type,
+            IEventSymbol declaredEvent => declaredEvent.Type,
             _ => null
         };
 
@@ -259,11 +355,11 @@ public sealed class MemberSurfaceProducer : IProducer
     private void EmitParameters(
         CompilationContext context,
         KnowledgeId memberId,
-        IMethodSymbol method,
+        IEnumerable<IParameterSymbol> parameters,
         Provenance provenance,
         IReadOnlyDictionary<string, string> projectByAssembly)
     {
-        foreach (var parameter in method.Parameters.OrderBy(p => p.Ordinal))
+        foreach (var parameter in parameters.OrderBy(p => p.Ordinal))
         {
             var modifier = ParameterModifierOf(parameter);
 
@@ -282,7 +378,8 @@ public sealed class MemberSurfaceProducer : IProducer
                     ("typeId", reference["typeId"]),
                     ("external", reference["external"]),
                     ("modifier", modifier),
-                    ("optional", parameter.HasExplicitDefaultValue ? "true" : null)),
+                    ("optional", parameter.HasExplicitDefaultValue ? "true" : null),
+                    ("defaultValue", DefaultValueOf(parameter))),
                 provenance);
         }
     }
@@ -323,7 +420,14 @@ public sealed class MemberSurfaceProducer : IProducer
         Provenance provenance)
     {
         if (property.GetMethod is { } getter)
-            EmitAccessor(context, memberId, MemberVocabulary.Get, getter, property, provenance);
+        {
+            EmitAccessor(
+                context,
+                memberId,
+                MemberVocabulary.Get,
+                Differing(getter, property),
+                provenance);
+        }
 
         if (property.SetMethod is { } setter)
         {
@@ -331,26 +435,25 @@ public sealed class MemberSurfaceProducer : IProducer
                 context,
                 memberId,
                 setter.IsInitOnly ? MemberVocabulary.Init : MemberVocabulary.Set,
-                setter,
-                property,
+                Differing(setter, property),
                 provenance);
         }
     }
+
+    private static string? Differing(IMethodSymbol accessor, ISymbol owner)
+        => accessor.DeclaredAccessibility == owner.DeclaredAccessibility
+            ? null
+            : AccessibilityOf(accessor.DeclaredAccessibility);
 
     private void EmitAccessor(
         CompilationContext context,
         KnowledgeId memberId,
         string kind,
-        IMethodSymbol accessor,
-        IPropertySymbol property,
+        string? accessibility,
         Provenance provenance)
     {
         if (!MemberVocabulary.IsKnownAccessor(kind))
             throw new InvalidOperationException($"Acessor fora do vocabulário: '{kind}'.");
-
-        var accessibility = accessor.DeclaredAccessibility == property.DeclaredAccessibility
-            ? null
-            : AccessibilityOf(accessor.DeclaredAccessibility);
 
         context.Knowledge.Add(
             ObservationKinds.MemberAccessor,
@@ -367,7 +470,9 @@ public sealed class MemberSurfaceProducer : IProducer
     /// </summary>
     private static ObservationPayload Reference(
         ITypeSymbol type,
-        IReadOnlyDictionary<string, string> projectByAssembly)
+        IReadOnlyDictionary<string, string> projectByAssembly,
+        string nameKey = "typeName",
+        string idKey = "typeId")
     {
         var display = TypeIdentity.Display(type);
 
@@ -378,18 +483,30 @@ public sealed class MemberSurfaceProducer : IProducer
             if (assembly is not null && projectByAssembly.TryGetValue(assembly, out var project))
             {
                 return ObservationPayload.From(
-                    ("typeName", display),
-                    ("typeId", KnowledgeId.ForType(TypeIdentity.Semantic(named), project).Value));
+                    (nameKey, display),
+                    (idKey, KnowledgeId.ForType(TypeIdentity.Semantic(named), project).Value));
             }
         }
 
-        return ObservationPayload.From(("typeName", display), ("external", "true"));
+        return ObservationPayload.From((nameKey, display), ("external", "true"));
     }
 
     private static string KindOf(ISymbol member) => member switch
     {
-        IMethodSymbol { MethodKind: MethodKind.Constructor } => MemberVocabulary.Constructor,
+        IMethodSymbol
+        {
+            MethodKind: MethodKind.Constructor or MethodKind.StaticConstructor
+        } => MemberVocabulary.Constructor,
+
+        IMethodSymbol
+        {
+            MethodKind: MethodKind.UserDefinedOperator or MethodKind.Conversion
+        } => MemberVocabulary.Operator,
+
+        IPropertySymbol { IsIndexer: true } => MemberVocabulary.Indexer,
         IPropertySymbol => MemberVocabulary.Property,
+        IFieldSymbol => MemberVocabulary.Field,
+        IEventSymbol => MemberVocabulary.Event,
         _ => MemberVocabulary.Method
     };
 
@@ -434,22 +551,99 @@ public sealed class MemberSurfaceProducer : IProducer
     {
         MethodDeclarationSyntax method => method.Modifiers,
         ConstructorDeclarationSyntax constructor => constructor.Modifiers,
+        OperatorDeclarationSyntax declared => declared.Modifiers,
+        ConversionOperatorDeclarationSyntax conversion => conversion.Modifiers,
+
+        // Cobre propriedade, indexador e evento com acessores.
         BasePropertyDeclarationSyntax property => property.Modifiers,
+
+        // Campo e evento em forma de campo declaram pelo declarador; os
+        // modificadores estão dois níveis acima, na declaração que pode
+        // conter vários nomes.
+        VariableDeclaratorSyntax declarator
+            when declarator.Parent?.Parent is BaseFieldDeclarationSyntax field => field.Modifiers,
+
         _ => default
     };
 
+    /// <summary>
+    /// Da sintaxe, e não de `RefKind` (ADR-043). O mapeamento anterior partia
+    /// do enum e `ref readonly` caía no ramo padrão: o vocabulário declarava
+    /// `ref-readonly` desde a fatia A e nada podia produzi-lo. Ausência
+    /// silenciosa, que dois conjuntos de testes não pegaram porque a fixture
+    /// não tinha o caso.
+    /// </summary>
     private static string? ParameterModifierOf(IParameterSymbol parameter)
     {
-        if (parameter.IsParams)
+        var written = WrittenModifiers(parameter);
+
+        if (written.Contains("params"))
             return "params";
 
-        return parameter.RefKind switch
+        if (written.Contains("ref") && written.Contains("readonly"))
+            return "ref-readonly";
+
+        if (written.Contains("ref"))
+            return "ref";
+
+        if (written.Contains("out"))
+            return "out";
+
+        if (written.Contains("in"))
+            return "in";
+
+        return null;
+    }
+
+    private static HashSet<string> WrittenModifiers(IParameterSymbol parameter)
+    {
+        var written = new HashSet<string>(StringComparer.Ordinal);
+
+        foreach (var reference in parameter.DeclaringSyntaxReferences)
         {
-            RefKind.Ref => "ref",
-            RefKind.Out => "out",
-            RefKind.In => "in",
-            _ => null
-        };
+            if (reference.GetSyntax() is not ParameterSyntax syntax)
+                continue;
+
+            foreach (var token in syntax.Modifiers)
+                written.Add(token.ValueText);
+        }
+
+        return written;
+    }
+
+    /// <summary>
+    /// Como está escrito, pelo mesmo motivo do valor padrão de parâmetro:
+    /// `"x"`, `1`, `Kind.None` e `default` são formas distintas que os
+    /// metadados achatam.
+    /// </summary>
+    private static string? ConstantValueOf(ISymbol member)
+    {
+        foreach (var reference in member.DeclaringSyntaxReferences)
+        {
+            if (reference.GetSyntax() is VariableDeclaratorSyntax { Initializer: { } initializer })
+                return initializer.Value.ToString();
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Como está escrito, e não reconstruído de `ExplicitDefaultValue`:
+    /// `default` e `null` são a mesma coisa nos metadados e coisas
+    /// diferentes na declaração.
+    /// </summary>
+    private static string? DefaultValueOf(IParameterSymbol parameter)
+    {
+        if (!parameter.HasExplicitDefaultValue)
+            return null;
+
+        foreach (var reference in parameter.DeclaringSyntaxReferences)
+        {
+            if (reference.GetSyntax() is ParameterSyntax { Default: { } clause })
+                return clause.Value.ToString();
+        }
+
+        return null;
     }
 
     private static IEnumerable<INamedTypeSymbol> SourceTypes(INamespaceOrTypeSymbol symbol)

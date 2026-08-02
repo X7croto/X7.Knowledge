@@ -3,7 +3,7 @@
 **Projeto:** X7.Knowledge
 **Versão:** 2.3
 **Status:** Normativo (autoridade 2)
-**Derivado de:** `PROJECT_CONSTITUTION.md` v2.5
+**Derivado de:** `PROJECT_CONSTITUTION.md` v2.8
 **Substitui:** `COMPILATION_PLAN.md` v1.0 e `ROADMAP.md` v1.0 (ambos revogados — ver ADR-032)
 
 ---
@@ -206,12 +206,13 @@ Métodos, construtores, propriedades, campos, eventos, operadores, assinaturas, 
 
 A separação entre representação estrutural e comportamental é preservada no modelo.
 
-**Entrega em fatias.** A primeira fatia cobre métodos, construtores e
-propriedades com assinatura (ADR-039). Campos, eventos, operadores,
-indexadores e restrições genéricas vêm na seguinte, e até lá a ausência é
-declarada por `acquisition.limitation` de escopo `type-members-partial`.
-Fatiar não altera a capacidade: ela só conclui quando todo o conhecimento
-acima existe.
+**Entrega em fatias.** A primeira cobre métodos, construtores e propriedades
+com assinatura (ADR-039). A segunda cobre campos, eventos, operadores,
+indexadores, construtores estáticos e implementações explícitas de interface
+(ADR-042). A terceira cobre restrições genéricas, valores padrão de parâmetro e o
+modificador `ref readonly` (ADR-043), e com ela a `acquisition.limitation` de
+escopo `type-members-partial` deixa de ser produzida. Fatiar não altera a
+capacidade: ela só conclui quando todo o conhecimento acima existe.
 
 **Projeções mínimas.** (Alteradas por ADR-040.)
 ```
@@ -515,4 +516,4 @@ Implementações evoluem continuamente. As capacidades acima constituem o contra
 ---
 *Fim de `COMPILATION_PLAN.md` v2.3.*
 *Alterado por ADR-034 (PL-07), ADR-035 e ADR-036 (projeções do C04),*
-*ADR-039 e ADR-040 (fatias, projeções e critério do C05).*
+*ADR-039, ADR-040, ADR-042 e ADR-043 (fatias, projeções e critério do C05).*
