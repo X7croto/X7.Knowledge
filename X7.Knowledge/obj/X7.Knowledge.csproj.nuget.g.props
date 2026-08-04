@@ -13,9 +13,9 @@
     <SourceRoot Include="C:\Users\engca\.nuget\packages\" />
   </ItemGroup>
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\Microsoft.Bcl.AsyncInterfaces.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\Microsoft.Bcl.AsyncInterfaces.dll')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\Microsoft.Bcl.AsyncInterfaces.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\Microsoft.Bcl.AsyncInterfaces.dll')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -24,9 +24,9 @@
       <Private>True</Private>
       <Link>BuildHost-net472\Microsoft.Bcl.AsyncInterfaces.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\Microsoft.Build.Locator.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\Microsoft.Build.Locator.dll')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\Microsoft.Build.Locator.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\Microsoft.Build.Locator.dll')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -35,9 +35,9 @@
       <Private>True</Private>
       <Link>BuildHost-net472\Microsoft.Build.Locator.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -46,9 +46,9 @@
       <Private>True</Private>
       <Link>BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe.config" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe.config')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe.config" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe.config')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -57,9 +57,31 @@
       <Private>True</Private>
       <Link>BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe.config</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\Microsoft.IO.Redist.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\Microsoft.IO.Redist.dll')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.dll')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
+      <NuGetItemType>Content</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.dll</TargetPath>
+      <DestinationSubDirectory>BuildHost-net472\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.dll</Link>
+    </Content>
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.pdb" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.pdb')">
+      <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
+      <NuGetItemType>Content</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.pdb</TargetPath>
+      <DestinationSubDirectory>BuildHost-net472\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>BuildHost-net472\Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.pdb</Link>
+    </Content>
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\Microsoft.IO.Redist.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\Microsoft.IO.Redist.dll')">
+      <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -68,9 +90,9 @@
       <Private>True</Private>
       <Link>BuildHost-net472\Microsoft.IO.Redist.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.Buffers.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.Buffers.dll')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.Buffers.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.Buffers.dll')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -79,9 +101,9 @@
       <Private>True</Private>
       <Link>BuildHost-net472\System.Buffers.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.Collections.Immutable.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.Collections.Immutable.dll')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.Collections.Immutable.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.Collections.Immutable.dll')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -90,9 +112,9 @@
       <Private>True</Private>
       <Link>BuildHost-net472\System.Collections.Immutable.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.IO.Pipelines.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.IO.Pipelines.dll')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.IO.Pipelines.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.IO.Pipelines.dll')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -101,9 +123,9 @@
       <Private>True</Private>
       <Link>BuildHost-net472\System.IO.Pipelines.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.Memory.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.Memory.dll')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.Memory.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.Memory.dll')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -112,9 +134,9 @@
       <Private>True</Private>
       <Link>BuildHost-net472\System.Memory.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.Numerics.Vectors.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.Numerics.Vectors.dll')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.Numerics.Vectors.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.Numerics.Vectors.dll')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -123,9 +145,9 @@
       <Private>True</Private>
       <Link>BuildHost-net472\System.Numerics.Vectors.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.Runtime.CompilerServices.Unsafe.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.Runtime.CompilerServices.Unsafe.dll')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.Runtime.CompilerServices.Unsafe.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.Runtime.CompilerServices.Unsafe.dll')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -134,9 +156,9 @@
       <Private>True</Private>
       <Link>BuildHost-net472\System.Runtime.CompilerServices.Unsafe.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.Text.Encodings.Web.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.Text.Encodings.Web.dll')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.Text.Encodings.Web.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.Text.Encodings.Web.dll')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -145,9 +167,9 @@
       <Private>True</Private>
       <Link>BuildHost-net472\System.Text.Encodings.Web.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.Text.Json.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.Text.Json.dll')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.Text.Json.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.Text.Json.dll')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -156,9 +178,9 @@
       <Private>True</Private>
       <Link>BuildHost-net472\System.Text.Json.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.Threading.Tasks.Extensions.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.Threading.Tasks.Extensions.dll')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.Threading.Tasks.Extensions.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-net472\System.Threading.Tasks.Extensions.dll')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -167,20 +189,9 @@
       <Private>True</Private>
       <Link>BuildHost-net472\System.Threading.Tasks.Extensions.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.ValueTuple.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-net472\System.ValueTuple.dll')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-netcore\Microsoft.Build.Locator.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-netcore\Microsoft.Build.Locator.dll')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
-      <NuGetItemType>Content</NuGetItemType>
-      <Pack>false</Pack>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>BuildHost-net472\System.ValueTuple.dll</TargetPath>
-      <DestinationSubDirectory>BuildHost-net472\</DestinationSubDirectory>
-      <Private>True</Private>
-      <Link>BuildHost-net472\System.ValueTuple.dll</Link>
-    </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-netcore\Microsoft.Build.Locator.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-netcore\Microsoft.Build.Locator.dll')">
-      <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -189,9 +200,9 @@
       <Private>True</Private>
       <Link>BuildHost-netcore\Microsoft.Build.Locator.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.deps.json" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.deps.json')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.deps.json" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.deps.json')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -200,9 +211,9 @@
       <Private>True</Private>
       <Link>BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.deps.json</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -211,9 +222,9 @@
       <Private>True</Private>
       <Link>BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.runtimeconfig.json" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.runtimeconfig.json')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.runtimeconfig.json" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.runtimeconfig.json')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -222,9 +233,31 @@
       <Private>True</Private>
       <Link>BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.runtimeconfig.json</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-netcore\System.Collections.Immutable.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.3.0\contentFiles\any\any\BuildHost-netcore\System.Collections.Immutable.dll')">
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.dll')">
       <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
-      <NuGetPackageVersion>5.3.0</NuGetPackageVersion>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
+      <NuGetItemType>Content</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.dll</TargetPath>
+      <DestinationSubDirectory>BuildHost-netcore\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.dll</Link>
+    </Content>
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.pdb" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.pdb')">
+      <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
+      <NuGetItemType>Content</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.pdb</TargetPath>
+      <DestinationSubDirectory>BuildHost-netcore\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>BuildHost-netcore\Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.pdb</Link>
+    </Content>
+    <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-netcore\System.Collections.Immutable.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\5.6.0\contentFiles\any\any\BuildHost-netcore\System.Collections.Immutable.dll')">
+      <NuGetPackageId>Microsoft.CodeAnalysis.Workspaces.MSBuild</NuGetPackageId>
+      <NuGetPackageVersion>5.6.0</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -235,10 +268,10 @@
     </Content>
   </ItemGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Import Project="$(NuGetPackageRoot)microsoft.codeanalysis.analyzers\5.3.0-2.25625.1\buildTransitive\Microsoft.CodeAnalysis.Analyzers.props" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.analyzers\5.3.0-2.25625.1\buildTransitive\Microsoft.CodeAnalysis.Analyzers.props')" />
-    <Import Project="$(NuGetPackageRoot)microsoft.build.locator\1.9.1\build\Microsoft.Build.Locator.props" Condition="Exists('$(NuGetPackageRoot)microsoft.build.locator\1.9.1\build\Microsoft.Build.Locator.props')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.codeanalysis.analyzers\5.3.0\buildTransitive\Microsoft.CodeAnalysis.Analyzers.props" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.analyzers\5.3.0\buildTransitive\Microsoft.CodeAnalysis.Analyzers.props')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.build.locator\1.11.2\buildTransitive\Microsoft.Build.Locator.props" Condition="Exists('$(NuGetPackageRoot)microsoft.build.locator\1.11.2\buildTransitive\Microsoft.Build.Locator.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <PkgMicrosoft_CodeAnalysis_Analyzers Condition=" '$(PkgMicrosoft_CodeAnalysis_Analyzers)' == '' ">C:\Users\engca\.nuget\packages\microsoft.codeanalysis.analyzers\5.3.0-2.25625.1</PkgMicrosoft_CodeAnalysis_Analyzers>
+    <PkgMicrosoft_CodeAnalysis_Analyzers Condition=" '$(PkgMicrosoft_CodeAnalysis_Analyzers)' == '' ">C:\Users\engca\.nuget\packages\microsoft.codeanalysis.analyzers\5.3.0</PkgMicrosoft_CodeAnalysis_Analyzers>
   </PropertyGroup>
 </Project>

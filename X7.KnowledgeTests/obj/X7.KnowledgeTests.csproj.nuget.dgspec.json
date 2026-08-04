@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Nuvem\\GoogleDrive - segundio\\X7Dev - Programas\\DevEnvironment\\Tools\\X7.ProjectIndexer\\X7.KnowledgeTests\\X7.KnowledgeTests.csproj": {}
+    "D:\\Nuvem\\GoogleDrive - kaainann\\X7DevEnviroment\\Solutions\\X7.ProjectIndexer\\X7.KnowledgeTests\\X7.KnowledgeTests.csproj": {}
   },
   "projects": {
-    "D:\\Nuvem\\GoogleDrive - segundio\\X7Dev - Programas\\DevEnvironment\\Tools\\X7.ProjectIndexer\\X7.KnowledgeTests\\X7.KnowledgeTests.csproj": {
+    "D:\\Nuvem\\GoogleDrive - kaainann\\X7DevEnviroment\\Solutions\\X7.ProjectIndexer\\X7.KnowledgeTests\\X7.KnowledgeTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Nuvem\\GoogleDrive - segundio\\X7Dev - Programas\\DevEnvironment\\Tools\\X7.ProjectIndexer\\X7.KnowledgeTests\\X7.KnowledgeTests.csproj",
+        "projectUniqueName": "D:\\Nuvem\\GoogleDrive - kaainann\\X7DevEnviroment\\Solutions\\X7.ProjectIndexer\\X7.KnowledgeTests\\X7.KnowledgeTests.csproj",
         "projectName": "X7.KnowledgeTests",
-        "projectPath": "D:\\Nuvem\\GoogleDrive - segundio\\X7Dev - Programas\\DevEnvironment\\Tools\\X7.ProjectIndexer\\X7.KnowledgeTests\\X7.KnowledgeTests.csproj",
+        "projectPath": "D:\\Nuvem\\GoogleDrive - kaainann\\X7DevEnviroment\\Solutions\\X7.ProjectIndexer\\X7.KnowledgeTests\\X7.KnowledgeTests.csproj",
         "packagesPath": "C:\\Users\\engca\\.nuget\\packages\\",
-        "outputPath": "D:\\Nuvem\\GoogleDrive - segundio\\X7Dev - Programas\\DevEnvironment\\Tools\\X7.ProjectIndexer\\X7.KnowledgeTests\\obj\\",
+        "outputPath": "D:\\Nuvem\\GoogleDrive - kaainann\\X7DevEnviroment\\Solutions\\X7.ProjectIndexer\\X7.KnowledgeTests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\engca\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -22,7 +22,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -30,8 +29,8 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\Nuvem\\GoogleDrive - segundio\\X7Dev - Programas\\DevEnvironment\\Tools\\X7.ProjectIndexer\\X7.Knowledge\\X7.Knowledge.csproj": {
-                "projectPath": "D:\\Nuvem\\GoogleDrive - segundio\\X7Dev - Programas\\DevEnvironment\\Tools\\X7.ProjectIndexer\\X7.Knowledge\\X7.Knowledge.csproj"
+              "D:\\Nuvem\\GoogleDrive - kaainann\\X7DevEnviroment\\Solutions\\X7.ProjectIndexer\\X7.Knowledge\\X7.Knowledge.csproj": {
+                "projectPath": "D:\\Nuvem\\GoogleDrive - kaainann\\X7DevEnviroment\\Solutions\\X7.ProjectIndexer\\X7.Knowledge\\X7.Knowledge.csproj"
               }
             }
           }
@@ -67,15 +66,17 @@
           "dependencies": {
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
-              "version": "[17.14.1, )"
+              "version": "[18.8.1, )"
             },
             "xunit": {
               "target": "Package",
               "version": "[2.9.3, )"
             },
             "xunit.runner.visualstudio": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[3.1.5, )"
             }
           },
           "imports": [
@@ -372,14 +373,14 @@
         }
       }
     },
-    "D:\\Nuvem\\GoogleDrive - segundio\\X7Dev - Programas\\DevEnvironment\\Tools\\X7.ProjectIndexer\\X7.Knowledge\\X7.Knowledge.csproj": {
+    "D:\\Nuvem\\GoogleDrive - kaainann\\X7DevEnviroment\\Solutions\\X7.ProjectIndexer\\X7.Knowledge\\X7.Knowledge.csproj": {
       "version": "0.4.0",
       "restore": {
-        "projectUniqueName": "D:\\Nuvem\\GoogleDrive - segundio\\X7Dev - Programas\\DevEnvironment\\Tools\\X7.ProjectIndexer\\X7.Knowledge\\X7.Knowledge.csproj",
+        "projectUniqueName": "D:\\Nuvem\\GoogleDrive - kaainann\\X7DevEnviroment\\Solutions\\X7.ProjectIndexer\\X7.Knowledge\\X7.Knowledge.csproj",
         "projectName": "X7.Knowledge",
-        "projectPath": "D:\\Nuvem\\GoogleDrive - segundio\\X7Dev - Programas\\DevEnvironment\\Tools\\X7.ProjectIndexer\\X7.Knowledge\\X7.Knowledge.csproj",
+        "projectPath": "D:\\Nuvem\\GoogleDrive - kaainann\\X7DevEnviroment\\Solutions\\X7.ProjectIndexer\\X7.Knowledge\\X7.Knowledge.csproj",
         "packagesPath": "C:\\Users\\engca\\.nuget\\packages\\",
-        "outputPath": "D:\\Nuvem\\GoogleDrive - segundio\\X7Dev - Programas\\DevEnvironment\\Tools\\X7.ProjectIndexer\\X7.Knowledge\\obj\\",
+        "outputPath": "D:\\Nuvem\\GoogleDrive - kaainann\\X7DevEnviroment\\Solutions\\X7.ProjectIndexer\\X7.Knowledge\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\engca\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -390,7 +391,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -432,19 +432,19 @@
           "dependencies": {
             "Microsoft.Build.Locator": {
               "target": "Package",
-              "version": "[1.9.1, )"
+              "version": "[1.11.2, )"
             },
             "Microsoft.CodeAnalysis.CSharp": {
               "target": "Package",
-              "version": "[5.3.0, )"
+              "version": "[5.6.0, )"
             },
             "Microsoft.CodeAnalysis.CSharp.Workspaces": {
               "target": "Package",
-              "version": "[5.3.0, )"
+              "version": "[5.6.0, )"
             },
             "Microsoft.CodeAnalysis.Workspaces.MSBuild": {
               "target": "Package",
-              "version": "[5.3.0, )"
+              "version": "[5.6.0, )"
             }
           },
           "imports": [

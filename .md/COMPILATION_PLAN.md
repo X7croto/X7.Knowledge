@@ -197,7 +197,7 @@ nível.
 
 ---
 
-# C05 — Modelo Comportamental
+# C05 — Modelo Comportamental — **CONCLUÍDA**
 
 **Objetivo.** Adicionar comportamento aos modelos estruturais. O compilador passa de *o que existe* para *o que cada componente faz*.
 
@@ -239,6 +239,11 @@ mais (PL-08).
 1. O comportamento público da solução é compreensível sem abrir código.
 2. Toda assinatura publicada é semanticamente correta e verificável contra o compilador de referência.
 3. CR não regride.
+
+Concluída em três fatias, mais a ADR-044. Medição em `benchmark/results-c05`:
+cobertura de 53% para 60%, comparação pareada 417‰ → 417‰ sobre oito perguntas
+sem exclusão e sem piora individual, Q09 sustentada a 427‰ contra 10083‰ do
+layout por projeto.
 
 O critério 1 não é verificável por invariante, ao contrário do critério
 equivalente do C04: não existe invariante de cobertura para membro, porque

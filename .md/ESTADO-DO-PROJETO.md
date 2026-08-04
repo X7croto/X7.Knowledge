@@ -3,8 +3,7 @@
 Documento de passagem. Serve para retomar o trabalho em outra conversa sem
 reconstruir o contexto.
 
-Atualizado no fechamento da **fatia A do C05**. A capacidade continua aberta:
-falta a fatia B.
+Atualizado no fechamento do **C05**, concluída nos três critérios.
 
 ---
 
@@ -42,7 +41,7 @@ exercida contra a maior adição do plano e não precisou ser quebrada.
 | C02 Arquitetural | concluída |
 | C03 Estrutura do Código | concluída |
 | C04 Modelo Estrutural | **concluída** |
-| C05 Modelo Comportamental | **em andamento — falta só o critério 2** |
+| C05 Modelo Comportamental | **concluída** |
 | C06 em diante | não iniciadas |
 
 C04 entregue em duas fatias: relações (`type.inherits`, `type.implements`) e
@@ -74,14 +73,14 @@ por julgamento.
 Solução de referência: o próprio compilador, 5 projetos, nível S.
 
 ```
-Observations 4747
+Observations 6046
 Evidence     1
 Inferences   10
-Limitações   7
+Limitações   6
 Digest       a0e430d38833d497…
 ```
 
-Corte em C04 sobre o mesmo snapshot: 817 Observations.
+Corte em C04 sobre o mesmo snapshot: 845 Observations.
 
 **Benchmark, `benchmark/results-c05`:**
 
@@ -93,9 +92,9 @@ Mediana CR   427‰  global, população nova
 ```
 
 Comparação pareada C04→C05, **oito de oito perguntas, nenhuma exclusão**:
-mediana **414‰ → 414‰**, sem regressão.
+mediana **417‰ → 417‰**, sem regressão, e nenhuma piora individual.
 
-A mediana global (427‰) e a pareada (414‰) não se comparam: são populações
+A mediana global (427‰) e a pareada (417‰) não se comparam: são populações
 diferentes. A Q09 entrou cara no conjunto, e isso é ganho de cobertura, não
 regressão — é o caso que a ADR-034 existe para separar. Quem governa MT-02 é a
 pareada.
@@ -283,20 +282,35 @@ a capacidade anterior.
 
 ---
 
-## 8. Próximo passo — fechar o C05
+## 8. Próximo passo — C06
 
-A superfície declarada está completa. Falta **um item**, e ele é de
-verificação, não de conhecimento.
+O C05 fechou nos três critérios, em três fatias mais uma correção:
 
-**Na medição da fatia C, Q01, Q02 e Q03 devem melhorar.** A limitação
-`type-members-partial` saiu, e `Structure/Solution.md` perdeu uma linha — as
-mesmas três perguntas que pioraram nas fatias A e B, agora pela razão inversa.
-Causa externa à capacidade nos dois sentidos (ADR-034).
+| Fatia | Entrega | ADR |
+|---|---|---|
+| A | método, construtor, propriedade; identidade `member:`; `Behavior/` por tipo | 039, 040 |
+| B | campo, evento, operador, indexador, construtor estático, implementação explícita | 042 |
+| C | restrições genéricas, valor padrão de parâmetro, `ref readonly` | 043 |
+| — | valor de constante, achado pela conferência de assinatura | 044 |
+
+Fora do plano do C05, mas no caminho dele: a **ADR-041**, que corrigiu a
+fronteira do que é observado depois que a publicação por tipo esbarrou num
+nome de arquivo inválido emitido por gerador de código.
+
+**Critério 2 satisfeito por `SignatureConformanceTests`**: toda assinatura
+publicada é devolvida ao compilador de referência, e verifica-se que é C#
+válido, que nada público foi omitido e que nada publicado foi inventado.
+
+O C06 é *Representação das Relações*, e a pergunta que o mede é a Q10 — *quem
+consome `Observation` e de que forma*. Ele herda a segunda regra da §9.1:
+`Relations/` hoje é por projeto porque responde *quem implementa X*, que é
+varredura; a projeção nova justifica a própria unidade contra a pergunta que
+sustenta, e sai medida.
 
 Candidato registrado para o C11: **teste de cobertura de vocabulário** — todo
 valor declarado é produzido ao menos uma vez pela fixture. O `ref-readonly`
-ficou dois ciclos no vocabulário sem que nada pudesse produzi-lo, e nenhum
-invariante cobre essa classe de defeito.
+ficou dois ciclos no vocabulário sem que nada pudesse produzi-lo, e o valor de
+`const` foi excluído por decisão errada; nenhum invariante cobre essa classe.
 
 O critério 1 do C05 — *o comportamento público é compreensível sem abrir
 código* — não é verificável por invariante: não existe equivalente da IV-14

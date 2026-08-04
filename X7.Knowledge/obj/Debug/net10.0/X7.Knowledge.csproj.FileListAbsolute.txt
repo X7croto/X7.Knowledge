@@ -31,3 +31,6 @@ D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.Projec
 D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.Knowledge\obj\Debug\net10.0\refint\X7.Knowledge.dll
 D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.Knowledge\obj\Debug\net10.0\X7.Knowledge.pdb
 D:\Nuvem\GoogleDrive - segundio\X7Dev - Programas\DevEnvironment\Tools\X7.ProjectIndexer\X7.Knowledge\obj\Debug\net10.0\ref\X7.Knowledge.dll
+D:\Nuvem\GoogleDrive - kaainann\X7DevEnviroment\Solutions\X7.ProjectIndexer\X7.Knowledge\obj\Debug\net10.0\X7.Knowledge.dll
+D:\Nuvem\GoogleDrive - kaainann\X7DevEnviroment\Solutions\X7.ProjectIndexer\X7.Knowledge\obj\Debug\net10.0\refint\X7.Knowledge.dll
+D:\Nuvem\GoogleDrive - kaainann\X7DevEnviroment\Solutions\X7.ProjectIndexer\X7.Knowledge\obj\Debug\net10.0\X7.Knowledge.pdb

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("X7.KnowledgeTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+950ec7091080fc8e35a3b2a2db183ef24df819fc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1ae6e5459b60359f769fba7da7355ee0f96e46da")]
 [assembly: System.Reflection.AssemblyProductAttribute("X7.KnowledgeTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("X7.KnowledgeTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
